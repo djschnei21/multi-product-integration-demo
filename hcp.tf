@@ -30,6 +30,10 @@ resource "hcp_consul_cluster" "hashistack" {
   connect_enabled = true
 }
 
+resource "hcp_consul_cluster_root_token" "example" {
+  cluster_id = hcp_consul_cluster.hashistack.cluster_id
+}
+
 resource "hcp_boundary_cluster" "hashistack" {
   cluster_id = "boundary-cluster"
   username   = "admin"
