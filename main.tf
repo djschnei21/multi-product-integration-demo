@@ -44,7 +44,7 @@ resource "hcp_boundary_cluster" "hashistack" {
 }
 
 output "vault_url" {
-  value = hcp_vault_cluster.hashistack.public_endpoint
+  value = hcp_vault_cluster.hashistack.vault_public_endpoint_url
 }
 
 output "consul_url" {
