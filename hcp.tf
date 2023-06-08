@@ -36,6 +36,6 @@ resource "hcp_consul_cluster_root_token" "example" {
 
 resource "hcp_boundary_cluster" "hashistack" {
   cluster_id = "boundary-cluster"
-  username   = "admin"
+  username   = "dan"
   password   = var.boundary_password
 }
