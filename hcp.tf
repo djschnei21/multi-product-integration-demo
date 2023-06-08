@@ -35,7 +35,7 @@ resource "hcp_packer_channel" "staging" {
   bucket_name = "ubuntu"
 }
 
-resource "hcp_packer_channel" "staging" {
+resource "hcp_packer_channel" "production" {
   name        = "production"
   bucket_name = "ubuntu"
 }
