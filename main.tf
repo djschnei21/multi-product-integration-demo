@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     hcp = {
-      source = "hashicorp/hcp"
+      source  = "hashicorp/hcp"
       version = "0.60.0"
     }
   }
@@ -19,9 +19,10 @@ resource "hcp_hvn" "hashistack" {
 }
 
 resource "hcp_vault_cluster" "hashistack" {
-  cluster_id = "vault-cluster"
-  hvn_id     = hcp_hvn.hashistack.hvn_id
-  tier       = "starter_small"
+  cluster_id      = "vault-cluster"
+  hvn_id          = hcp_hvn.hashistack.hvn_id
+  tier            = "starter_small"
+  public_endpoint = true
 
   lifecycle {
     prevent_destroy = true
