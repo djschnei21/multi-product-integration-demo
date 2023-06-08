@@ -30,9 +30,11 @@ resource "hcp_vault_cluster" "hashistack" {
 }
 
 resource "hcp_consul_cluster" "hashistack" {
-  cluster_id = "consul-cluster"
-  hvn_id     = hcp_hvn.hashistack.hvn_id
-  tier       = "development"
+  cluster_id      = "consul-cluster"
+  hvn_id          = hcp_hvn.hashistack.hvn_id
+  tier            = "development"
+  public_endpoint = true
+  connect_enabled = true
 }
 
 resource "hcp_boundary_cluster" "hashistack" {
