@@ -29,3 +29,13 @@ resource "hcp_boundary_cluster" "hashistack" {
   username   = "admin"
   password   = var.boundary_password
 }
+
+resource "hcp_packer_channel" "staging" {
+  name        = "staging"
+  bucket_name = "ubuntu"
+}
+
+resource "hcp_packer_channel" "staging" {
+  name        = "production"
+  bucket_name = "ubuntu"
+}
