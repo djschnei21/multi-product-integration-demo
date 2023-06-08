@@ -12,12 +12,20 @@ resource "vault_policy" "admin_policy" {
   policy = file("vault/admin-policy.hcl")
 }
 
-resource "vault_github_auth_backend" "github" {
-  organization = "hashicorp"
+resource "vault_auth_backend" "userpass" {
+  type = "userpass"
 }
 
-resource "vault_github_user" "me" {
-  backend  = vault_github_auth_backend.github.id
-  user     = "djschnei21"
-  policies = ["admin"]
+# Create a user named, "student"
+resource "vault_generic_endpoint" "student" {
+  depends_on           = [vault_auth_backend.userpass]
+  path                 = "auth/userpass/users/dan"
+  ignore_absent_fields = true
+
+  data_json = <<EOT
+{
+  "policies": ["admins"],
+  "password": "${var.vault_password}"
+}
+EOT
 }
