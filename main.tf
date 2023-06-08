@@ -14,3 +14,12 @@ resource "hcp_hvn" "hashistack" {
   cidr_block     = "172.25.16.0/20"
 }
 
+resource "hcp_vault_cluster" "hashistack" {
+  cluster_id = "vault-cluster"
+  hvn_id     = hcp_hvn.hashistack.hvn_id
+  tier       = "starter_small"
+  
+  lifecycle {
+    prevent_destroy = true
+  }
+}
