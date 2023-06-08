@@ -18,8 +18,14 @@ resource "hcp_vault_cluster" "hashistack" {
   cluster_id = "vault-cluster"
   hvn_id     = hcp_hvn.hashistack.hvn_id
   tier       = "starter_small"
-  
+
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "hcp_consul_cluster" "hashistack" {
+  cluster_id = "consul-cluster"
+  hvn_id     = hcp_hvn.hashistack.id
+  tier       = "development"
 }
