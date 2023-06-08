@@ -7,6 +7,10 @@ terraform {
   }
 }
 
+variable "boundary_password" {
+  type = string
+}
+
 resource "hcp_hvn" "hashistack" {
   hvn_id         = "hashistack-hvn"
   cloud_provider = "aws"
