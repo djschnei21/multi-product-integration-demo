@@ -33,9 +33,11 @@ resource "hcp_boundary_cluster" "hashistack" {
 resource "hcp_packer_channel" "staging" {
   name        = "staging"
   bucket_name = "ubuntu"
+  project_id  = "multi-cloud-hashistack"
 }
 
 resource "hcp_packer_channel" "production" {
   name        = "production"
   bucket_name = "ubuntu"
+  project_id  = "multi-cloud-hashistack"
 }
