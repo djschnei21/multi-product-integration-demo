@@ -1,3 +1,5 @@
+provider "hcp" {}
+
 resource "hcp_hvn" "hashistack" {
   hvn_id         = "hashistack-hvn"
   cloud_provider = "aws"
@@ -14,6 +16,10 @@ resource "hcp_vault_cluster" "hashistack" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "hcp_vault_cluster_admin_token" "hashistack" {
+  cluster_id = hcp_vault_cluster.hashistack.cluster_id
 }
 
 resource "hcp_consul_cluster" "hashistack" {
