@@ -6,3 +6,18 @@ provider "vault" {
 resource "vault_namespace" "hashistack" {
   path = "hashistack"
 }
+
+resource "vault_policy" "admin_policy" {
+  name   = "admins"
+  policy = file("vault/admin-policy.hcl")
+}
+
+resource "vault_github_auth_backend" "github" {
+  organization = "hashicorp"
+}
+
+resource "vault_github_user" "me" {
+  backend  = vault_github_auth_backend.github.id
+  user     = "djschnei21"
+  policies = ["admin"]
+}
