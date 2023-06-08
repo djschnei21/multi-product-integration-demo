@@ -17,7 +17,7 @@ resource "vault_auth_backend" "userpass" {
 }
 
 # Create a user named, "student"
-resource "vault_generic_endpoint" "student" {
+resource "vault_generic_endpoint" "dan" {
   depends_on           = [vault_auth_backend.userpass]
   path                 = "auth/userpass/users/dan"
   ignore_absent_fields = true
@@ -28,4 +28,11 @@ resource "vault_generic_endpoint" "student" {
   "password": "${var.vault_password}"
 }
 EOT
+}
+
+resource "vault_consul_secret_backend" "backend" {
+  path        = "consul"
+  description = "Manages the Consul backend"
+  address     = hcp_consul_cluster.hashistack.consul_public_endpoint_url
+  token       = hcp_consul_cluster_root_token.hashistack.token
 }
