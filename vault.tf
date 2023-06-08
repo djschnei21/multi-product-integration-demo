@@ -34,5 +34,5 @@ resource "vault_consul_secret_backend" "backend" {
   path        = "consul"
   description = "Manages the Consul backend"
   address     = hcp_consul_cluster.hashistack.consul_public_endpoint_url
-  token       = hcp_consul_cluster_root_token.hashistack.token
+  token       = hcp_consul_cluster_root_token.hashistack.secret_id
 }
