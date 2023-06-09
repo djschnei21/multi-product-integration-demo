@@ -30,9 +30,18 @@ resource "vault_generic_endpoint" "dan" {
 EOT
 }
 
-resource "vault_consul_secret_backend" "backend" {
+resource "vault_consul_secret_backend" "consul" {
   path        = "consul"
   description = "Manages the Consul backend"
   address     = hcp_consul_cluster.hashistack.consul_public_endpoint_url
   token       = hcp_consul_cluster_root_token.hashistack.secret_id
+}
+
+resource "vault_consul_secret_backend_role" "consul" {
+  name    = "admin"
+  backend = vault_consul_secret_backend.consul.path
+
+  consul_policies = [
+    "global-management",
+  ]
 }
