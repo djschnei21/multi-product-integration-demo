@@ -9,7 +9,7 @@ resource "vault_namespace" "hashistack" {
 
 resource "vault_policy" "admin_policy" {
   name   = "admins"
-  policy = file("vault/admin-policy.hcl")
+  policy = file("../vault/admin-policy.hcl")
 }
 
 resource "vault_auth_backend" "userpass" {
