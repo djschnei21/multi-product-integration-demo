@@ -1,18 +1,4 @@
-terraform {
-  required_providers {
-    hcp = {
-      source = "hashicorp/hcp"
-      version = "0.66.0"
-    }
-    aws = {
-        source = "hashicorp/aws"
-    }
-  }
-}
-
-provider "hcp" {
-    project_id = var.project_id
-}
+terraform {}
 
 resource "hcp_hvn" "main" {
   hvn_id         = "${var.stack_name}-hvn"

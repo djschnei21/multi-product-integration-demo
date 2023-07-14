@@ -6,7 +6,12 @@ terraform {
 
     doormat = {
       source  = "doormat.hashicorp.services/hashicorp-security/doormat"
-      version = "~> 0.0.2"
+      version = "0.0.2"
+    }
+
+    hcp = {
+      source = "hashicorp/hcp"
+      version = "0.66.0"
     }
   }
 }
