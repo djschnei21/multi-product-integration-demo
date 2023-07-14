@@ -27,4 +27,5 @@ provider "aws" {
 
 module "name" {
   source = "./modules/csp-landing-zones/aws"
+  stack_name = var.stack_name
 }
