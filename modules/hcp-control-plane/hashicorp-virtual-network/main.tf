@@ -10,9 +10,7 @@ terraform {
   }
 }
 
-provider "hcp" {
-  project_id = var.project_id
-}
+provider "hcp" {}
 
 resource "hcp_hvn" "main" {
   hvn_id         = "${var.stack_name}-hvn"
