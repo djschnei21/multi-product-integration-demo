@@ -25,6 +25,9 @@ data "aws_vpc" "peer" {
   id = var.aws_vpc_id
 }
 
+data "aws_security_group" "default" {
+  name = "default"
+}
 
 resource "hcp_aws_network_peering" "hashistack" {
   hvn_id          = hcp_hvn.main.hvn_id
@@ -44,4 +47,13 @@ resource "hcp_hvn_route" "hvn-to-aws" {
 resource "aws_vpc_peering_connection_accepter" "peer" {
   vpc_peering_connection_id = hcp_aws_network_peering.hashistack.provider_peering_id
   auto_accept               = true
+}
+
+resource "aws_security_group_rule" "aws_outbound_hcp" {
+  type              = "egress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "tcp"
+  cidr_blocks       = [hcp_hvn.main.cidr_block]
+  security_group_id = data.aws_security_group.default.id
 }
