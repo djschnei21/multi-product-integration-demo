@@ -33,7 +33,7 @@ resource "hcp_aws_network_peering" "hashistack" {
 resource "hcp_hvn_route" "hvn-to-aws" {
   hvn_link         = hcp_hvn.main.self_link
   hvn_route_id     = "hvn-to-aws"
-  destination_cidr = aws_vpc.peer.cidr
+  destination_cidr = data.aws_vpc.peer.cidr_block
   target_link      = hcp_aws_network_peering.hashistack.self_link
 }
 
