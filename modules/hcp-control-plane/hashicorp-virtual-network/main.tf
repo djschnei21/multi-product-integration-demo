@@ -27,7 +27,7 @@ resource "hcp_aws_network_peering" "hashistack" {
   peering_id      = var.stack_name
   peer_vpc_id     = data.aws_vpc.peer.id
   peer_account_id = data.aws_vpc.peer.owner_id
-  peer_vpc_region = data.aws_vpc.peer.region
+  peer_vpc_region = "us-east-1"
 }
 
 resource "hcp_hvn_route" "hvn-to-aws" {
