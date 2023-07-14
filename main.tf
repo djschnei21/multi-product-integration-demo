@@ -29,3 +29,9 @@ module "aws_landing_zone" {
   source = "./modules/csp-landing-zones/aws"
   stack_name = var.stack_name
 }
+
+module "hcp_hvn_aws" {
+  source = "./modules/hcp-control-plane/hashicorp-virtual-network"
+  stack_name = var.stack_name
+  aws_vpc_arn = module.aws_landing_zone.vpc_arn
+}
