@@ -12,10 +12,6 @@ resource "hcp_vault_cluster" "hashistack" {
   hvn_id          = hcp_hvn.hashistack.hvn_id
   tier            = "starter_small"
   public_endpoint = true
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 resource "hcp_vault_cluster_admin_token" "hashistack" {
