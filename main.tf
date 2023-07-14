@@ -25,8 +25,6 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
-data "aws_iam_roles" "roles" {}
-
-output "roles" {
-  value = data.aws_iam_roles.roles
+module "name" {
+  source = "./modules/csp-landing-zones/aws"
 }
