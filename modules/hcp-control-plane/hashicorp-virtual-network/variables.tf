@@ -3,7 +3,7 @@ variable "stack_name" {
     default = ""
 }
 
-variable "aws_vpc_arn" {
+variable "aws_vpc_id" {
     type = string
     default = ""
 }

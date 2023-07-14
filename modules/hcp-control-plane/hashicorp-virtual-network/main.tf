@@ -18,7 +18,7 @@ resource "hcp_hvn" "main" {
 }
 
 data "aws_vpc" "peer" {
-  id = "${var.stack_name}-vpc"
+  id = var.aws_vpc_id
 }
 
 
