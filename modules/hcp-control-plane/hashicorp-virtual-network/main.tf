@@ -10,8 +10,8 @@ terraform {
   }
 }
 
-hcp {
-    project = "multi-cloud-hashistack"
+provider "hcp" {
+  project_id = "multi-cloud-hashistack"
 }
 
 resource "hcp_hvn" "main" {
