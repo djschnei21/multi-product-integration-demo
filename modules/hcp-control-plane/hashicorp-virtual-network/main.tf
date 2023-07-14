@@ -53,7 +53,7 @@ resource "aws_security_group_rule" "aws_outbound_hcp" {
   type              = "egress"
   from_port         = 0
   to_port           = 65535
-  protocol          = "tcp"
+  protocol          = "all"
   cidr_blocks       = [hcp_hvn.main.cidr_block]
   security_group_id = data.aws_security_group.default.id
 }
