@@ -10,6 +10,10 @@ terraform {
   }
 }
 
+hcp {
+    project = "multi-cloud-hashistack"
+}
+
 resource "hcp_hvn" "main" {
   hvn_id         = "${var.stack_name}-hvn"
   cloud_provider = "aws"
