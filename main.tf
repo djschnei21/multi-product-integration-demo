@@ -25,7 +25,7 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
-module "name" {
+module "aws_landing_zone" {
   source = "./modules/csp-landing-zones/aws"
   stack_name = var.stack_name
 }
