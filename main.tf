@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
     }
 
     doormat = {
@@ -19,19 +19,19 @@ data "doormat_aws_credentials" "creds" {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region     = "us-east-1"
   access_key = data.doormat_aws_credentials.creds.access_key
   secret_key = data.doormat_aws_credentials.creds.secret_key
   token      = data.doormat_aws_credentials.creds.token
 }
 
 module "aws_landing_zone" {
-  source = "./modules/csp-landing-zones/aws"
+  source     = "./modules/csp-landing-zones/aws"
   stack_name = var.stack_name
 }
 
 module "hcp_hvn_aws" {
-  source = "./modules/hcp-control-plane/hashicorp-virtual-network"
-  stack_name = var.stack_name
+  source      = "./modules/hcp-control-plane/hashicorp-virtual-network"
+  stack_name  = var.stack_name
   aws_vpc_arn = module.aws_landing_zone.vpc_arn
 }

@@ -1,19 +1,19 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
+      source = "hashicorp/aws"
     }
   }
 }
 
 variable "tfc_account_name" {
-    type = string
-    default = "djs-tfcb"
+  type    = string
+  default = "djs-tfcb"
 }
 
 variable "tfc_workspace_name" {
-    type = string
-    default = "multi-cloud-hashistack"
+  type    = string
+  default = "multi-cloud-hashistack"
 }
 
 resource "aws_iam_role" "doormat_role" {

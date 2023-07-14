@@ -10,10 +10,6 @@ terraform {
   }
 }
 
-provider "aws" {}
-
-provider "hcp" {}
-
 resource "hcp_hvn" "main" {
   hvn_id         = "${var.stack_name}-hvn"
   cloud_provider = "aws"
@@ -21,9 +17,10 @@ resource "hcp_hvn" "main" {
   cidr_block     = "172.25.16.0/20"
 }
 
-data "aws_arn" "peer" {
-  arn = var.aws_vpc_arn
+data "aws_vpc" "peer" {
+  id = "${var.stack_name}-vpc"
 }
+
 
 resource "hcp_aws_network_peering" "hashistack" {
   hvn_id          = hcp_hvn.main.hvn_id
