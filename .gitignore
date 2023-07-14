@@ -1,0 +1,4 @@
+local-prereqs/.terraform
+local-prereqs/.terraform.lock.hcl
+local-prereqs/terraform.tfstate
+local-prereqs/terraform.tfstate.backup

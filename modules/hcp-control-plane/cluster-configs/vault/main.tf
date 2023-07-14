@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    vault = {
+      source  = "hashicorp/vault"
+      version = "3.16.0"
+    }
+  }
+}
+
 provider "vault" {
   address = hcp_vault_cluster.hashistack.vault_public_endpoint_url
   token   = hcp_vault_cluster_admin_token.hashistack.token
