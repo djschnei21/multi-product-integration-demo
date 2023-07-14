@@ -31,6 +31,7 @@ module "aws_landing_zone" {
 }
 
 module "hcp_hvn_aws" {
+  depends_on = [ module.aws_landing_zone ]
   source      = "./modules/hcp-control-plane/hashicorp-virtual-network"
   stack_name  = var.stack_name
   aws_vpc_id = module.aws_landing_zone.vpc_id
