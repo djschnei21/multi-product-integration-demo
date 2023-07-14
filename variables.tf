@@ -4,6 +4,6 @@ variable "stack_name" {
 }
 
 variable "hcp_project_id" {
-  type = string
+  type    = string
   default = ""
 }

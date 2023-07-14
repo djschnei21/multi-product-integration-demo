@@ -10,7 +10,7 @@ terraform {
     }
 
     hcp = {
-      source = "hashicorp/hcp"
+      source  = "hashicorp/hcp"
       version = "0.66.0"
     }
   }
@@ -19,7 +19,7 @@ terraform {
 provider "doormat" {}
 
 provider "hcp" {
-    project_id = var.hcp_project_id
+  project_id = var.hcp_project_id
 }
 
 provider "aws" {
@@ -40,9 +40,9 @@ module "aws_landing_zone" {
 }
 
 module "hcp_hvn_aws" {
-  depends_on = [ module.aws_landing_zone ]
-  source      = "./modules/hcp-control-plane/hashicorp-virtual-network"
-  stack_name  = var.stack_name
+  depends_on = [module.aws_landing_zone]
+  source     = "./modules/hcp-control-plane/hashicorp-virtual-network"
+  stack_name = var.stack_name
   aws_vpc_id = module.aws_landing_zone.vpc_id
   project_id = var.hcp_project_id
 }
