@@ -11,7 +11,7 @@ terraform {
 }
 
 provider "hcp" {
-  project_id = "multi-cloud-hashistack"
+  project_id = var.project_id
 }
 
 resource "hcp_hvn" "main" {
