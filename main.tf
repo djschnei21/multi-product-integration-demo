@@ -45,7 +45,7 @@ module "hcp_hvn_aws" {
 }
 
 module "hcp_clusters" {
-  depends_on = [ module.module.hcp_hvn_aws ]
+  depends_on = [ module.hcp_hvn_aws ]
   source                  = "./modules/hcp-control-plane/clusters"
   stack_name              = var.stack_name
   hcp_hvn_id              = module.hcp_hvn_aws.hcp_hvn_id
