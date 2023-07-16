@@ -11,7 +11,7 @@ check "vault_health_check" {
 
 check "consul_health_check" {
   data "http" "consul_cluster" {
-    url = module.hcp_clusters.consul_url
+    url = "${module.hcp_clusters.consul_url}/health"
   }
 
   assert {
