@@ -25,9 +25,7 @@ resource "hcp_consul_cluster_root_token" "hashistack" {
 
 resource "hcp_boundary_cluster" "hashistack" {
   cluster_id = "${var.stack_name}-boundary-cluster"
-  hvn_id          = var.hcp_hvn_id
-  boundary_cluster_tier = var.boundary_cluster_tier
+  tier       = var.boundary_cluster_tier
   username   = var.boundary_admin_username
   password   = var.boundary_admin_password
-  tier       = var.boundary_cluster_tier
 }

@@ -13,7 +13,7 @@ output "consul_url" {
 
 output "consul_admin_token" {
   sensitive = true
-  value = hcp_consul_cluster_root_token.hashistack.token
+  value = hcp_consul_cluster_root_token.hashistack.secret_id
 }
 
 output "boundary_url" {
