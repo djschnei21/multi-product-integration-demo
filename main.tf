@@ -2,16 +2,17 @@ terraform {
   required_providers {
     aws = {
       source = "hashicorp/aws"
+      version = "~> 5.8.0"
     }
 
     doormat = {
       source  = "doormat.hashicorp.services/hashicorp-security/doormat"
-      version = "0.0.6"
+      version = "~> 0.0.6"
     }
 
     hcp = {
       source  = "hashicorp/hcp"
-      version = "0.66.0"
+      version = "~> 0.66.0"
     }
   }
 }
