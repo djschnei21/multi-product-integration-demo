@@ -46,11 +46,11 @@ module "hcp_hvn_aws" {
 }
 
 module "hcp_clusters" {
-  source = "./modules/hcp-control-plane/clusters"
-  stack_name = var.stack_name
-  hcp_hvn_id = module.hcp_hvn_aws.hcp_hvn_id
+  source                  = "./modules/hcp-control-plane/clusters"
+  stack_name              = var.stack_name
+  hcp_hvn_id              = module.hcp_hvn_aws.hcp_hvn_id
   boundary_admin_username = var.boundary_admin_username
   boundary_admin_password = var.boundary_admin_password
-  vault_cluster_tier = var.vault_cluster_tier
-  consul_cluster_tier = var.consul_cluster_tier
+  vault_cluster_tier      = var.vault_cluster_tier
+  consul_cluster_tier     = var.consul_cluster_tier
 }

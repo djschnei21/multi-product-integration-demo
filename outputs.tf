@@ -7,7 +7,7 @@ output "aws_vpc_id" {
 }
 
 output "hcp_hvn_id" {
-    value = module.hcp_hvn_aws.hcp_hvn_id
+  value = module.hcp_hvn_aws.hcp_hvn_id
 }
 
 output "vault_url" {
@@ -16,7 +16,7 @@ output "vault_url" {
 
 output "vault_admin_token" {
   sensitive = true
-  value = module.hcp_clusters.vault_admin_token
+  value     = module.hcp_clusters.vault_admin_token
 }
 
 output "consul_url" {
@@ -25,7 +25,7 @@ output "consul_url" {
 
 output "consul_admin_token" {
   sensitive = true
-  value = module.hcp_clusters.consul_admin_token
+  value     = module.hcp_clusters.consul_admin_token
 }
 
 output "boundary_url" {
