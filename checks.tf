@@ -26,7 +26,7 @@ check "boundary_chealth_check" {
   }
 
   assert {
-    condition = data.http.boundary_url.status_code == 200
+    condition = data.http.boundary_cluster.status_code == 200
     error_message = "${var.stack_name}-boundary-cluster returned an unhealthy status code"
   }
 }
