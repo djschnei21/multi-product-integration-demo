@@ -1,6 +1,6 @@
 check "vault_health_check" {
   data "http" "vault_cluster" {
-    url = module.hcp_clusters.vault_url
+    url = "${module.hcp_clusters.vault_url}/sys/health"
   }
 
   assert {
