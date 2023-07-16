@@ -39,14 +39,13 @@ module "aws_landing_zone" {
 }
 
 module "hcp_hvn_aws" {
-  # depends_on = [module.aws_landing_zone]
+  depends_on = [module.aws_landing_zone] #required because dependency on default SG being created isnt implicit
   source     = "./modules/hcp-control-plane/hashicorp-virtual-network"
   stack_name = var.stack_name
   aws_vpc_id = module.aws_landing_zone.vpc_id
 }
 
 module "hcp_clusters" {
-  # depends_on              = [module.hcp_hvn_aws]
   source                  = "./modules/hcp-control-plane/clusters"
   stack_name              = var.stack_name
   hcp_hvn_id              = module.hcp_hvn_aws.hcp_hvn_id
