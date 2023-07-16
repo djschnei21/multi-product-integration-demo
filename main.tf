@@ -18,9 +18,7 @@ terraform {
 
 provider "doormat" {}
 
-provider "hcp" {
-  project_id = var.hcp_project_id
-}
+provider "hcp" {}
 
 provider "aws" {
   region     = "us-east-1"
@@ -45,4 +43,12 @@ module "hcp_hvn_aws" {
   stack_name = var.stack_name
   aws_vpc_id = module.aws_landing_zone.vpc_id
   project_id = var.hcp_project_id
+}
+
+module "hcp_clusters" {
+  source = "./modules/hcp-control-plane/clusters"
+  boundary_admin_username = var.boundary_admin_username
+  boundary_admin_password = var.boundary_admin_password
+  vault_cluster_tier = var.vault_cluster_tier
+  consul_cluster_tier = var.consul_cluster_tier
 }

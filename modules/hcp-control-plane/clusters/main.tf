@@ -1,25 +1,9 @@
-terraform {
-  required_providers {
-    hcp = {
-      source  = "hashicorp/hcp"
-      version = "0.60.0"
-    }
-  }
-}
-
-provider "hcp" {}
-
-resource "hcp_hvn" "hashistack" {
-  hvn_id         = "hashistack-hvn"
-  cloud_provider = "aws"
-  region         = "us-east-1"
-  cidr_block     = "172.25.16.0/20"
-}
+terraform {}
 
 resource "hcp_vault_cluster" "hashistack" {
-  cluster_id      = "vault-cluster"
+  cluster_id      = "${var.stack_name}-vault-cluster"
   hvn_id          = hcp_hvn.hashistack.hvn_id
-  tier            = "starter_small"
+  tier            = var.vault_cluster_tier
   public_endpoint = true
 }
 
@@ -28,9 +12,9 @@ resource "hcp_vault_cluster_admin_token" "hashistack" {
 }
 
 resource "hcp_consul_cluster" "hashistack" {
-  cluster_id      = "consul-cluster"
+  cluster_id      = "${var.stack_name}-consul-cluster"
   hvn_id          = hcp_hvn.hashistack.hvn_id
-  tier            = "development"
+  tier            = var.consul_cluster_tier
   public_endpoint = true
   connect_enabled = true
 }
@@ -40,7 +24,7 @@ resource "hcp_consul_cluster_root_token" "hashistack" {
 }
 
 resource "hcp_boundary_cluster" "hashistack" {
-  cluster_id = "boundary-cluster"
-  username   = "dan"
-  password   = var.boundary_password
+  cluster_id = "${var.stack_name}-boundary-cluster"
+  username   = var.boundary_admin_username
+  password   = var.boundary_admin_password
 }
