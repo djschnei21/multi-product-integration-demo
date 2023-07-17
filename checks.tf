@@ -1,6 +1,6 @@
 check "vault_health_check" {
   data "http" "vault_cluster" {
-    url = "${hcp_vault_cluster.hashistack.cluster_url}/ui/"
+    url = "${hcp_vault_cluster.hashistack.vault_public_endpoint_url}/ui/"
   }
 
   assert {
@@ -11,7 +11,7 @@ check "vault_health_check" {
 
 check "consul_health_check" {
   data "http" "consul_cluster" {
-    url = hcp_consul_cluster.hashistack.cluster_url
+    url = hcp_consul_cluster.hashistack.consul_public_endpoint_url
   }
 
   assert {
