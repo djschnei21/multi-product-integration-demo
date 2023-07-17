@@ -3,22 +3,50 @@ variable "stack_name" {
   default = "hashistack"
 }
 
-variable "boundary_admin_username" {
-  type = string
+variable "stack_id" {
+  type        = string
+  description = "The name of your HCP Consul cluster"
+  default     = "cluster-ec2-demo"
 }
 
-variable "boundary_admin_password" {
-  type = string
+variable "vpc_region" {
+  type        = string
+  description = "The AWS region to create resources in"
+  default     = "us-west-2"
 }
 
-variable "boundary_cluster_tier" {
-  type = string
+variable "vpc_cidr_block" {
+  type        = string
+  description = "The CIDR range to create the AWS VPC with"
+  default     = "10.0.0.0/16"
 }
 
-variable "vault_cluster_tier" {
-  type = string
+variable "vpc_public_subnets" {
+  type        = list(string)
+  description = "A list of public subnet CIDR ranges to create"
+  default     = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
 
-variable "consul_cluster_tier" {
-  type = string
+variable "vpc_private_subnets" {
+  type        = list(string)
+  description = "A list of private subnet CIDR ranges to create"
+  default     = []
+}
+
+variable "hvn_region" {
+  type        = string
+  description = "The AWS region to create HCP resources in"
+  default     = "us-west-2"
+}
+
+variable "hvn_id" {
+  type        = string
+  description = "The name of your HCP HVN"
+  default     = "cluster-ec2-demo-hvn"
+}
+
+variable "hvn_cidr_block" {
+  type        = string
+  description = "The CIDR range to create the HCP HVN with"
+  default     = "172.25.32.0/20"
 }
