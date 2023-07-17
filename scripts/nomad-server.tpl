@@ -24,6 +24,12 @@ consul {
   token = "${consul_acl_token}"
 }
 bind_addr = "0.0.0.0"
+acl {
+  enabled    = true
+  token_ttl  = "30s"
+  policy_ttl = "60s"
+  role_ttl   = "60s"
+}
 EOF
 chown root:root /etc/nomad.d/nomad.hcl
 chmod 600 /etc/nomad.d/nomad.hcl
