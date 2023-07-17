@@ -95,13 +95,26 @@ resource "hcp_boundary_cluster" "hashistack" {
   password   = var.boundary_admin_password
 }
 
-data "hcp_packer_image" "ubuntu-lunar-hashi" {
+data "hcp_packer_image" "ubuntu-lunar-hashi-amd" {
   bucket_name     = "ubuntu-lunar-hashi"
+  component_type  = "amazon-ebs.amd"
   channel         = "latest"
   cloud_provider  = "aws"
   region          = "us-east-2"
 }
 
-output "image" {
-  value = data.hcp_packer_image.ubuntu-lunar-hashi
+data "hcp_packer_image" "ubuntu-lunar-hashi-arm" {
+  bucket_name     = "ubuntu-lunar-hashi"
+  component_type  = "amazon-ebs.arm"
+  channel         = "latest"
+  cloud_provider  = "aws"
+  region          = "us-east-2"
+}
+
+output "amd-image" {
+  value = data.hcp_packer_image.ubuntu-lunar-hashi-amd
+}
+
+output "arm-image" {
+  value = data.hcp_packer_image.ubuntu-lunar-hashi-arm
 }
