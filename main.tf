@@ -69,14 +69,32 @@ module "aws_hcp_network_config" {
   route_table_ids = module.vpc.public_route_table_ids
 }
 
-module "hcp_clusters" {
-  source = "./modules/hcp-control-plane/clusters"
+resource "hcp_vault_cluster" "hashistack" {
+  cluster_id      = "${var.stack_id}-vault-cluster"
+  hvn_id          = hcp_hvn.main.hvn_id
+  tier            = var.vault_cluster_tier
+  public_endpoint = true
+}
 
-  stack_id = var.stack_id
-  hvn = hcp_hvn.main
-  boundary_admin_username = var.boundary_admin_username
-  boundary_admin_password = var.boundary_admin_password
-  boundary_cluster_tier = var.boundary_cluster_tier
-  vault_cluster_tier = var.vault_cluster_tier
-  consul_cluster_tier = var.consul_cluster_tier
+resource "hcp_vault_cluster_admin_token" "hashistack" {
+  cluster_id = hcp_vault_cluster.hashistack.cluster_id
+}
+
+resource "hcp_consul_cluster" "hashistack" {
+  cluster_id      = "${var.stack_id}-consul-cluster"
+  hvn_id          = hcp_hvn.main.hvn_id
+  tier            = var.consul_cluster_tier
+  public_endpoint = true
+  connect_enabled = true
+}
+
+resource "hcp_consul_cluster_root_token" "hashistack" {
+  cluster_id = hcp_consul_cluster.hashistack.cluster_id
+}
+
+resource "hcp_boundary_cluster" "hashistack" {
+  cluster_id = "${var.stack_id}-boundary-cluster"
+  tier       = var.boundary_cluster_tier
+  username   = var.boundary_admin_username
+  password   = var.boundary_admin_password
 }
