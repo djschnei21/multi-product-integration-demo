@@ -139,10 +139,9 @@ resource "aws_launch_template" "nomad_server_asg_template" {
   image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_amd.cloud_image_id
   instance_type = "t2.micro"
 
-  vpc_security_group_ids = [aws_security_group.nomad_server.id]
-
   network_interfaces {
     associate_public_ip_address = true
+    security_groups = [ aws_security_group.nomad_server.id ]
   }
 
   user_data = base64encode(
@@ -169,7 +168,16 @@ resource "aws_autoscaling_group" "nomad-nomad_server_asg" {
     id = aws_launch_template.nomad_server_asg_template.id
     version = aws_launch_template.nomad_server_asg_template.latest_version
   }
+  
   vpc_zone_identifier = module.vpc.public_subnets
+
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = [ "launch_template" ]
+  }
 
   lifecycle {
     create_before_destroy = true
