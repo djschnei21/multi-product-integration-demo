@@ -159,7 +159,7 @@ resource "aws_launch_template" "nomad_server_asg_template" {
   }
 }
 
-resource "aws_autoscaling_group" "nomad-nomad_server_asg" {
+resource "aws_autoscaling_group" "nomad_server_asg" {
   desired_capacity  = 3
   max_size          = 5
   min_size          = 1
