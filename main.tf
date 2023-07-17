@@ -102,7 +102,7 @@ resource "tls_private_key" "ssh" {
 
 resource "aws_key_pair" "hcp_ec2" {
   public_key = tls_private_key.ssh.public_key_openssh
-  key_name   = "hcp-ec2-key-${var.cluster_id}"
+  key_name   = "hcp-ec2-key-${var.stack_id}"
 }
 
 resource "local_file" "ssh_key" {
@@ -123,7 +123,7 @@ module "aws_ec2_consul_client" {
   nat_public_ips           = module.vpc.nat_public_ips
   install_demo_app         = var.install_demo_app
   root_token               = hcp_consul_cluster_root_token.token.secret_id
-  security_group_id        = module.aws_hcp_consul.security_group_id
+  security_group_id        = module.aws_hcp_network_config.security_group_id
   ssh_key                  = tls_private_key.ssh.private_key_pem
   ssh_keyname              = aws_key_pair.hcp_ec2.key_name
   ssm                      = var.ssm
