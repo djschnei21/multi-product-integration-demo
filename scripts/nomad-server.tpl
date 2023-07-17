@@ -33,7 +33,7 @@ chown root:root /etc/nomad.d/nomad.hcl
 chmod 600 /etc/nomad.d/nomad.hcl
 
 echo "${nomad_license}" | sudo tee /etc/nomad.d/license.hclic
-chown root:root /etc/nomad.d/nomad.license
-chmod 600 /etc/nomad.d/nomad.license
+chown root:root /etc/nomad.d/license.hclic
+chmod 600 /etc/nomad.d/license.hclic
                 
 sudo systemctl restart nomad
