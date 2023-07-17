@@ -21,16 +21,16 @@ provider "doormat" {}
 
 provider "hcp" {}
 
+data "doormat_aws_credentials" "creds" {
+  provider = doormat
+  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role"
+}
+
 provider "aws" {
   region     = var.aws_region
   access_key = data.doormat_aws_credentials.creds.access_key
   secret_key = data.doormat_aws_credentials.creds.secret_key
   token      = data.doormat_aws_credentials.creds.token
-}
-
-data "doormat_aws_credentials" "creds" {
-  provider = doormat
-  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role"
 }
 
 data "aws_availability_zones" "available" {

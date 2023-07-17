@@ -45,7 +45,7 @@ variable "boundary_admin_username" {
 }
 
 variable "boundary_admin_password" {
-  type = string
+  type      = string
   sensitive = true
 }
 
