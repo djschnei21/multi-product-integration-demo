@@ -75,3 +75,9 @@ variable "ssm" {
   description = "Whether to enable SSM on the EC2 host"
   default     = true
 }
+
+variable "install_demo_app" {
+  type        = bool
+  description = "Whether to install demo app"
+  default     = false
+}
