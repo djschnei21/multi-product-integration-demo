@@ -4,10 +4,10 @@ variable "stack_id" {
   default     = "hashistack"
 }
 
-variable "vpc_region" {
+variable "aws_region" {
   type        = string
   description = "The AWS region to create resources in"
-  default     = "us-west-2"
+  default     = "us-east-2"
 }
 
 variable "vpc_cidr_block" {
@@ -31,7 +31,7 @@ variable "vpc_private_subnets" {
 variable "hvn_region" {
   type        = string
   description = "The AWS region to create HCP resources in"
-  default     = "us-west-2"
+  default     = "us-east-2"
 }
 
 variable "hvn_cidr_block" {
