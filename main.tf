@@ -119,19 +119,19 @@ resource "aws_security_group" "nomad_server" {
 }
 
 data "hcp_packer_image" "ubuntu_lunar_hashi_amd" {
-  bucket_name     = "ubuntu-lunar-hashi"
-  component_type  = "amazon-ebs.amd"
-  channel         = "latest"
-  cloud_provider  = "aws"
-  region          = "us-east-2"
+  bucket_name    = "ubuntu-lunar-hashi"
+  component_type = "amazon-ebs.amd"
+  channel        = "latest"
+  cloud_provider = "aws"
+  region         = "us-east-2"
 }
 
 data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
-  bucket_name     = "ubuntu-lunar-hashi"
-  component_type  = "amazon-ebs.arm"
-  channel         = "latest"
-  cloud_provider  = "aws"
-  region          = "us-east-2"
+  bucket_name    = "ubuntu-lunar-hashi"
+  component_type = "amazon-ebs.arm"
+  channel        = "latest"
+  cloud_provider = "aws"
+  region         = "us-east-2"
 }
 
 resource "aws_launch_template" "nomad_server_asg_template" {
@@ -141,15 +141,15 @@ resource "aws_launch_template" "nomad_server_asg_template" {
 
   vpc_security_group_ids = [aws_security_group.nomad_server.id]
 
-   network_interfaces {
+  network_interfaces {
     associate_public_ip_address = true
   }
 
   user_data = base64encode(
     templatefile("${path.module}/scripts/nomad-server.tpl",
       {
-        nomad_license    = var.nomad_license,
-        consul_ca_file   = hcp_consul_cluster.hashistack.consul_ca_file,
+        nomad_license      = var.nomad_license,
+        consul_ca_file     = hcp_consul_cluster.hashistack.consul_ca_file,
         consul_config_file = hcp_consul_cluster.hashistack.consul_config_file
       }
     )
@@ -161,12 +161,12 @@ resource "aws_launch_template" "nomad_server_asg_template" {
 }
 
 resource "aws_autoscaling_group" "nomad-nomad_server_asg" {
-  desired_capacity     = 3
-  max_size             = 5
-  min_size             = 1
-  health_check_type    = "EC2"
+  desired_capacity  = 3
+  max_size          = 5
+  min_size          = 1
+  health_check_type = "EC2"
   launch_template {
-    id      = aws_launch_template.nomad_server_asg_template.id
+    id = aws_launch_template.nomad_server_asg_template.id
   }
   vpc_zone_identifier = module.vpc.public_subnets
 

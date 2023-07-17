@@ -41,36 +41,36 @@ variable "hvn_cidr_block" {
 }
 
 variable "boundary_admin_username" {
-  type = string
+  type        = string
   description = "The admin username to be created on the Boundary cluster"
   default     = "admin"
 }
 
 variable "boundary_admin_password" {
-  type      = string
+  type        = string
   description = "The admin user's password on the Boundary cluster"
-  sensitive = true
+  sensitive   = true
 }
 
 variable "boundary_cluster_tier" {
-  type = string
+  type        = string
   description = "The tier used when creating the Boundary cluster"
-  default = "plus"
+  default     = "plus"
 }
 
 variable "vault_cluster_tier" {
-  type = string
+  type        = string
   description = "The tier used when creating the Vault cluster"
-  default = "plus_small"
+  default     = "plus_small"
 }
 
 variable "consul_cluster_tier" {
-  type = string
+  type        = string
   description = "The tier used when creating the Consul cluster"
-  default = "development"
+  default     = "development"
 }
 
 variable "nomad_license" {
-  type        = string
+  type      = string
   sensitive = true
 }
