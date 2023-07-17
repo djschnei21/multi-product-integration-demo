@@ -176,7 +176,6 @@ resource "aws_autoscaling_group" "nomad-nomad_server_asg" {
     preferences {
       min_healthy_percentage = 50
     }
-    triggers = [ "launch_template" ]
   }
 
   lifecycle {
