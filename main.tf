@@ -84,6 +84,10 @@ resource "hcp_consul_cluster" "hashistack" {
   connect_enabled = true
 }
 
+resource "hcp_consul_cluster_root_token" "token" {
+  cluster_id = hcp_consul_cluster.hashistack.cluster_id
+}
+
 resource "hcp_boundary_cluster" "hashistack" {
   cluster_id = "${var.stack_id}-boundary-cluster"
   tier       = var.boundary_cluster_tier
