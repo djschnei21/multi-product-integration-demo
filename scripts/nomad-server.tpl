@@ -3,7 +3,7 @@ set -e
 
 # Add HCP Consul CA and Config
 echo '${consul_ca_file}' | sudo base64 -d > /etc/consul.d/consul_ca.pem
-echo '${consul_config_file}' | sudo base64 -d > /etc/consul.d/consul.hcl
+echo '${consul_config_file}' | sudo base64 -d > /etc/consul.d/consul.json
 
 sudo systemctl restart consul
 
