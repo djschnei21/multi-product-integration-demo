@@ -23,11 +23,7 @@ server {
 consul {
   token = "${consul_acl_token}"
 }
-advertise {
-  http = "$(ec2metadata --local-ipv4):4646"
-  rpc  = "$(ec2metadata --local-ipv4):4647"
-  serf = "$(ec2metadata --local-ipv4):4648" # Serf is used for server gossip protocol
-}
+bind_addr = "$(ec2metadata --local-ipv4)"
 EOF
 chown root:root /etc/nomad.d/nomad.hcl
 chmod 600 /etc/nomad.d/nomad.hcl
