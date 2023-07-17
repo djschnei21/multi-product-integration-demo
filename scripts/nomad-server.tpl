@@ -29,10 +29,10 @@ advertise {
   serf = "$(ec2metadata --local-ipv4):4648" # Serf is used for server gossip protocol
 }
 EOF
-chown root:root /etc/nomad.d/config.hcl
-chmod 600 /etc/nomad.d/config.hcl
+chown root:root /etc/nomad.d/nomad.hcl
+chmod 600 /etc/nomad.d/nomad.hcl
 
-echo '${nomad_license}' | sudo tee /etc/nomad.d/license.hclic
+echo "${nomad_license}" | sudo tee /etc/nomad.d/license.hclic
 chown root:root /etc/nomad.d/nomad.license
 chmod 600 /etc/nomad.d/nomad.license
                 
