@@ -90,3 +90,39 @@ resource "hcp_boundary_cluster" "hashistack" {
   username   = var.boundary_admin_username
   password   = var.boundary_admin_password
 }
+
+resource "tls_private_key" "ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "hcp_ec2" {
+  public_key = tls_private_key.ssh.public_key_openssh
+  key_name   = "hcp-ec2-key-${var.cluster_id}"
+}
+
+resource "local_file" "ssh_key" {
+  content         = tls_private_key.ssh.private_key_pem
+  file_permission = "400"
+  filename        = "${path.module}/${aws_key_pair.hcp_ec2.key_name}.pem"
+}
+
+module "aws_ec2_consul_client" {
+  source  = "hashicorp/hcp-consul/aws//modules/hcp-ec2-client"
+  version = "~> 0.12.1"
+
+  allowed_http_cidr_blocks = ["0.0.0.0/0"]
+  allowed_ssh_cidr_blocks  = ["0.0.0.0/0"]
+  client_ca_file           = hcp_consul_cluster.main.consul_ca_file
+  client_config_file       = hcp_consul_cluster.main.consul_config_file
+  consul_version           = hcp_consul_cluster.main.consul_version
+  nat_public_ips           = module.vpc.nat_public_ips
+  install_demo_app         = var.install_demo_app
+  root_token               = hcp_consul_cluster_root_token.token.secret_id
+  security_group_id        = module.aws_hcp_consul.security_group_id
+  ssh_key                  = tls_private_key.ssh.private_key_pem
+  ssh_keyname              = aws_key_pair.hcp_ec2.key_name
+  ssm                      = var.ssm
+  subnet_id                = module.vpc.public_subnets[0]
+  vpc_id                   = module.vpc.vpc_id
+}

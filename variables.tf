@@ -69,3 +69,9 @@ variable "consul_cluster_tier" {
   description = "The tier used when creating the Consul cluster"
   default = "development"
 }
+
+variable "ssm" {
+  type        = bool
+  description = "Whether to enable SSM on the EC2 host"
+  default     = true
+}
