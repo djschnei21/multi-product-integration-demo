@@ -134,7 +134,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   region          = "us-east-2"
 }
 
-resource "aws_launch_template" "asg_template" {
+resource "aws_launch_template" "nomad_server_asg_template" {
   name_prefix   = "lt-"
   image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_amd.cloud_image_id
   instance_type = "t2.micro"
@@ -150,6 +150,21 @@ resource "aws_launch_template" "asg_template" {
       }
     )
   )
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "nomad-nomad_server_asg" {
+  desired_capacity     = 3
+  max_size             = 5
+  min_size             = 1
+  health_check_type    = "EC2"
+  launch_template {
+    id      = aws_launch_template.nomad_server_asg_template.id
+  }
+  vpc_zone_identifier = module.vpc.public_subnets
 
   lifecycle {
     create_before_destroy = true
