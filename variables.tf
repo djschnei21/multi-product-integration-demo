@@ -55,14 +55,17 @@ variable "boundary_admin_password" {
 variable "boundary_cluster_tier" {
   type = string
   description = "The tier used when creating the Boundary cluster"
+  default = "plus"
 }
 
 variable "vault_cluster_tier" {
   type = string
   description = "The tier used when creating the Vault cluster"
+  default = "plus_small"
 }
 
 variable "consul_cluster_tier" {
   type = string
   description = "The tier used when creating the Consul cluster"
+  default = "development"
 }
