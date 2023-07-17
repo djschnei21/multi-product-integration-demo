@@ -76,10 +76,6 @@ resource "hcp_vault_cluster" "hashistack" {
   public_endpoint = true
 }
 
-resource "hcp_vault_cluster_admin_token" "hashistack" {
-  cluster_id = hcp_vault_cluster.hashistack.cluster_id
-}
-
 resource "hcp_consul_cluster" "hashistack" {
   cluster_id      = "${var.stack_id}-consul-cluster"
   hvn_id          = hcp_hvn.main.hvn_id
