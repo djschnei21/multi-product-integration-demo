@@ -15,8 +15,8 @@ sudo systemctl restart consul
 cat <<EOF > /etc/nomad.d/config.hcl
 datacenter = "dc1"
 data_dir = "/opt/nomad"
-license_path = "/etc/nomad.d/license.hclic"
 server {
+  license_path = "/etc/nomad.d/license.hclic"
   enabled          = true
   bootstrap_expect = 3
 }
@@ -24,7 +24,7 @@ EOF
 chown root:root /etc/nomad.d/config.hcl
 chmod 600 /etc/nomad.d/config.hcl
 
-echo '${nomad_license}' | sudo tee /etc/nomad.d/nomad.license
+echo '${nomad_license}' | sudo tee /etc/nomad.d/license.hclic
 chown root:root /etc/nomad.d/nomad.license
 chmod 600 /etc/nomad.d/nomad.license
                 
