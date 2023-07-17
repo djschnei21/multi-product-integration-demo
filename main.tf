@@ -141,6 +141,10 @@ resource "aws_launch_template" "nomad_server_asg_template" {
 
   vpc_security_group_ids = [aws_security_group.nomad_server.id]
 
+   network_interfaces {
+    associate_public_ip_address = true
+  }
+
   user_data = base64encode(
     templatefile("${path.module}/scripts/nomad-server.tpl",
       {
