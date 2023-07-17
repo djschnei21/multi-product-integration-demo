@@ -39,3 +39,24 @@ variable "hvn_cidr_block" {
   description = "The CIDR range to create the HCP HVN with"
   default     = "172.25.32.0/20"
 }
+
+variable "boundary_admin_username" {
+  type = string
+}
+
+variable "boundary_admin_password" {
+  type = string
+  sensitive = true
+}
+
+variable "boundary_cluster_tier" {
+  type = string
+}
+
+variable "vault_cluster_tier" {
+  type = string
+}
+
+variable "consul_cluster_tier" {
+  type = string
+}

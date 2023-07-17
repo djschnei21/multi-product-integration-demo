@@ -1,9 +1,14 @@
-variable "stack_name" {
+variable "stack_id" {
   type = string
 }
 
-variable "hcp_hvn_id" {
-  type = string
+variable "hvn" {
+  type = object({
+    hvn_id     = string
+    self_link  = string
+    cidr_block = string
+  })
+  description = "The HCP HVN to connect to the VPC"
 }
 
 variable "boundary_admin_username" {
@@ -12,6 +17,7 @@ variable "boundary_admin_username" {
 
 variable "boundary_admin_password" {
   type = string
+  sensitive = true
 }
 
 variable "boundary_cluster_tier" {

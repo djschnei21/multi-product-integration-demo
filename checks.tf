@@ -5,7 +5,7 @@
 
 #   assert {
 #     condition     = data.http.vault_cluster.status_code == 200
-#     error_message = "${var.stack_name}-vault-cluster returned an unhealthy status code"
+#     error_message = "${var.stack_id}-vault-cluster returned an unhealthy status code"
 #   }
 # }
 
@@ -16,7 +16,7 @@
 
 #   assert {
 #     condition     = data.http.consul_cluster.status_code == 200
-#     error_message = "${var.stack_name}-consul-cluster returned an unhealthy status code"
+#     error_message = "${var.stack_id}-consul-cluster returned an unhealthy status code"
 #   }
 # }
 
@@ -27,6 +27,6 @@
 
 #   assert {
 #     condition     = data.http.boundary_cluster.status_code == 200
-#     error_message = "${var.stack_name}-boundary-cluster returned an unhealthy status code"
+#     error_message = "${var.stack_id}-boundary-cluster returned an unhealthy status code"
 #   }
 # }

@@ -68,3 +68,15 @@ module "aws_hcp_network_config" {
   subnet_ids      = module.vpc.public_subnets
   route_table_ids = module.vpc.public_route_table_ids
 }
+
+module "hcp_clusters" {
+  source = "./modules/hcp-control-plane/clusters"
+
+  stack_id = var.stack_id
+  hvn = hcp_hvn.main
+  boundary_admin_username = var.boundary_admin_username
+  boundary_admin_password = var.boundary_admin_password
+  boundary_cluster_tier = var.boundary_cluster_tier
+  vault_cluster_tier = var.vault_cluster_tier
+  consul_cluster_tier = var.consul_cluster_tier
+}
