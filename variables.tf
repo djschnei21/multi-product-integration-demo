@@ -1,12 +1,7 @@
-variable "stack_name" {
-  type    = string
-  default = "hashistack"
-}
-
 variable "stack_id" {
   type        = string
-  description = "The name of your HCP Consul cluster"
-  default     = "cluster-ec2-demo"
+  description = "The name of your stack"
+  default     = "hashistack"
 }
 
 variable "vpc_region" {
@@ -37,12 +32,6 @@ variable "hvn_region" {
   type        = string
   description = "The AWS region to create HCP resources in"
   default     = "us-west-2"
-}
-
-variable "hvn_id" {
-  type        = string
-  description = "The name of your HCP HVN"
-  default     = "cluster-ec2-demo-hvn"
 }
 
 variable "hvn_cidr_block" {
