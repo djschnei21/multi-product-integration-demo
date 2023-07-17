@@ -113,9 +113,9 @@ module "aws_ec2_consul_client" {
 
   allowed_http_cidr_blocks = ["0.0.0.0/0"]
   allowed_ssh_cidr_blocks  = ["0.0.0.0/0"]
-  client_ca_file           = hcp_consul_cluster.main.consul_ca_file
-  client_config_file       = hcp_consul_cluster.main.consul_config_file
-  consul_version           = hcp_consul_cluster.main.consul_version
+  client_ca_file           = hcp_consul_cluster.hashistack.consul_ca_file
+  client_config_file       = hcp_consul_cluster.hashistack.consul_config_file
+  consul_version           = hcp_consul_cluster.hashistack.consul_version
   nat_public_ips           = module.vpc.nat_public_ips
   install_demo_app         = var.install_demo_app
   root_token               = hcp_consul_cluster_root_token.token.secret_id
