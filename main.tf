@@ -167,6 +167,7 @@ resource "aws_autoscaling_group" "nomad-nomad_server_asg" {
   health_check_type = "EC2"
   launch_template {
     id = aws_launch_template.nomad_server_asg_template.id
+    version = aws_launch_template.nomad_server_asg_template.latest_version
   }
   vpc_zone_identifier = module.vpc.public_subnets
 
