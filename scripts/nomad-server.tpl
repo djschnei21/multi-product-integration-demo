@@ -23,7 +23,7 @@ server {
 consul {
   token = "${consul_acl_token}"
 }
-bind_addr = "$(ec2metadata --local-ipv4)"
+bind_addr = "0.0.0.0"
 EOF
 chown root:root /etc/nomad.d/nomad.hcl
 chmod 600 /etc/nomad.d/nomad.hcl

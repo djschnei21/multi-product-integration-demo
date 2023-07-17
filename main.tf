@@ -109,7 +109,7 @@ resource "aws_security_group" "nomad_server" {
   ingress {
     from_port   = 4646
     to_port     = 4646
-    protocol    = "http"
+    protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
