@@ -95,7 +95,30 @@ resource "hcp_boundary_cluster" "hashistack" {
   password   = var.boundary_admin_password
 }
 
-data "hcp_packer_image" "ubuntu-lunar-hashi-amd" {
+resource "aws_security_group" "nomad_server" {
+  name   = "nomad-server"
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+data "hcp_packer_image" "ubuntu_lunar_hashi_amd" {
   bucket_name     = "ubuntu-lunar-hashi"
   component_type  = "amazon-ebs.amd"
   channel         = "latest"
@@ -103,7 +126,7 @@ data "hcp_packer_image" "ubuntu-lunar-hashi-amd" {
   region          = "us-east-2"
 }
 
-data "hcp_packer_image" "ubuntu-lunar-hashi-arm" {
+data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   bucket_name     = "ubuntu-lunar-hashi"
   component_type  = "amazon-ebs.arm"
   channel         = "latest"
@@ -111,10 +134,24 @@ data "hcp_packer_image" "ubuntu-lunar-hashi-arm" {
   region          = "us-east-2"
 }
 
-output "amd-image" {
-  value = data.hcp_packer_image.ubuntu-lunar-hashi-amd
-}
+resource "aws_launch_template" "asg_template" {
+  name_prefix   = "lt-"
+  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_amd.cloud_image_id
+  instance_type = "t2.micro"
 
-output "arm-image" {
-  value = data.hcp_packer_image.ubuntu-lunar-hashi-arm
+  vpc_security_group_ids = [aws_security_group.nomad_server.id]
+
+  user_data = base64encode(
+    templatefile("${path.module}/scripts/nomad-server.tpl",
+      {
+        nomad_license    = var.nomad_license,
+        consul_ca_file   = hcp_consul_cluster.hashistack.consul_ca_file,
+        consul_config_file = hcp_consul_cluster.hashistack.consul_config_file
+      }
+    )
+  )
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }

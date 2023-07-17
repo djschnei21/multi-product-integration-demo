@@ -70,14 +70,7 @@ variable "consul_cluster_tier" {
   default = "development"
 }
 
-variable "ssm" {
-  type        = bool
-  description = "Whether to enable SSM on the EC2 host"
-  default     = true
-}
-
-variable "install_demo_app" {
-  type        = bool
-  description = "Whether to install demo app"
-  default     = false
+variable "nomad_license" {
+  type        = string
+  sensitive = true
 }

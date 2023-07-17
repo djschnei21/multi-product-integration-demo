@@ -1,25 +1,20 @@
-variable "consul_ent_version" {
-  type = string
-  default = "1.16.0+ent-1"
-}
-
 variable "nomad_ent_version" {
-  type = string
+  type    = string
   default = "1.6.0~rc.1+ent-1"
 }
 
 variable "subnet_id" {
-    type = string
+  type = string
 }
 
 variable "region" {
-    type = string
-    default = "us-east-2"
+  type    = string
+  default = "us-east-2"
 }
 
 source "amazon-ebs" "amd" {
-  region     = var.region
-  subnet_id  = var.subnet_id
+  region                      = var.region
+  subnet_id                   = var.subnet_id
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
@@ -27,22 +22,22 @@ source "amazon-ebs" "amd" {
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
-    owners = ["099720109477"] # Canonical
+    owners      = ["099720109477"] # Canonical
     most_recent = true
   }
   instance_type = "t2.micro"
   ssh_username  = "ubuntu"
-  ami_name      = "ubuntu-lunar-hashi-amd64"
+  ami_name      = "amd64-{{timestamp}}"
   tags = {
-    timestamp = "{{timestamp}}"
-    nomad_version = var.nomad_ent_version
-    consul_version = var.consul_ent_version
+    timestamp      = "{{timestamp}}"
+    nomad_version  = var.nomad_ent_version
+    consul_enabled = true
   }
 }
 
 source "amazon-ebs" "arm" {
-  region     = var.region
-  subnet_id  = var.subnet_id
+  region                      = var.region
+  subnet_id                   = var.subnet_id
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
@@ -50,16 +45,16 @@ source "amazon-ebs" "arm" {
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
-    owners = ["099720109477"] # Canonical
+    owners      = ["099720109477"] # Canonical
     most_recent = true
   }
-  instance_type = "a1.medium"
+  instance_type = "a1.large"
   ssh_username  = "ubuntu"
-  ami_name      = "ubuntu-lunar-hashi-arm64"
+  ami_name      = "arm64-{{timestamp}}"
   tags = {
-    timestamp = "{{timestamp}}"
-    nomad_version = var.nomad_ent_version
-    consul_version = var.consul_ent_version
+    timestamp      = "{{timestamp}}"
+    nomad_version  = var.nomad_ent_version
+    consul_enabled = true
   }
 }
 
@@ -69,20 +64,34 @@ build {
     "source.amazon-ebs.arm"
   ]
 
-  provisioner "shell" {
-    inline = [
-      "sudo apt-get update",
-      "sudo apt-get upgrade -y",
-      "wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg",
-      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
-      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
-      "sudo apt-get update"
-    ]
+  hcp_packer_registry {
+    bucket_name = "ubuntu-lunar-hashi"
+    description = "Ubuntu Lunar Lobster with Nomad and Consul installed"
+
+    bucket_labels = {
+      "os"             = "Ubuntu",
+      "ubuntu-version" = "23.04",
+    }
+
+    build_labels = {
+      "timestamp"      = timestamp()
+      "nomad_version"  = var.nomad_ent_version
+      "consul_enabled" = true
+    }
   }
 
   provisioner "shell" {
     inline = [
-      "sudo apt-get install -y consul-enterprise=${var.consul_ent_version} nomad-enterprise=${var.nomad_ent_version}"
+      "wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg",
+      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
+      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
+      "sudo apt update && sudo apt upgrade -y",
+      "sudo apt install -y consul nomad-enterprise=${var.nomad_ent_version}",
+      "curl -fsSL https://get.docker.com -o get-docker.sh",
+      "sh ./get-docker.sh",
+      "curl -L -o cni-plugins.tgz \"https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-$([ $(uname -m) = aarch64 ] && echo arm64 || echo amd64)\"-v1.3.0.tgz",
+      "sudo mkdir -p /opt/cni/bin",
+      "sudo tar -C /opt/cni/bin -xzf cni-plugins.tgz"
     ]
   }
 }
