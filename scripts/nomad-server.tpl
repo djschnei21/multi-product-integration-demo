@@ -12,13 +12,16 @@ jq '.ports = {"grpc":8502}' /etc/consul.d/client.temp.3 > /etc/consul.d/consul.j
 sudo systemctl restart consul
 
 # Create Nomad configuration file
-cat <<EOF > /etc/nomad.d/config.hcl
+cat <<EOF > /etc/nomad.d/nomad.hcl
 datacenter = "dc1"
 data_dir = "/opt/nomad"
 server {
   license_path = "/etc/nomad.d/license.hclic"
   enabled          = true
   bootstrap_expect = 3
+}
+consul {
+  token = "${consul_acl_token}"
 }
 EOF
 chown root:root /etc/nomad.d/config.hcl
