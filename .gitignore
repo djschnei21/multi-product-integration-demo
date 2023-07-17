@@ -1,5 +1,5 @@
-local-prereqs/.terraform
-local-prereqs/.terraform.lock.hcl
-local-prereqs/terraform.tfstate
-local-prereqs/terraform.tfstate.backup
+doormat-prereqs/.terraform
+doormat-prereqs/.terraform.lock.hcl
+doormat-prereqs/terraform.tfstate
+doormat-prereqs/terraform.tfstate.backup
 .DS_Store
