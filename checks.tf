@@ -1,6 +1,6 @@
 check "vault_health_check" {
   data "http" "vault_cluster" {
-    url = "${hcp_vault_cluster.hashistack.vault_url}/ui/"
+    url = "${hcp_vault_cluster.hashistack.cluster_url}/ui/"
   }
 
   assert {
@@ -11,7 +11,7 @@ check "vault_health_check" {
 
 check "consul_health_check" {
   data "http" "consul_cluster" {
-    url = hcp_consul_cluster.hashistack.consul_url
+    url = hcp_consul_cluster.hashistack.cluster_url
   }
 
   assert {
@@ -22,7 +22,7 @@ check "consul_health_check" {
 
 check "boundary_chealth_check" {
   data "http" "boundary_cluster" {
-    url = hcp_boundary_cluster.hashistack.boundary_url
+    url = hcp_boundary_cluster.hashistack.cluster_url
   }
 
   assert {
