@@ -164,6 +164,9 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
   max_size          = 5
   min_size          = 1
   health_check_type = "EC2"
+
+  name_prefix = "nomad-server"
+
   launch_template {
     id = aws_launch_template.nomad_server_asg_template.id
     version = aws_launch_template.nomad_server_asg_template.latest_version
