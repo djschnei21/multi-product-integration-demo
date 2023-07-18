@@ -123,7 +123,7 @@ resource "aws_launch_template" "nomad_server_asg_template" {
   instance_type = "t2.micro"
 
   network_interfaces {
-    associate_public_ip_address = true
+    associate_public_ip_address = false
     security_groups = [ aws_security_group.nomad_server.id ]
   }
 
@@ -147,52 +147,52 @@ resource "aws_launch_template" "nomad_server_asg_template" {
   }
 }
 
-# resource "aws_autoscaling_group" "nomad_server_asg" {
-#   desired_capacity  = 3
-#   max_size          = 5
-#   min_size          = 1
-#   health_check_type = "ALB"
-#   health_check_grace_period = "60"
+resource "aws_autoscaling_group" "nomad_server_asg" {
+  desired_capacity  = 3
+  max_size          = 5
+  min_size          = 1
+  health_check_type = "ALB"
+  health_check_grace_period = "60"
 
-#   name = "nomad-server"
+  name = "nomad-server"
 
-#   launch_template {
-#     id = aws_launch_template.nomad_server_asg_template.id
-#     version = aws_launch_template.nomad_server_asg_template.latest_version
-#   }
+  launch_template {
+    id = aws_launch_template.nomad_server_asg_template.id
+    version = aws_launch_template.nomad_server_asg_template.latest_version
+  }
   
-#   vpc_zone_identifier = module.vpc.public_subnets
+  vpc_zone_identifier = module.vpc.public_subnets
 
-#   instance_refresh {
-#     strategy = "Rolling"
-#     preferences {
-#       min_healthy_percentage = 50
-#     }
-#   }
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+  }
 
-#   lifecycle {
-#     create_before_destroy = true
-#   }
+  lifecycle {
+    create_before_destroy = true
+  }
 
-#   provisioner "local-exec" {
-#     command = <<EOF
-#       sleep 60  # wait for the instances in ASG to be up and running
-#       MAX_RETRIES=5
-#       COUNT=0
-#       while [ $COUNT -lt $MAX_RETRIES ]; do
-#         RESPONSE=$(curl --write-out %\{http_code\} --silent --output /dev/null http://${aws_alb.nomad.dns_name}:4646/v1/status/leader)
-#         if [ $RESPONSE -eq 200 ]; then
-#           curl --request POST http://${aws_alb.nomad.dns_name}:4646/v1/acl/bootstrap
-#           break
-#         fi
-#         COUNT=$((COUNT + 1))
-#         sleep 10
-#       done
-#     EOF
-#   }
-# }
+  provisioner "local-exec" {
+    command = <<EOF
+      sleep 60  # wait for the instances in ASG to be up and running
+      MAX_RETRIES=5
+      COUNT=0
+      while [ $COUNT -lt $MAX_RETRIES ]; do
+        RESPONSE=$(curl --write-out %\{http_code\} --silent --output /dev/null http://${aws_alb.nomad.dns_name}:4646/v1/status/leader)
+        if [ $RESPONSE -eq 200 ]; then
+          curl --request POST http://${aws_alb.nomad.dns_name}:4646/v1/acl/bootstrap
+          break
+        fi
+        COUNT=$((COUNT + 1))
+        sleep 10
+      done
+    EOF
+  }
+}
 
-# resource "aws_autoscaling_attachment" "asg_attachment" {
-#   autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
-#   lb_target_group_arn   = aws_alb_target_group.nomad.arn
-# }
+resource "aws_autoscaling_attachment" "asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
+  lb_target_group_arn   = aws_alb_target_group.nomad.arn
+}
