@@ -18,4 +18,5 @@ data "vault_kv_secret_v2" "bootstrap" {
 
 output "bootstrap" {
   value = data.vault_kv_secret_v2.bootstrap.data
+  sensitive = true
 }
