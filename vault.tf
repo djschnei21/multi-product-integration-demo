@@ -10,3 +10,12 @@ resource "vault_mount" "kvv2" {
   options     = { version = "2" }
 }
 
+data "vault_kv_secret_v2" "bootstrap" {
+  depends_on = [ null_resource.bootstrap_acl ]
+  mount = vault_mount.kvv2.path
+  name  = "nomad_bootstrap"
+}
+
+output "bootstrap" {
+  value = data.vault_kv_secret_v2.bootstrap.data
+}
