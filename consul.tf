@@ -19,7 +19,7 @@ resource "consul_acl_policy" "nomad" {
     }
 
     node_prefix "" {
-      policy = "read"
+      policy = "write"
     }
 
     service_prefix "" {
