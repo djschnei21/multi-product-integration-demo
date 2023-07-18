@@ -64,6 +64,7 @@ resource "aws_security_group" "nomad_server" {
 resource "aws_security_group" "nomad_lb" {
   name        = "nomad_lb_sg"
   description = "Allow inbound traffic"
+  vpc_id = module.vpc.vpc_id
 
   ingress {
     from_port   = 80
