@@ -10,13 +10,13 @@ resource "vault_mount" "kvv2" {
   options     = { version = "2" }
 }
 
-data "vault_kv_secret_v2" "bootstrap" {
-  depends_on = [ null_resource.bootstrap_acl ]
-  mount = vault_mount.kvv2.path
-  name  = "nomad_bootstrap"
-}
+# data "vault_kv_secret_v2" "bootstrap" {
+#   depends_on = [ null_resource.bootstrap_acl ]
+#   mount = vault_mount.kvv2.path
+#   name  = "nomad_bootstrap/SecretID"
+# }
 
-output "bootstrap" {
-  value     = jsonencode(data.vault_kv_secret_v2.bootstrap.data)["SecretID"]
-  sensitive = true
-}
+# output "bootstrap" {
+#   value     = data.vault_kv_secret_v2.bootstrap.data
+#   sensitive = true
+# }
