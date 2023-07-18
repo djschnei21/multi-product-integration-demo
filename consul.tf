@@ -5,7 +5,7 @@ provider "consul" {
 }
 
 resource "consul_acl_policy" "nomad" {
-  name  = "nomad-server"
+  name  = "nomad"
   datacenters = ["${var.stack_id}-consul-cluster"]
   rules = <<-RULE
     agent_prefix "" {
@@ -29,7 +29,7 @@ resource "consul_acl_policy" "nomad" {
 }
 
 resource "consul_acl_token" "nomad" {
-  description = "nomad server token"
+  description = "nomad token"
   policies = ["${consul_acl_policy.nomad.name}"]
   local = true
 }

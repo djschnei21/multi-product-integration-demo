@@ -98,7 +98,7 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
   health_check_type = "EC2"
   health_check_grace_period = "60"
 
-  name_prefix = "nomad-server"
+  name = "nomad-server"
 
   launch_template {
     id = aws_launch_template.nomad_server_asg_template.id
