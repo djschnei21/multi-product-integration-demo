@@ -17,6 +17,6 @@ data "vault_kv_secret_v2" "bootstrap" {
 }
 
 output "bootstrap" {
-  value     = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
+  value     = jsonencode(data.vault_kv_secret_v2.bootstrap.data)["SecretID"]
   sensitive = true
 }
