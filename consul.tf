@@ -4,7 +4,7 @@ provider "consul" {
   token      = hcp_consul_cluster_root_token.provider.secret_id
 }
 
-resource "consul_acl_policy" "nomad_server" {
+resource "consul_acl_policy" "nomad" {
   name  = "nomad-server"
   datacenters = ["${var.stack_id}-consul-cluster"]
   rules = <<-RULE
@@ -28,12 +28,12 @@ resource "consul_acl_policy" "nomad_server" {
     RULE
 }
 
-resource "consul_acl_token" "nomad_server" {
+resource "consul_acl_token" "nomad" {
   description = "nomad server token"
-  policies = ["${consul_acl_policy.nomad_server.name}"]
+  policies = ["${consul_acl_policy.nomad.name}"]
   local = true
 }
 
 data "consul_acl_token_secret_id" "read" {
-    accessor_id = consul_acl_token.nomad_server.id
+    accessor_id = consul_acl_token.nomad.id
 }
