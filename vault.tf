@@ -1,11 +1,11 @@
-# provider "vault" {
-#   address = hcp_vault_cluster.hashistack.public_endpoint
-#   token = hcp_vault_cluster_admin_token.provider.token
-# }
+provider "vault" {
+  address = hcp_vault_cluster.hashistack.public_endpoint
+  token = hcp_vault_cluster_admin_token.provider.token
+}
 
-# resource "vault_mount" "kvv2" {
-#   path        = "hashistack-admin"
-#   type        = "kv"
-#   options     = { version = "2" }
-# }
+resource "vault_mount" "kvv2" {
+  path        = "hashistack-admin"
+  type        = "kv"
+  options     = { version = "2" }
+}
 
