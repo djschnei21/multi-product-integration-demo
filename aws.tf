@@ -72,6 +72,13 @@ resource "aws_security_group" "nomad_lb" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  egress = {
+    from_port   = 4646
+    to_port     = 4646
+    protocol    = "tcp"
+    cidr_blocks = module.vpc.public_subnets
+  }
 }
 
 resource "aws_alb" "nomad" {
