@@ -157,6 +157,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
 
 resource "consul_acl_policy" "nomad_server" {
   name  = "nomad-server"
+  datacenters = ["${var.stack_id}-consul-cluster"]
   rules = <<-RULE
     agent_prefix "" {
       policy = "read"
