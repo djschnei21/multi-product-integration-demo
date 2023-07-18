@@ -39,7 +39,7 @@ resource "aws_security_group" "nomad_server" {
     from_port   = 4646
     to_port     = 4646
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.lb_sg.id]
   }
 
   ingress {
@@ -58,6 +58,36 @@ resource "aws_security_group" "nomad_server" {
 
   lifecycle {
     create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "nomad_lb" {
+  name        = "nomad_lb_sg"
+  description = "Allow inbound traffic"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_alb" "main" {
+  name               = "nomad-alb"
+  security_groups    = [aws_security_group.nomad_lb.id]
+  subnets            = module.vpc.public_subnets
+}
+
+resource "aws_alb_target_group" "nomad" {
+  name     = "nomad"
+  port     = 4646
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+
+  health_check {
+    path = "/v1/status/leader"
+    port = "4646"
   }
 }
 
@@ -117,4 +147,9 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_autoscaling_attachment" "asg_attachment" {
+  autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
+  alb_target_group_arn   = aws_alb_target_group.nomad.arn
 }
