@@ -14,6 +14,11 @@ terraform {
       source  = "hashicorp/hcp"
       version = "~> 0.66.0"
     }
+
+    consul = {
+      source = "hashicorp/consul"
+      version = "~> 2.17.0"
+    }
   }
 }
 
@@ -31,6 +36,12 @@ provider "aws" {
   access_key = data.doormat_aws_credentials.creds.access_key
   secret_key = data.doormat_aws_credentials.creds.secret_key
   token      = data.doormat_aws_credentials.creds.token
+}
+
+provider "consul" {
+  address    = hcp_consul_cluster.hashistack.consul_public_endpoint_url
+  datacenter = "${var.stack_id}-consul-cluster"
+  token      = hcp_consul_cluster.hashistack.consul_root_token_secret_id
 }
 
 data "aws_availability_zones" "available" {
@@ -82,10 +93,6 @@ resource "hcp_consul_cluster" "hashistack" {
   tier            = var.consul_cluster_tier
   public_endpoint = true
   connect_enabled = true
-}
-
-resource "hcp_consul_cluster_root_token" "token" {
-  cluster_id = hcp_consul_cluster.hashistack.cluster_id
 }
 
 resource "hcp_boundary_cluster" "hashistack" {
@@ -146,6 +153,43 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   channel        = "latest"
   cloud_provider = "aws"
   region         = "us-east-2"
+}
+
+resource "consul_namespace" "nomad" {
+  name        = "nomad-ns"
+  description = "nomad namespace"
+}
+
+resource "consul_acl_policy" "nomad_server" {
+  name  = "nomad-server"
+  rules = <<-RULE
+    agent_prefix "" {
+      policy = "read"
+    }
+
+    namespace "${consul_namespace.nomad.name}" {
+      acl = "write"
+
+      key_prefix "" {
+        policy = "read"
+      }
+
+      node_prefix "" {
+        policy = "read"
+      }
+
+      service_prefix "" {
+        policy = "write"
+      }
+    }
+    RULE
+}
+
+resource "consul_acl_token" "test" {
+  description = "nomad server token"
+  policies = ["${consul_acl_policy.nomad_server.name}"]
+  local = true
+  namespace = consul_namespace.nomad.name
 }
 
 resource "aws_launch_template" "nomad_server_asg_template" {
