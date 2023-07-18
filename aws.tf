@@ -39,7 +39,7 @@ resource "aws_security_group" "nomad_server" {
     from_port   = 4646
     to_port     = 4646
     protocol    = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
+    security_groups = [aws_security_group.nomad_lb.id]
   }
 
   ingress {
@@ -75,7 +75,7 @@ resource "aws_security_group" "nomad_lb" {
 
 resource "aws_alb" "main" {
   name               = "nomad-alb"
-  security_groups    = [aws_security_group.nomad_lb.id]
+  security_groups    = [ aws_security_group.nomad_lb.id ]
   subnets            = module.vpc.public_subnets
 }
 
@@ -83,7 +83,7 @@ resource "aws_alb_target_group" "nomad" {
   name     = "nomad"
   port     = 4646
   protocol = "HTTP"
-  vpc_id   = aws_vpc.main.id
+  vpc_id   = module.vpc.vpc_id
 
   health_check {
     path = "/v1/status/leader"
