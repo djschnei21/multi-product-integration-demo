@@ -73,7 +73,7 @@ resource "aws_security_group" "nomad_lb" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  egress = {
+  egress {
     from_port   = 4646
     to_port     = 4646
     protocol    = "tcp"
