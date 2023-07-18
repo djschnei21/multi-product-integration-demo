@@ -147,38 +147,38 @@ resource "aws_launch_template" "nomad_server_asg_template" {
   }
 }
 
-resource "aws_autoscaling_group" "nomad_server_asg" {
-  desired_capacity  = 3
-  max_size          = 5
-  min_size          = 1
-  health_check_type = "ELB"
-  health_check_grace_period = "60"
+# resource "aws_autoscaling_group" "nomad_server_asg" {
+#   desired_capacity  = 3
+#   max_size          = 5
+#   min_size          = 1
+#   health_check_type = "ELB"
+#   health_check_grace_period = "60"
 
-  name = "nomad-server"
+#   name = "nomad-server"
 
-  launch_template {
-    id = aws_launch_template.nomad_server_asg_template.id
-    version = aws_launch_template.nomad_server_asg_template.latest_version
-  }
+#   launch_template {
+#     id = aws_launch_template.nomad_server_asg_template.id
+#     version = aws_launch_template.nomad_server_asg_template.latest_version
+#   }
   
-  vpc_zone_identifier = module.vpc.public_subnets
+#   vpc_zone_identifier = module.vpc.public_subnets
 
-  instance_refresh {
-    strategy = "Rolling"
-    preferences {
-      min_healthy_percentage = 50
-    }
-  }
+#   instance_refresh {
+#     strategy = "Rolling"
+#     preferences {
+#       min_healthy_percentage = 50
+#     }
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
 
-resource "aws_autoscaling_attachment" "asg_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
-  lb_target_group_arn   = aws_alb_target_group.nomad.arn
-}
+# resource "aws_autoscaling_attachment" "asg_attachment" {
+#   autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
+#   lb_target_group_arn   = aws_alb_target_group.nomad.arn
+# }
 
 # resource "null_resource" "bootstrap_acl" {
 #   triggers = {
