@@ -1,9 +1,5 @@
 provider "hcp" {}
 
-resource "hcp_consul_cluster_root_token" "provider" {
-  cluster_id = hcp_consul_cluster.hashistack.cluster_id
-}
-
 resource "hcp_hvn" "main" {
   hvn_id         = "${var.stack_id}-hvn"
   cloud_provider = "aws"
@@ -41,6 +37,14 @@ resource "hcp_boundary_cluster" "hashistack" {
   tier       = var.boundary_cluster_tier
   username   = var.boundary_admin_username
   password   = var.boundary_admin_password
+}
+
+resource "hcp_consul_cluster_root_token" "provider" {
+  cluster_id = hcp_consul_cluster.hashistack.cluster_id
+}
+
+resource "hcp_vault_cluster_admin_token" "provider" {
+  cluster_id = hcp_vault_cluster.hashistack.cluster_id
 }
 
 data "hcp_packer_image" "ubuntu_lunar_hashi_amd" {
