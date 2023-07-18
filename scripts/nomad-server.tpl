@@ -22,7 +22,6 @@ server {
 }
 consul {
   token = "${consul_acl_token}"
-  namespace = "${consul_namespace}"
 }
 bind_addr = "0.0.0.0"
 acl {

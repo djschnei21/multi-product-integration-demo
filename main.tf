@@ -155,11 +155,6 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   region         = "us-east-2"
 }
 
-resource "consul_namespace" "nomad" {
-  name        = "nomad-ns"
-  description = "nomad namespace"
-}
-
 resource "consul_acl_policy" "nomad_server" {
   name  = "nomad-server"
   rules = <<-RULE
@@ -167,20 +162,18 @@ resource "consul_acl_policy" "nomad_server" {
       policy = "read"
     }
 
-    namespace "${consul_namespace.nomad.name}" {
-      acl = "write"
+    acl = "write"
 
-      key_prefix "" {
-        policy = "read"
-      }
+    key_prefix "" {
+      policy = "read"
+    }
 
-      node_prefix "" {
-        policy = "read"
-      }
+    node_prefix "" {
+      policy = "read"
+    }
 
-      service_prefix "" {
-        policy = "write"
-      }
+    service_prefix "" {
+      policy = "write"
     }
     RULE
 }
@@ -189,7 +182,6 @@ resource "consul_acl_token" "nomad_server" {
   description = "nomad server token"
   policies = ["${consul_acl_policy.nomad_server.name}"]
   local = true
-  namespace = consul_namespace.nomad.name
 }
 
 data "consul_acl_token_secret_id" "read" {
@@ -217,7 +209,6 @@ resource "aws_launch_template" "nomad_server_asg_template" {
         consul_ca_file     = hcp_consul_cluster.hashistack.consul_ca_file,
         consul_config_file = hcp_consul_cluster.hashistack.consul_config_file
         consul_acl_token   = data.consul_acl_token_secret_id.read.secret_id
-        consul_namespace   = consul_namespace.nomad.name
       }
     )
   )
