@@ -87,7 +87,7 @@ resource "aws_alb_target_group" "nomad" {
   vpc_id   = module.vpc.vpc_id
 
   health_check {
-    path = "/v1/status/leader"
+    path = "/v1/agent/health?type=server"
     port = "4646"
   }
 }
