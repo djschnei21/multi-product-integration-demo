@@ -16,7 +16,11 @@ data "vault_kv_secret_v2" "bootstrap" {
   name  = "nomad_bootstrap"
 }
 
+data "external" "bootstrap" {
+  program = ["bash", "-c", "echo '${data.vault_kv_secret_v2.bootstrap.data["response"]}' | jq -r '.SecretID'"]
+}
+
 output "bootstrap" {
-  value = data.vault_kv_secret_v2.bootstrap.data
+  value     = data.external.bootstrap.result["stdout"]
   sensitive = true
 }
