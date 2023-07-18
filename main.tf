@@ -217,6 +217,7 @@ resource "aws_launch_template" "nomad_server_asg_template" {
         consul_ca_file     = hcp_consul_cluster.hashistack.consul_ca_file,
         consul_config_file = hcp_consul_cluster.hashistack.consul_config_file
         consul_acl_token   = data.consul_acl_token_secret_id.read.secret_id
+        consul_namespace   = consul_namespace.nomad.name
       }
     )
   )
