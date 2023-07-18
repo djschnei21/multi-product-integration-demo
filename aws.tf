@@ -190,9 +190,10 @@ resource "null_resource" "bootstrap_acl" {
       MAX_RETRIES=5
       COUNT=0
       while [ $COUNT -lt $MAX_RETRIES ]; do
-        RESPONSE=$(curl --write-out %%{http_code} --silent --output /dev/null http://${aws_alb.nomad.dns_name}:4646/v1/agent/health?type=server)
+        RESPONSE=$(curl --write-out %%{http_code} --silent --output /dev/null http://${aws_alb.nomad.dns_name}/v1/agent/health?type=server)
         if [ $RESPONSE -eq 200 ]; then
-          curl --request POST http://${aws_alb.nomad.dns_name}:4646/v1/acl/bootstrap >> nomad_bootstrap.json
+          curl --request POST http://${aws_alb.nomad.dns_name}/v1/acl/bootstrap >> nomad_bootstrap.json
+          cat nomad_bootstrap.json
           break
         fi
         COUNT=$((COUNT + 1))
