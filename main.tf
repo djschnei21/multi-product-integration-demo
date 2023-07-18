@@ -38,10 +38,14 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
+resource "hcp_consul_cluster_root_token" "provider" {
+  cluster_id = hcp_consul_cluster.hashistack.cluster_id
+}
+
 provider "consul" {
   address    = hcp_consul_cluster.hashistack.consul_public_endpoint_url
   datacenter = "${var.stack_id}-consul-cluster"
-  token      = hcp_consul_cluster.hashistack.consul_root_token_secret_id
+  token      = hcp_consul_cluster_root_token.provider.secret_id
 }
 
 data "aws_availability_zones" "available" {
