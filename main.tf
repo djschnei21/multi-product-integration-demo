@@ -185,11 +185,15 @@ resource "consul_acl_policy" "nomad_server" {
     RULE
 }
 
-resource "consul_acl_token" "test" {
+resource "consul_acl_token" "nomad_server" {
   description = "nomad server token"
   policies = ["${consul_acl_policy.nomad_server.name}"]
   local = true
   namespace = consul_namespace.nomad.name
+}
+
+data "consul_acl_token_secret_id" "read" {
+    accessor_id = consul_acl_token.nomad_server.id
 }
 
 resource "aws_launch_template" "nomad_server_asg_template" {
@@ -212,7 +216,7 @@ resource "aws_launch_template" "nomad_server_asg_template" {
         nomad_license      = var.nomad_license,
         consul_ca_file     = hcp_consul_cluster.hashistack.consul_ca_file,
         consul_config_file = hcp_consul_cluster.hashistack.consul_config_file
-        consul_acl_token   = hcp_consul_cluster_root_token.token.secret_id
+        consul_acl_token   = data.consul_acl_token_secret_id.read.secret_id
       }
     )
   )
