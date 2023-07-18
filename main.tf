@@ -158,6 +158,10 @@ resource "aws_launch_template" "nomad_server_asg_template" {
     security_groups = [ aws_security_group.nomad_server.id ]
   }
 
+  private_dns_name_options {
+    hostname_type = "resource-name"
+  }
+
   user_data = base64encode(
     templatefile("${path.module}/scripts/nomad-server.tpl",
       {
@@ -174,30 +178,30 @@ resource "aws_launch_template" "nomad_server_asg_template" {
   }
 }
 
-resource "aws_autoscaling_group" "nomad_server_asg" {
-  desired_capacity  = 3
-  max_size          = 5
-  min_size          = 1
-  health_check_type = "EC2"
-  health_check_grace_period = "60"
+# resource "aws_autoscaling_group" "nomad_server_asg" {
+#   desired_capacity  = 3
+#   max_size          = 5
+#   min_size          = 1
+#   health_check_type = "EC2"
+#   health_check_grace_period = "60"
 
-  name_prefix = "nomad-server"
+#   name_prefix = "nomad-server"
 
-  launch_template {
-    id = aws_launch_template.nomad_server_asg_template.id
-    version = aws_launch_template.nomad_server_asg_template.latest_version
-  }
+#   launch_template {
+#     id = aws_launch_template.nomad_server_asg_template.id
+#     version = aws_launch_template.nomad_server_asg_template.latest_version
+#   }
   
-  vpc_zone_identifier = module.vpc.public_subnets
+#   vpc_zone_identifier = module.vpc.public_subnets
 
-  instance_refresh {
-    strategy = "Rolling"
-    preferences {
-      min_healthy_percentage = 50
-    }
-  }
+#   instance_refresh {
+#     strategy = "Rolling"
+#     preferences {
+#       min_healthy_percentage = 50
+#     }
+#   }
 
-  lifecycle {
-    create_before_destroy = true
-  }
-}
+#   lifecycle {
+#     create_before_destroy = true
+#   }
+# }
