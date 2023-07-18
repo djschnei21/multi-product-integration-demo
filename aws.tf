@@ -151,7 +151,7 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
   desired_capacity  = 3
   max_size          = 5
   min_size          = 1
-  health_check_type = "EC2"
+  health_check_type = "ALB"
   health_check_grace_period = "60"
 
   name = "nomad-server"
