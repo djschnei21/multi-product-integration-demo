@@ -180,24 +180,24 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   lb_target_group_arn   = aws_alb_target_group.nomad.arn
 }
 
-# resource "null_resource" "bootstrap_acl" {
-#   triggers = {
-#     asg = aws_autoscaling_group.nomad_server_asg.id
-#   }
-#   provisioner "local-exec" {
-#     command = <<EOF
-#       sleep 60  # wait for the instances in ASG to be up and running
-#       MAX_RETRIES=5
-#       COUNT=0
-#       while [ $COUNT -lt $MAX_RETRIES ]; do
-#         RESPONSE=$(curl --write-out %\{http_code} --silent --output /dev/null http://${aws_alb.nomad.dns_name}:4646/v1/acl/bootstrap)
-#         if [ $RESPONSE -eq 200 ]; then
-#           curl --request POST http://${aws_alb.nomad.dns_name}:4646/v1/acl/bootstrap
-#           break
-#         fi
-#         COUNT=$((COUNT + 1))
-#         sleep 10
-#       done
-#     EOF
-#   }
-# }
+resource "null_resource" "bootstrap_acl" {
+  triggers = {
+    asg = aws_autoscaling_group.nomad_server_asg.id
+  }
+  provisioner "local-exec" {
+    command = <<EOF
+      sleep 60  # wait for the instances in ASG to be up and running
+      MAX_RETRIES=5
+      COUNT=0
+      while [ $COUNT -lt $MAX_RETRIES ]; do
+        RESPONSE=$(curl --write-out %%{http_code} --silent --output /dev/null http://${aws_alb.nomad.dns_name}:4646/v1/agent/health?type=server)
+        if [ $RESPONSE -eq 200 ]; then
+          curl --request POST http://${aws_alb.nomad.dns_name}:4646/v1/acl/bootstrap >> nomad_bootstrap.json
+          break
+        fi
+        COUNT=$((COUNT + 1))
+        sleep 10
+      done
+    EOF
+  }
+}
