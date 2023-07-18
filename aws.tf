@@ -42,12 +42,12 @@ resource "aws_security_group" "nomad_server" {
     security_groups = [aws_security_group.nomad_lb.id]
   }
 
-  ingress {
-    from_port   = 4646
-    to_port     = 4646
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+  # ingress {
+  #   from_port   = 4646
+  #   to_port     = 4646
+  #   protocol    = "tcp"
+  #   cidr_blocks = ["0.0.0.0/0"]
+  # }
 
   ingress {
     from_port   = 0
