@@ -9,6 +9,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.8.0"
     }
+
+    hcp = {
+      source  = "hashicorp/hcp"
+      version = "~> 0.66.0"
+    }
   }
 }
 
@@ -16,7 +21,7 @@ provider "doormat" {}
 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
-  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_aws-networking"
+  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_networking"
 }
 
 provider "aws" {
@@ -25,6 +30,8 @@ provider "aws" {
   secret_key = data.doormat_aws_credentials.creds.secret_key
   token      = data.doormat_aws_credentials.creds.token
 }
+
+provider "hcp" {}
 
 data "aws_availability_zones" "available" {
   filter {
@@ -45,4 +52,19 @@ module "vpc" {
   public_subnets       = var.vpc_public_subnets
 }
 
+resource "hcp_hvn" "main" {
+  hvn_id         = "${var.stack_id}-hvn"
+  cloud_provider = "aws"
+  region         = var.hvn_region
+  cidr_block     = var.hvn_cidr_block
+}
 
+module "aws_hcp_network_config" {
+  source  = "hashicorp/hcp-consul/aws"
+  version = "~> 0.12.1"
+
+  hvn             = hcp_hvn.main
+  vpc_id          = module.vpc.vpc_id
+  subnet_ids      = module.vpc.public_subnets
+  route_table_ids = module.vpc.public_route_table_ids
+}
