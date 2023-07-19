@@ -21,7 +21,7 @@ resource "vault_nomad_secret_backend" "config" {
     default_lease_ttl_seconds = "3600"
     max_lease_ttl_seconds     = "7200"
     max_ttl                   = "240"
-    address                   = aws_alb.nomad.dns_name
+    address                   = "http://${aws_alb.nomad.dns_name}"
     token                     = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
     ttl                       = "120"
 }
