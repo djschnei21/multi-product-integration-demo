@@ -193,7 +193,7 @@ resource "null_resource" "bootstrap_acl" {
               curl --header "X-Vault-Token: ${hcp_vault_cluster_admin_token.provider.token}" \
                   --header "X-Vault-Namespace: admin" \
                   --request PUT \
-                  --data "{ \"data\": { \"$key\": $value }}" \
+                  --data "{ 'data': { '$key': '$value' }}" \
                   ${hcp_vault_cluster.hashistack.vault_public_endpoint_url}/v1/hashistack-admin/data/nomad_bootstrap/$key
           done
           break
