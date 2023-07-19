@@ -220,7 +220,7 @@ resource "aws_launch_template" "nomad_client_x86_asg_template" {
   }
 
   user_data = base64encode(
-    templatefile("${path.module}/scripts/nomad-server.tpl",
+    templatefile("${path.module}/scripts/nomad-client.tpl",
       {
         nomad_license      = var.nomad_license,
         consul_ca_file     = hcp_consul_cluster.hashistack.consul_ca_file,
@@ -278,7 +278,7 @@ resource "aws_launch_template" "nomad_client_arm_asg_template" {
   }
 
   user_data = base64encode(
-    templatefile("${path.module}/scripts/nomad-server.tpl",
+    templatefile("${path.module}/scripts/nomad-client.tpl",
       {
         nomad_license      = var.nomad_license,
         consul_ca_file     = hcp_consul_cluster.hashistack.consul_ca_file,
