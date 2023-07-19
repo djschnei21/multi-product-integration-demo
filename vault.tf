@@ -16,7 +16,26 @@ data "vault_kv_secret_v2" "bootstrap" {
   name  = "nomad_bootstrap/SecretID"
 }
 
-output "bootstrap" {
-  value     = data.vault_kv_secret_v2.bootstrap.data
-  sensitive = true
+resource "vault_nomad_secret_backend" "config" {
+    backend                   = "nomad"
+    default_lease_ttl_seconds = "3600"
+    max_lease_ttl_seconds     = "7200"
+    max_ttl                   = "240"
+    address                   = aws_alb.nomad.dns_name
+    token                     = data.vault_kv_secret_v2.bootstrap.data
+    ttl                       = "120"
+}
+
+resource "vault_nomad_secret_role" "developer" {
+  backend   = vault_nomad_secret_backend.config.backend
+  role      = "developer"
+  type      = "client"
+  policies  = [ nomad_acl_policy.developer.name ]
+}
+
+resource "vault_nomad_secret_role" "operations" {
+  backend   = vault_nomad_secret_backend.config.backend
+  role      = "developer"
+  type      = "client"
+  policies  = [ nomad_acl_policy.operations.name ]
 }
