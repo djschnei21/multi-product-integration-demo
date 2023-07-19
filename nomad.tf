@@ -1,6 +1,6 @@
 provider "nomad" {
   address = aws_alb.nomad.dns_name
-  token = data.vault_kv_secret_v2.bootstrap.data
+  secret_id = data.vault_kv_secret_v2.bootstrap.data
 }
 
 resource "nomad_acl_policy" "developer" {
