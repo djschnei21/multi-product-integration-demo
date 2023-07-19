@@ -25,7 +25,7 @@ data "doormat_aws_credentials" "creds" {
 }
 
 provider "aws" {
-  region     = var.aws_region
+  region     = var.region
   access_key = data.doormat_aws_credentials.creds.access_key
   secret_key = data.doormat_aws_credentials.creds.secret_key
   token      = data.doormat_aws_credentials.creds.token
@@ -55,7 +55,7 @@ module "vpc" {
 resource "hcp_hvn" "main" {
   hvn_id         = "${var.stack_id}-hvn"
   cloud_provider = "aws"
-  region         = var.hvn_region
+  region         = var.region
   cidr_block     = var.hvn_cidr_block
 }
 

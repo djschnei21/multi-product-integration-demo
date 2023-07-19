@@ -4,9 +4,9 @@ variable "stack_id" {
   default     = "hashistack"
 }
 
-variable "aws_region" {
+variable "region" {
   type        = string
-  description = "The AWS region to create resources in"
+  description = "The AWS and HCP region to create resources in"
   default     = "us-east-2"
 }
 
@@ -26,4 +26,10 @@ variable "vpc_private_subnets" {
   type        = list(string)
   description = "A list of private subnet CIDR ranges to create"
   default     = []
+}
+
+variable "hvn_cidr_block" {
+  type        = string
+  description = "The CIDR range to create the HCP HVN with"
+  default     = "172.25.32.0/20"
 }
