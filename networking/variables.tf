@@ -1,13 +1,11 @@
 variable "stack_id" {
   type        = string
   description = "The name of your stack"
-  default     = "hashistack"
 }
 
 variable "region" {
   type        = string
   description = "The AWS and HCP region to create resources in"
-  default     = "us-east-2"
 }
 
 variable "vpc_cidr_block" {
