@@ -110,7 +110,7 @@ resource "aws_security_group" "nomad_lb" {
     from_port   = 4646
     to_port     = 4646
     protocol    = "tcp"
-    security_groups = [ aws_security_group.nomad_server.id ]
+    cidr_blocks = data.terraform_remote_state.networking.outputs.subnet_cidrs
   }
 }
 
