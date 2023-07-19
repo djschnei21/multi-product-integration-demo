@@ -42,3 +42,13 @@ plugin {
 
 EOT
 }
+
+resource "nomad_node_pool" "x64" {
+  name        = "x64"
+  description = "Intel/AMD Nodes"
+}
+
+resource "nomad_node_pool" "arm" {
+  name        = "arm"
+  description = "Arm Nodes"
+}

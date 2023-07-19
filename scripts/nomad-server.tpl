@@ -20,6 +20,9 @@ server {
   enabled          = true
   bootstrap_expect = 3
 }
+client {
+  enabled = false
+}
 consul {
   token = "${consul_acl_token}"
 }
