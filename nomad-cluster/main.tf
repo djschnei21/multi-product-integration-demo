@@ -39,8 +39,8 @@ provider "aws" {
 }
 
 provider "vault" {
-  address = data.terraform_remote_state.hcp_clusters.output.vault_public_endpoint
-  token = data.terraform_remote_state.hcp_clusters.output.vault_root_token
+  address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+  token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
   namespace = "admin"
 }
 
@@ -180,7 +180,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
     security_groups = [ 
       aws_security_group.nomad_server.id,
       aws_security_group.nomad.id,
-      data.terraform_remote_state.networking.hvn_sg_id
+      data.terraform_remote_state.networking.outputs.hvn_sg_id
     ]
   }
 
@@ -192,9 +192,9 @@ resource "aws_launch_template" "nomad_server_launch_template" {
     templatefile("${path.module}/scripts/nomad-server.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.output.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.output.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.output.consul_root_token
+        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
+        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
       }
     )
   )
@@ -260,11 +260,11 @@ resource "null_resource" "bootstrap_acl" {
         JSON_DATA=$(jq -c . < nomad_bootstrap.json)
         for key in $(echo $JSON_DATA | jq -r 'keys[]'); do
             value=$(echo $JSON_DATA | jq -r --arg key "$key" '.[$key] | @uri')
-            curl --header "X-Vault-Token: ${data.terraform_remote_state.hcp_clusters.output.vault_root_token}" \
+            curl --header "X-Vault-Token: ${data.terraform_remote_state.hcp_clusters.outputs.vault_root_token}" \
                 --header "X-Vault-Namespace: admin" \
                 --request PUT \
                 --data "{ \"data\": { \"$key\": \"$value\" }}" \
-                ${data.terraform_remote_state.hcp_clusters.output.vault_public_endpoint}/v1/hashistack-admin/data/nomad_bootstrap/$key
+                ${data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint}/v1/hashistack-admin/data/nomad_bootstrap/$key
         done
         break
       fi
@@ -284,7 +284,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
     associate_public_ip_address = false
     security_groups = [ 
       aws_security_group.nomad.id,
-      data.terraform_remote_state.networking.hvn_sg_id
+      data.terraform_remote_state.networking.outputs.hvn_sg_id
     ]
   }
 
@@ -296,9 +296,9 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
     templatefile("${path.module}/scripts/nomad-client.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.output.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.output.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.output.consul_root_token
+        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
+        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
       }
     )
   )
@@ -345,7 +345,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
     associate_public_ip_address = false
     security_groups = [ 
       aws_security_group.nomad.id,
-      data.terraform_remote_state.networking.hvn_sg_id
+      data.terraform_remote_state.networking.outputs.hvn_sg_id
     ]
   }
 
@@ -357,9 +357,9 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
     templatefile("${path.module}/scripts/nomad-client.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.output.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.output.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.output.consul_root_token
+        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
+        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
       }
     )
   )
