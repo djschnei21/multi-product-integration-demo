@@ -11,15 +11,16 @@ variable "tfc_account_name" {
   default = "djs-tfcb"
 }
 
-variable "tfc_workspace_name" {
-  type    = string
-  default = "multi-cloud-hashistack"
+variable "tfc_workspace_names" {
+  type    = set(string)
+  default = ["aws-networking"]
 }
 
 resource "aws_iam_role" "doormat_role" {
-  name = "tfc-doormat-role"
+  for_each = var.tfc_workspace_names
+  name = "tfc-doormat-role_${each.key}"
   tags = {
-    hc-service-uri = "app.terraform.io/${var.tfc_account_name}/${var.tfc_workspace_name}"
+    hc-service-uri = "app.terraform.io/${var.tfc_account_name}/${each.key}"
   }
   max_session_duration = 43200
   assume_role_policy   = data.aws_iam_policy_document.doormat_assume.json
