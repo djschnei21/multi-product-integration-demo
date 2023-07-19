@@ -38,10 +38,13 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
+resource "hcp_vault_cluster_admin_token" "provider" {
+  cluster_id = data.terraform_remote_state.hcp_clusters.outputs.vault_cluster_id
+}
+
 provider "vault" {
-  skip_child_token = true
   address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-  token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
+  token = hcp_vault_cluster_admin_token.provider.token
   namespace = "admin"
 }
 
