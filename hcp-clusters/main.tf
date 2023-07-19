@@ -4,11 +4,6 @@ terraform {
       source  = "hashicorp/hcp"
       version = "~> 0.66.0"
     }
-
-    terraform = {
-      source = "hashicorp/terraform"
-      version = "~> 1.0.2"
-    }
   }
 }
 
