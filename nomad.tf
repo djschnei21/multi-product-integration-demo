@@ -1,5 +1,5 @@
 provider "nomad" {
-  address = aws_alb.nomad.dns_name
+  address = "http://${aws_alb.nomad.dns_name}"
   secret_id = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
 }
 
