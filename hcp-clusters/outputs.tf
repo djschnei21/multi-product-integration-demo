@@ -42,8 +42,10 @@ output "consul_root_token" {
 
 output "consul_ca_file" {
   value = hcp_consul_cluster.hashistack.consul_ca_file
+  sensitive = true
 }
 
 output "consul_config_file" {
   value = hcp_consul_cluster.hashistack.consul_config_file
+  sensitive = true
 }
