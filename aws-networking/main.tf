@@ -45,18 +45,4 @@ module "vpc" {
   public_subnets       = var.vpc_public_subnets
 }
 
-resource "aws_security_group" "nomad_server" {
-  name   = "nomad-server"
-  vpc_id = module.vpc.vpc_id
 
-  ingress {
-    from_port   = 4646
-    to_port     = 4646
-    protocol    = "tcp"
-    security_groups = [aws_security_group.nomad_lb.id]
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}

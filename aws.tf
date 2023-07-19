@@ -5,25 +5,6 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
-data "aws_availability_zones" "available" {
-  filter {
-    name   = "zone-type"
-    values = ["availability-zone"]
-  }
-}
-
-module "vpc" {
-  source  = "terraform-aws-modules/vpc/aws"
-  version = "5.1.0"
-
-  azs                  = data.aws_availability_zones.available.names
-  cidr                 = var.vpc_cidr_block
-  enable_dns_hostnames = true
-  name                 = "${var.stack_id}-vpc"
-  private_subnets      = var.vpc_private_subnets
-  public_subnets       = var.vpc_public_subnets
-}
-
 resource "aws_security_group" "nomad_server" {
   name   = "nomad-server"
   vpc_id = module.vpc.vpc_id
