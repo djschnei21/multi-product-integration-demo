@@ -35,7 +35,7 @@ resource "vault_nomad_secret_role" "developer" {
 
 resource "vault_nomad_secret_role" "operations" {
   backend   = vault_nomad_secret_backend.config.backend
-  role      = "developer"
+  role      = "operations"
   type      = "client"
   policies  = [ nomad_acl_policy.operations.name ]
 }
