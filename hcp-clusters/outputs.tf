@@ -39,3 +39,11 @@ output "consul_root_token" {
   value = hcp_consul_cluster_root_token.provider.secret_id
   sensitive = true
 }
+
+output "consul_ca_file" {
+  value = hcp_consul_cluster.hashistack.consul_ca_file
+}
+
+output "consul_config_file" {
+  value = hcp_consul_cluster.hashistack.consul_config_file
+}

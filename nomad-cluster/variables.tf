@@ -11,3 +11,7 @@ variable "region" {
   type        = string
   description = "The AWS and HCP region to create resources in"
 }
+
+variable "nomad_license" {
+  type = string
+}
