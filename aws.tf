@@ -29,17 +29,26 @@ resource "aws_security_group" "nomad_server" {
   vpc_id = module.vpc.vpc_id
 
   ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
     from_port   = 4646
     to_port     = 4646
     protocol    = "tcp"
     security_groups = [aws_security_group.nomad_lb.id]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_security_group" "nomad" {
+  name   = "nomad"
+  vpc_id = module.vpc.vpc_id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
@@ -117,7 +126,10 @@ resource "aws_launch_template" "nomad_server_asg_template" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [ aws_security_group.nomad_server.id ]
+    security_groups = [ 
+      aws_security_group.nomad_server.id,
+      aws_security_group.nomad.id 
+    ]
   }
 
   private_dns_name_options {
@@ -212,7 +224,7 @@ resource "aws_launch_template" "nomad_client_x86_asg_template" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [ aws_security_group.nomad_server.id ]
+    security_groups = [ aws_security_group.nomad.id ]
   }
 
   private_dns_name_options {
@@ -270,7 +282,7 @@ resource "aws_launch_template" "nomad_client_arm_asg_template" {
 
   network_interfaces {
     associate_public_ip_address = false
-    security_groups = [ aws_security_group.nomad_server.id ]
+    security_groups = [ aws_security_group.nomad.id ]
   }
 
   private_dns_name_options {
