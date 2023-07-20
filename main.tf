@@ -84,6 +84,12 @@ resource "tfe_workspace_run" "networking" {
     retry_attempts    = 5
     retry_backoff_min = 5
   }
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
 }
 
 resource "tfe_workspace_run" "hcp_clusters" {
@@ -91,6 +97,12 @@ resource "tfe_workspace_run" "hcp_clusters" {
   workspace_id    = tfe_workspace.hcp_clusters.id
 
   apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+  destroy {
     manual_confirm    = false
     wait_for_run      = true
     retry_attempts    = 5
@@ -108,6 +120,12 @@ resource "tfe_workspace_run" "nomad_cluster" {
     retry_attempts    = 5
     retry_backoff_min = 5
   }
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
 }
 
 resource "tfe_workspace_run" "nomad_nodes" {
@@ -120,47 +138,6 @@ resource "tfe_workspace_run" "nomad_nodes" {
     retry_attempts    = 5
     retry_backoff_min = 5
   }
-}
-
-resource "tfe_workspace_run" "nomad_nodes_destroy" {
-  workspace_id    = tfe_workspace.nomad_nodes.id
-
-  destroy {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 5
-    retry_backoff_min = 5
-  }
-}
-
-resource "tfe_workspace_run" "nomad_cluster_destroy" {
-  depends_on = [ tfe_workspace_run.nomad_nodes_destroy ]
-  workspace_id    = tfe_workspace.nomad_cluster.id
-
-  destroy {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 5
-    retry_backoff_min = 5
-  }
-}
-
-resource "tfe_workspace_run" "hcp_clusters_destroy" {
-  depends_on = [ tfe_workspace_run.nomad_cluster_destroy ]
-  workspace_id    = tfe_workspace.hcp_clusters.id
-
-  destroy {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 5
-    retry_backoff_min = 5
-  }
-}
-
-resource "tfe_workspace_run" "networking_destroy" {
-  depends_on = [ tfe_workspace_run.hcp_clusters_destroy ]
-  workspace_id    = tfe_workspace.networking.id
-
   destroy {
     manual_confirm    = false
     wait_for_run      = true
