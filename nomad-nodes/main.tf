@@ -50,8 +50,7 @@ provider "vault" {
 }
 
 data "vault_kv_secret_v2" "bootstrap" {
-  depends_on = [ null_resource.bootstrap_acl ]
-  mount = vault_mount.kvv2.path
+  mount = data.terraform_remote_state.nomad_cluster.outputs.bootstrap_kv
   name  = "nomad_bootstrap/SecretID"
 }
 
