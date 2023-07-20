@@ -19,6 +19,11 @@ terraform {
       source = "hashicorp/vault"
       version = "~> 3.18.0"
     }
+
+    nomad = {
+      source = "hashicorp/nomad"
+      version = "2.0.0-beta.1"
+    }
   }
 }
 
@@ -272,127 +277,5 @@ resource "null_resource" "bootstrap_acl" {
       sleep 10
     done
     EOF
-  }
-}
-
-resource "aws_launch_template" "nomad_client_x86_launch_template" {
-  name_prefix   = "lt-"
-  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_amd.cloud_image_id
-  instance_type = "t3a.medium"
-
-  network_interfaces {
-    associate_public_ip_address = false
-    security_groups = [ 
-      aws_security_group.nomad.id,
-      data.terraform_remote_state.networking.outputs.hvn_sg_id
-    ]
-  }
-
-  private_dns_name_options {
-    hostname_type = "resource-name"
-  }
-
-  user_data = base64encode(
-    templatefile("${path.module}/scripts/nomad-client.tpl",
-      {
-        nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
-      }
-    )
-  )
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_autoscaling_group" "nomad_client_x86_asg" {
-  desired_capacity  = 2
-  max_size          = 5
-  min_size          = 1
-  health_check_type = "EC2"
-  health_check_grace_period = "60"
-
-  name = "nomad-client-x86"
-
-  launch_template {
-    id = aws_launch_template.nomad_client_x86_launch_template.id
-    version = aws_launch_template.nomad_client_x86_launch_template.latest_version
-  }
-  
-  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
-
-  instance_refresh {
-    strategy = "Rolling"
-    preferences {
-      min_healthy_percentage = 50
-    }
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_launch_template" "nomad_client_arm_launch_template" {
-  name_prefix   = "lt-"
-  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_arm.cloud_image_id
-  instance_type = "t4g.medium"
-
-  network_interfaces {
-    associate_public_ip_address = false
-    security_groups = [ 
-      aws_security_group.nomad.id,
-      data.terraform_remote_state.networking.outputs.hvn_sg_id
-    ]
-  }
-
-  private_dns_name_options {
-    hostname_type = "resource-name"
-  }
-
-  user_data = base64encode(
-    templatefile("${path.module}/scripts/nomad-client.tpl",
-      {
-        nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
-      }
-    )
-  )
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_autoscaling_group" "nomad_client_arm_asg" {
-  desired_capacity  = 2
-  max_size          = 5
-  min_size          = 1
-  health_check_type = "EC2"
-  health_check_grace_period = "60"
-
-  name = "nomad-client-arm"
-
-  launch_template {
-    id = aws_launch_template.nomad_client_arm_launch_template.id
-    version = aws_launch_template.nomad_client_arm_launch_template.latest_version
-  }
-  
-  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
-
-  instance_refresh {
-    strategy = "Rolling"
-    preferences {
-      min_healthy_percentage = 50
-    }
-  }
-
-  lifecycle {
-    create_before_destroy = true
   }
 }
