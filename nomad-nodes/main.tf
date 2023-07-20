@@ -62,7 +62,7 @@ provider "nomad" {
 resource "nomad_node_pool" "x86" {
   provisioner "local-exec" {
     when    = destroy
-    command <<EOF
+    command = <<EOF
     curl \
       --header 'X-Nomad-Token: ${data.vault_kv_secret_v2.bootstrap.data["SecretID"]}' \
       --request PUT \
@@ -75,7 +75,7 @@ resource "nomad_node_pool" "x86" {
 resource "nomad_node_pool" "arm" {
   provisioner "local-exec" {
     when    = destroy
-    command <<EOF
+    command = <<EOF
     curl \
       --header 'X-Nomad-Token: ${data.vault_kv_secret_v2.bootstrap.data["SecretID"]}' \
       --request PUT \
