@@ -15,7 +15,7 @@ output "vault_private_endpoint" {
 }
 
 output "vault_public_endpoint" {
-  value = hcp_vault_cluster.hashistack.vault_private_endpoint_url
+  value = hcp_vault_cluster.hashistack.vault_public_endpoint_url
 }
 
 output "consul_private_endpoint" {
