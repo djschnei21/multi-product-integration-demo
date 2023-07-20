@@ -43,9 +43,29 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
+provider "vault" {
+  address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+  token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
+  namespace = "admin"
+}
+
+data "vault_kv_secret_v2" "bootstrap" {
+  depends_on = [ null_resource.bootstrap_acl ]
+  mount = vault_mount.kvv2.path
+  name  = "nomad_bootstrap/SecretID"
+}
+
 provider "nomad" {
-  address = "http://${aws_alb.nomad.dns_name}"
+  address = data.terraform_remote_state.hcp_clusters.outputs.nomad_public_endpoint
   secret_id = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
+}
+
+resource "nomad_node_pool" "x86" {
+  name = "x86"
+}
+
+resource "nomad_node_pool" "arm" {
+  name = "arm"
 }
 
 data "terraform_remote_state" "nomad_cluster" {
@@ -59,7 +79,7 @@ data "terraform_remote_state" "nomad_cluster" {
   }
 }
 
-data "hcp_packer_image" "ubuntu_lunar_hashi_amd" {
+data "hcp_packer_image" "ubuntu_lunar_hashi_x86" {
   bucket_name    = "ubuntu-lunar-hashi"
   component_type = "amazon-ebs.amd"
   channel        = "latest"
@@ -77,7 +97,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
 
 resource "aws_launch_template" "nomad_client_x86_launch_template" {
   name_prefix   = "lt-"
-  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_amd.cloud_image_id
+  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_x86.cloud_image_id
   instance_type = "t3a.medium"
 
   network_interfaces {
@@ -99,6 +119,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
         consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
         consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file
         consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token
+        node_pool          = nomad_node_pool.x86.name
       }
     )
   )
@@ -160,6 +181,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
         consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
         consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file
         consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token
+        node_pool          = nomad_node_pool.arm.name
       }
     )
   )
