@@ -19,11 +19,6 @@ terraform {
       source = "hashicorp/vault"
       version = "~> 3.18.0"
     }
-
-    nomad = {
-      source = "hashicorp/nomad"
-      version = "2.0.0-beta.1"
-    }
   }
 }
 
@@ -41,17 +36,6 @@ provider "aws" {
   access_key = data.doormat_aws_credentials.creds.access_key
   secret_key = data.doormat_aws_credentials.creds.secret_key
   token      = data.doormat_aws_credentials.creds.token
-}
-
-data "terraform_remote_state" "networking" {
-  backend = "remote"
-
-  config = {
-    organization = var.tfc_account_name
-    workspaces = {
-      name = "networking"
-    }
-  }
 }
 
 data "terraform_remote_state" "hcp_clusters" {
@@ -73,7 +57,7 @@ provider "vault" {
 
 resource "aws_security_group" "nomad_server" {
   name   = "nomad-server"
-  vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
+  vpc_id = data.terraform_remote_state.hcp_clusters.outputs.vpc_id
 
   ingress {
     from_port   = 4646
@@ -89,7 +73,7 @@ resource "aws_security_group" "nomad_server" {
 
 resource "aws_security_group" "nomad" {
   name   = "nomad"
-  vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
+  vpc_id = data.terraform_remote_state.hcp_clusters.outputs.vpc_id
 
   ingress {
     from_port   = 0
@@ -113,7 +97,7 @@ resource "aws_security_group" "nomad" {
 resource "aws_security_group" "nomad_lb" {
   name        = "nomad_lb_sg"
   description = "Allow inbound traffic"
-  vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
+  vpc_id = data.terraform_remote_state.hcp_clusters.outputs.vpc_id
 
   ingress {
     from_port   = 80
@@ -126,21 +110,21 @@ resource "aws_security_group" "nomad_lb" {
     from_port   = 4646
     to_port     = 4646
     protocol    = "tcp"
-    cidr_blocks = data.terraform_remote_state.networking.outputs.subnet_cidrs
+    cidr_blocks = data.terraform_remote_state.hcp_clusters.outputs.subnet_cidrs
   }
 }
 
 resource "aws_alb" "nomad" {
   name               = "nomad-alb"
   security_groups    = [ aws_security_group.nomad_lb.id ]
-  subnets            = data.terraform_remote_state.networking.outputs.subnet_ids
+  subnets            = data.terraform_remote_state.hcp_clusters.outputs.subnet_ids
 }
 
 resource "aws_alb_target_group" "nomad" {
   name     = "nomad"
   port     = 4646
   protocol = "HTTP"
-  vpc_id   = data.terraform_remote_state.networking.outputs.vpc_id
+  vpc_id   = data.terraform_remote_state.hcp_clusters.outputs.vpc_id
 
   health_check {
     path = "/v1/agent/health?type=server"
@@ -185,7 +169,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
     security_groups = [ 
       aws_security_group.nomad_server.id,
       aws_security_group.nomad.id,
-      data.terraform_remote_state.networking.outputs.hvn_sg_id
+      data.terraform_remote_state.hcp_clusters.outputs.hvn_sg_id
     ]
   }
 
@@ -223,7 +207,7 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
     version = aws_launch_template.nomad_server_launch_template.latest_version
   }
   
-  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
+  vpc_zone_identifier = data.terraform_remote_state.hcp_clusters.outputs.subnet_ids
 
   instance_refresh {
     strategy = "Rolling"

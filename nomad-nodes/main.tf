@@ -43,26 +43,9 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
-data "terraform_remote_state" "networking" {
-  backend = "remote"
-
-  config = {
-    organization = var.tfc_account_name
-    workspaces = {
-      name = "networking"
-    }
-  }
-}
-
-data "terraform_remote_state" "hcp_clusters" {
-  backend = "remote"
-
-  config = {
-    organization = var.tfc_account_name
-    workspaces = {
-      name = "hcp-clusters"
-    }
-  }
+provider "nomad" {
+  address = "http://${aws_alb.nomad.dns_name}"
+  secret_id = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
 }
 
 data "terraform_remote_state" "nomad_cluster" {
@@ -101,7 +84,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
     associate_public_ip_address = false
     security_groups = [ 
       data.terraform_remote_state.nomad_cluster.outputs.nomad_sg,
-      data.terraform_remote_state.networking.outputs.hvn_sg_id
+      data.terraform_remote_state.nomad_cluster.outputs.hvn_sg_id
     ]
   }
 
@@ -113,9 +96,9 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
     templatefile("${path.module}/scripts/nomad-node.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
+        consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file
+        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token
       }
     )
   )
@@ -139,7 +122,7 @@ resource "aws_autoscaling_group" "nomad_client_x86_asg" {
     version = aws_launch_template.nomad_client_x86_launch_template.latest_version
   }
   
-  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
+  vpc_zone_identifier = data.terraform_remote_state.nomad_cluster.outputs.subnet_ids
 
   instance_refresh {
     strategy = "Rolling"
@@ -162,7 +145,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
     associate_public_ip_address = false
     security_groups = [ 
       data.terraform_remote_state.nomad_cluster.outputs.nomad_sg,
-      data.terraform_remote_state.networking.outputs.hvn_sg_id
+      data.terraform_remote_state.nomad_cluster.outputs.hvn_sg_id
     ]
   }
 
@@ -174,9 +157,9 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
     templatefile("${path.module}/scripts/nomad-node.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
+        consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file
+        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token
       }
     )
   )
@@ -200,7 +183,7 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
     version = aws_launch_template.nomad_client_arm_launch_template.latest_version
   }
   
-  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
+  vpc_zone_identifier = data.terraform_remote_state.nomad_cluster.outputs.subnet_ids
 
   instance_refresh {
     strategy = "Rolling"
