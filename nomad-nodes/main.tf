@@ -44,8 +44,8 @@ provider "aws" {
 }
 
 provider "vault" {
-  address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-  token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
+  address = data.terraform_remote_state.nomad_cluster.outputs.vault_public_endpoint
+  token = data.terraform_remote_state.nomad_cluster.outputs.vault_root_token
   namespace = "admin"
 }
 
@@ -56,7 +56,7 @@ data "vault_kv_secret_v2" "bootstrap" {
 }
 
 provider "nomad" {
-  address = data.terraform_remote_state.hcp_clusters.outputs.nomad_public_endpoint
+  address = data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint
   secret_id = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
 }
 
