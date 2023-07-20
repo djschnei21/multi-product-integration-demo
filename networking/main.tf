@@ -14,6 +14,10 @@ terraform {
       source  = "hashicorp/hcp"
       version = "~> 0.66.0"
     }
+
+    tfe = {
+      version = "~> 0.46.0"
+    }
   }
 }
 
@@ -32,6 +36,8 @@ provider "aws" {
 }
 
 provider "hcp" {}
+
+provider "tfe" {}
 
 data "aws_availability_zones" "available" {
   filter {
@@ -68,3 +74,4 @@ module "aws_hcp_network_config" {
   subnet_ids      = module.vpc.public_subnets
   route_table_ids = module.vpc.public_route_table_ids
 }
+
