@@ -64,6 +64,10 @@ resource "null_resource" "nomad_gc" {
     nomad_node_pool.arm,
     nomad_node_pool.x86
   ]
+  triggers = {
+    x86 = nomad_node_pool.x86.name
+    arm = nomad_node_pool.arm.name
+  }
   provisioner "local-exec" {
     command = <<EOF
     curl \
