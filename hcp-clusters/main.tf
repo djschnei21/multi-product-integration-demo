@@ -4,10 +4,16 @@ terraform {
       source  = "hashicorp/hcp"
       version = "~> 0.66.0"
     }
+
+    tfe = {
+      version = "~> 0.46.0"
+    }
   }
 }
 
 provider "hcp" {}
+
+provider "tfe" {}
 
 data "terraform_remote_state" "networking" {
   backend = "remote"
@@ -48,4 +54,27 @@ resource "hcp_consul_cluster_root_token" "provider" {
 
 resource "hcp_vault_cluster_admin_token" "provider" {
   cluster_id = hcp_vault_cluster.hashistack.cluster_id
+}
+
+data "tfe_workspace" "cascade" {
+  name         = "nomad-cluster"
+  organization = var.tfc_organization
+}
+
+resource "tfe_workspace_run" "cascade" {
+  workspace_id    = data.tfe_workspace.cascade.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 3
+    retry_backoff_min = 10
+  }
 }

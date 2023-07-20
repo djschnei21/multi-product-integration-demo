@@ -63,3 +63,21 @@ resource "tfe_workspace" "nomad_nodes" {
   working_directory = "nomad-nodes"
   queue_all_runs = false
 }
+
+resource "tfe_workspace_run" "cascade" {
+  workspace_id    = tfe_workspace.networking.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 3
+    retry_backoff_min = 10
+  }
+}

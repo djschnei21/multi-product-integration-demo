@@ -75,3 +75,25 @@ module "aws_hcp_network_config" {
   route_table_ids = module.vpc.public_route_table_ids
 }
 
+data "tfe_workspace" "cascade" {
+  name         = "hcp-clusters"
+  organization = var.tfc_organization
+}
+
+resource "tfe_workspace_run" "cascade" {
+  workspace_id    = data.tfe_workspace.cascade.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 3
+    retry_backoff_min = 10
+  }
+}

@@ -19,12 +19,18 @@ terraform {
       source = "hashicorp/vault"
       version = "~> 3.18.0"
     }
+
+    tfe = {
+      version = "~> 0.46.0"
+    }
   }
 }
 
 provider "doormat" {}
 
 provider "hcp" {}
+
+provider "tfe" {}
 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
@@ -261,5 +267,28 @@ resource "null_resource" "bootstrap_acl" {
       sleep 10
     done
     EOF
+  }
+}
+
+data "tfe_workspace" "cascade" {
+  name         = "nomad-nodes"
+  organization = var.tfc_organization
+}
+
+resource "tfe_workspace_run" "cascade" {
+  workspace_id    = data.tfe_workspace.cascade.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 3
+    retry_backoff_min = 10
   }
 }
