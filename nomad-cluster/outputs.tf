@@ -9,6 +9,7 @@ output "vault_public_endpoint" {
 
 output "vault_root_token" {
   value = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
+  sensitive = true
 }
 
 output "consul_root_token" {
