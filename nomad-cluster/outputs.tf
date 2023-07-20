@@ -3,6 +3,14 @@ output "nomad_sg" {
 }
 
 # Passthrough outputs to enable cascading plans
+output "vault_public_endpoint" {
+  value = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+}
+
+output "vault_root_token" {
+  value = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
+}
+
 output "consul_root_token" {
   value = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
   sensitive = true
