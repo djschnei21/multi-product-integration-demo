@@ -59,30 +59,29 @@ provider "nomad" {
   secret_id = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
 }
 
-resource "null_resource" "nomad_gc" {
-  depends_on = [ 
-    nomad_node_pool.arm,
-    nomad_node_pool.x86
-  ]
-  triggers = {
-    x86 = nomad_node_pool.x86.name
-    arm = nomad_node_pool.arm.name
-  }
+resource "nomad_node_pool" "x86" {
   provisioner "local-exec" {
-    command = <<EOF
+    when    = destroy
+    command <<EOF
     curl \
       --header 'X-Nomad-Token: ${data.vault_kv_secret_v2.bootstrap.data["SecretID"]}' \
       --request PUT \
       ${data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint}/v1/system/gc
     EOF
   }
-}
-
-resource "nomad_node_pool" "x86" {
   name = "x86"
 }
 
 resource "nomad_node_pool" "arm" {
+  provisioner "local-exec" {
+    when    = destroy
+    command <<EOF
+    curl \
+      --header 'X-Nomad-Token: ${data.vault_kv_secret_v2.bootstrap.data["SecretID"]}' \
+      --request PUT \
+      ${data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint}/v1/system/gc
+    EOF
+  }
   name = "arm"
 }
 
