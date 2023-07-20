@@ -17,4 +17,7 @@ resource "tfe_workspace" "test" {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
   }
+
+  working_directory = "networking"
+  queue_all_runs = false
 }
