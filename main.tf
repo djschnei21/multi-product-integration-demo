@@ -84,7 +84,7 @@ resource "tfe_workspace_run" "networking" {
 }
 
 resource "tfe_workspace_run" "hcp_clusters" {
-  depends_on = [ tfe_workspace.networking ]
+  depends_on = [ tfe_workspace_run.networking ]
   workspace_id    = tfe_workspace.hcp_clusters.id
 
   apply {
@@ -96,7 +96,7 @@ resource "tfe_workspace_run" "hcp_clusters" {
 }
 
 resource "tfe_workspace_run" "nomad_cluster" {
-  depends_on = [ tfe_workspace.hcp_clusters ]
+  depends_on = [ tfe_workspace_run.hcp_clusters ]
   workspace_id    = tfe_workspace.nomad_cluster.id
 
   apply {
@@ -108,7 +108,7 @@ resource "tfe_workspace_run" "nomad_cluster" {
 }
 
 resource "tfe_workspace_run" "nomad_nodes" {
-  depends_on = [ tfe_workspace.nomad_cluster ]
+  depends_on = [ tfe_workspace_run.nomad_cluster ]
   workspace_id    = tfe_workspace.nomad_nodes.id
 
   apply {
