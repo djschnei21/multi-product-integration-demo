@@ -15,6 +15,6 @@ resource "tfe_workspace" "test" {
 
   vcs_repo {
     identifier = var.repo_identifier
-    github_app_installation_id = var.github_app_installation_id 
+    oauth_token_id = var.oauth_token_id
   }
 }
