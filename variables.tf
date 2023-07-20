@@ -2,7 +2,7 @@ variable "tfc_organization" {
   type = string
 }
 
-variable "project_id" {
+variable "tfc_project_id" {
   type = string
 }
 
