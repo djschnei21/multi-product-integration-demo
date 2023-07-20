@@ -8,16 +8,16 @@ terraform {
 
 provider "tfe" {}
 
-resource "tfe_workspace" "test" {
-  name          = "networking"
-  organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
+# resource "tfe_workspace" "test" {
+#   name          = "networking"
+#   organization  = var.tfc_organization
+#   project_id    = var.tfc_project_id
 
-  vcs_repo {
-    identifier = var.repo_identifier
-    oauth_token_id = var.oauth_token_id
-  }
+#   vcs_repo {
+#     identifier = var.repo_identifier
+#     oauth_token_id = var.oauth_token_id
+#   }
 
-  working_directory = "networking"
-  queue_all_runs = false
-}
+#   working_directory = "networking"
+#   queue_all_runs = false
+# }
