@@ -20,6 +20,7 @@ resource "tfe_workspace" "networking" {
 
   working_directory = "networking"
   queue_all_runs = false
+  trigger_prefixes = "non-cascade.txt"
 }
 
 resource "tfe_workspace" "hcp_clusters" {
@@ -34,6 +35,7 @@ resource "tfe_workspace" "hcp_clusters" {
 
   working_directory = "hcp-clusters"
   queue_all_runs = false
+  trigger_prefixes = "non-cascade.txt"
 }
 
 resource "tfe_workspace" "nomad_cluster" {
@@ -48,6 +50,7 @@ resource "tfe_workspace" "nomad_cluster" {
 
   working_directory = "nomad-cluster"
   queue_all_runs = false
+  trigger_prefixes = "non-cascade.txt"
 }
 
 resource "tfe_workspace" "nomad_nodes" {
@@ -62,9 +65,10 @@ resource "tfe_workspace" "nomad_nodes" {
 
   working_directory = "nomad-nodes"
   queue_all_runs = false
+  trigger_prefixes = "non-cascade.txt"
 }
 
-resource "tfe_workspace_run" "cascade" {
+resource "tfe_workspace_run" "networking" {
   workspace_id    = tfe_workspace.networking.id
 
   apply {
@@ -73,11 +77,40 @@ resource "tfe_workspace_run" "cascade" {
     retry_attempts    = 5
     retry_backoff_min = 5
   }
+}
 
-  destroy {
+resource "tfe_workspace_run" "hcp_clusters" {
+  depends_on = [ tfe_workspace.networking ]
+  workspace_id    = tfe_workspace.hcp_clusters.id
+
+  apply {
     manual_confirm    = false
     wait_for_run      = true
-    retry_attempts    = 3
-    retry_backoff_min = 10
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+}
+
+resource "tfe_workspace_run" "nomad_cluster" {
+  depends_on = [ tfe_workspace.hcp_clusters ]
+  workspace_id    = tfe_workspace.nomad_cluster.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+}
+
+resource "tfe_workspace_run" "nomad_nodes" {
+  depends_on = [ tfe_workspace.nomad_cluster ]
+  workspace_id    = tfe_workspace.nomad_nodes.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
   }
 }

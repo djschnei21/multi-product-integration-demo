@@ -270,25 +270,25 @@ resource "null_resource" "bootstrap_acl" {
   }
 }
 
-data "tfe_workspace" "cascade" {
-  name         = "nomad-nodes"
-  organization = var.tfc_organization
-}
+# data "tfe_workspace" "cascade" {
+#   name         = "nomad-nodes"
+#   organization = var.tfc_organization
+# }
 
-resource "tfe_workspace_run" "cascade" {
-  workspace_id    = data.tfe_workspace.cascade.id
+# resource "tfe_workspace_run" "cascade" {
+#   workspace_id    = data.tfe_workspace.cascade.id
 
-  apply {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 5
-    retry_backoff_min = 5
-  }
+#   apply {
+#     manual_confirm    = false
+#     wait_for_run      = true
+#     retry_attempts    = 5
+#     retry_backoff_min = 5
+#   }
 
-  destroy {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 3
-    retry_backoff_min = 10
-  }
-}
+#   destroy {
+#     manual_confirm    = false
+#     wait_for_run      = true
+#     retry_attempts    = 3
+#     retry_backoff_min = 10
+#   }
+# }
