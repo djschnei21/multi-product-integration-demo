@@ -38,16 +38,6 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
-resource "hcp_vault_cluster_admin_token" "provider" {
-  cluster_id = data.terraform_remote_state.hcp_clusters.outputs.vault_cluster_id
-}
-
-provider "vault" {
-  address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-  token = hcp_vault_cluster_admin_token.provider.token
-  namespace = "admin"
-}
-
 data "terraform_remote_state" "networking" {
   backend = "remote"
 
@@ -68,6 +58,12 @@ data "terraform_remote_state" "hcp_clusters" {
       name = "hcp-clusters"
     }
   }
+}
+
+provider "vault" {
+  address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+  token = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+  namespace = "admin"
 }
 
 resource "aws_security_group" "nomad_server" {
