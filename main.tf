@@ -22,6 +22,7 @@ resource "tfe_workspace" "networking" {
   queue_all_runs = false
   trigger_patterns = [ "/**/non-cascade.txt" ]
   assessments_enabled = true
+  remote_state_consumer_ids = [ tfe_workspace.hcp_clusters.id ]
 }
 
 resource "tfe_workspace" "hcp_clusters" {
@@ -38,6 +39,7 @@ resource "tfe_workspace" "hcp_clusters" {
   queue_all_runs = false
   trigger_patterns = [ "/**/non-cascade.txt" ]
   assessments_enabled = true
+  remote_state_consumer_ids = [ tfe_workspace.nomad_cluster.id ]
 }
 
 resource "tfe_workspace" "nomad_cluster" {
@@ -54,6 +56,7 @@ resource "tfe_workspace" "nomad_cluster" {
   queue_all_runs = false
   trigger_patterns = [ "/**/non-cascade.txt" ]
   assessments_enabled = true
+  remote_state_consumer_ids = [ tfe_workspace.nomad_nodes.id ]
 }
 
 resource "tfe_workspace" "nomad_nodes" {
