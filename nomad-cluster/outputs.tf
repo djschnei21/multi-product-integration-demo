@@ -2,6 +2,10 @@ output "nomad_sg" {
     value = aws_security_group.nomad.id
 }
 
+output "nomad_public_endpoint" {
+  value = "http://${aws_alb.nomad.dns_name}"
+}
+
 # Passthrough outputs to enable cascading plans
 output "vault_public_endpoint" {
   value = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
