@@ -67,14 +67,36 @@ resource "boundary_scope" "project" {
   auto_create_admin_role = true
 }
 
-# resource "boundary_host_catalog_plugin" "aws" {
-#   name            = "My aws catalog"
-#   scope_id        = boundary_scope.project.id
-#   plugin_name     = "aws"
-#   attributes_json = jsonencode({ "region" = "${var.region}" })
+resource "aws_iam_user" "boundary" {
+  name = "boundary"
+}
 
-#   secrets_json = jsonencode({
-#     "access_key_id"     = "aws_access_key_id_value",
-#     "secret_access_key" = "aws_secret_access_key_value"
-#   })
-# }
+resource "aws_iam_access_key" "boundary" {
+  user = aws_iam_user.boundary.name
+}
+
+data "aws_iam_policy_document" "boundary_ro" {
+  statement {
+    effect    = "Allow"
+    actions   = ["ec2:Describe*"]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_user_policy" "lb_ro" {
+  name   = "test"
+  user   = aws_iam_user.boundary.name
+  policy = data.aws_iam_policy_document.boundary_ro.json
+}
+
+resource "boundary_host_catalog_plugin" "aws" {
+  name            = "My aws catalog"
+  scope_id        = boundary_scope.project.id
+  plugin_name     = "aws"
+  attributes_json = jsonencode({ "region" = "${var.region}" })
+
+  secrets_json = jsonencode({
+    "access_key_id"     = "${aws_iam_access_key.boundary.id}",
+    "secret_access_key" = "${aws_iam_access_key.boundary.secret}"
+  })
+}
