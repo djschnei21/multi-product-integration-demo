@@ -98,7 +98,13 @@ resource "tfe_workspace_run" "hcp_clusters" {
     retry_attempts    = 5
     retry_backoff_min = 5
   }
-  destroy {
+}
+
+resource "tfe_workspace_run" "nomad_cluster" {
+  depends_on = [ tfe_workspace_run.hcp_clusters ]
+  workspace_id    = tfe_workspace.nomad_cluster.id
+
+  apply {
     manual_confirm    = false
     wait_for_run      = true
     retry_attempts    = 5
@@ -106,12 +112,14 @@ resource "tfe_workspace_run" "hcp_clusters" {
   }
 }
 
-resource "tfe_workspace_run" "nomad_cluster" {
-  depends_on = [ tfe_workspace_run.hcp_clusters ]
-  workspace_id    = tfe_workspace.nomad_cluster.id
-}
-
 resource "tfe_workspace_run" "nomad_nodes" {
   depends_on = [ tfe_workspace_run.nomad_cluster ]
   workspace_id    = tfe_workspace.nomad_nodes.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
 }
