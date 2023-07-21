@@ -43,7 +43,7 @@ data "terraform_remote_state" "hcp_clusters" {
 }
 
 provider "boundary" {
-  addr                            = data.terraform_remote_state.hcp_clusters.boundary_public_endpoint
+  addr                            = data.terraform_remote_state.hcp_clusters.outputs.boundary_public_endpoint
   password_auth_method_login_name = var.boundary_admin_username
   password_auth_method_password   = var.boundary_admin_password
 }
