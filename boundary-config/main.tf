@@ -103,3 +103,9 @@ resource "boundary_host_catalog_plugin" "aws" {
     "secret_access_key" = "${aws_iam_access_key.boundary.secret}"
   })
 }
+
+resource "boundary_host_set_plugin" "nomad_servers" {
+  name            = "nomad_servers"
+  host_catalog_id = boundary_host_catalog_plugin.aws.id
+  attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-server"] })
+}
