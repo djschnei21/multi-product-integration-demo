@@ -122,6 +122,24 @@ resource "tfe_workspace_run" "hcp_clusters" {
   }
 }
 
+resource "tfe_workspace_run" "boundary_config" {
+  depends_on = [ tfe_workspace_run.hcp_clusters ]
+  workspace_id    = tfe_workspace.boundary_config.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+}
+
 resource "tfe_workspace_run" "nomad_cluster" {
   depends_on = [ tfe_workspace_run.hcp_clusters ]
   workspace_id    = tfe_workspace.nomad_cluster.id
