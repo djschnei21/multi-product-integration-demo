@@ -93,7 +93,10 @@ resource "boundary_host_catalog_plugin" "aws" {
   name            = "My aws catalog"
   scope_id        = boundary_scope.project.id
   plugin_name     = "aws"
-  attributes_json = jsonencode({ "region" = "${var.region}" })
+  attributes_json = jsonencode({ 
+    "region" = "${var.region}",
+    "disable_credential_rotation" = "true" 
+  })
 
   secrets_json = jsonencode({
     "access_key_id"     = "${aws_iam_access_key.boundary.id}",
