@@ -22,6 +22,10 @@ output "consul_config_file" {
   sensitive = true
 }
 
+output "boundary_public_endpoint" {
+  value = hcp_boundary_cluster.hashistack.cluster_url
+}
+
 # Passthrough outputs to enable cascading plans
 output "vpc_id" {
   value = data.terraform_remote_state.networking.outputs.vpc_id
