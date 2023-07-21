@@ -21,7 +21,7 @@ provider "doormat" {}
 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
-  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_nomad-cluster"
+  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_boundary-config"
 }
 
 provider "aws" {
