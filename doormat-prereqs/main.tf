@@ -13,7 +13,7 @@ variable "tfc_account_name" {
 
 variable "tfc_workspace_names" {
   type    = set(string)
-  default = ["networking", "nomad-cluster", "nomad-nodes"]
+  default = ["networking", "nomad-cluster", "nomad-nodes", "boundary-config"]
 }
 
 resource "aws_iam_role" "doormat_role" {
