@@ -7,6 +7,10 @@ output "vault_root_token" {
   sensitive = true
 }
 
+output "vault_cluster_id" {
+  value = hcp_vault_cluster.hashistack.cluster_id
+}
+
 output "consul_root_token" {
   value = hcp_consul_cluster_root_token.provider.secret_id
   sensitive = true
