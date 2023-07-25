@@ -79,7 +79,7 @@ resource "aws_security_group" "nomad" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cird_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
