@@ -205,6 +205,6 @@ resource "boundary_target" "nomad_servers" {
     boundary_host_set_plugin.nomad_servers.id 
   ]
   brokered_credential_source_ids = [
-    boundary_credential_library_vault_ssh_certificate.vault.credential_store_id 
+    boundary_credential_library_vault_ssh_certificate.vault.id 
   ]
 }
