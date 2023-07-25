@@ -143,7 +143,7 @@ path "sys/capabilities-self" {
   capabilities = ["update"]
 }
 
-path "ssh/boundary_role" {
+path "admin/ssh/boundary_role" {
   capabilities = ["read"]
 }
 EOT
