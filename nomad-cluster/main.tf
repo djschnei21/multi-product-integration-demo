@@ -44,7 +44,7 @@ data "terraform_remote_state" "hcp_clusters" {
 
 provider "vault" {
   address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-  token = data.terraform_remote_state.hcp_clusters.vault_root_token
+  token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
   namespace = "admin"
 }
 
