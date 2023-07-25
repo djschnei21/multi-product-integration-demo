@@ -46,7 +46,7 @@ sudo systemctl restart nomad
 # SSH Vault config
 
 # Your vault public endpoint
-ssh_ca_public_key='${vault_ssh_pub_key}'
+ssh_ca_public_key="${vault_ssh_pub_key}"
 
 # Backup existing SSHD config
 echo "Backing up existing SSHD config"
