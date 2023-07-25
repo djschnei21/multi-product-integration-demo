@@ -58,7 +58,7 @@ echo "TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem" >> /etc/ssh/sshd_conf
 
 # Add the fetched public key to trusted keys
 echo "Adding the fetched public key to trusted keys"
-echo "${ssh_ca_public_key}" >> /etc/ssh/trusted-user-ca-keys.pem
+echo $ssh_ca_public_key >> /etc/ssh/trusted-user-ca-keys.pem
 
 # Restart SSHD service
 echo "Restarting SSHD service"
