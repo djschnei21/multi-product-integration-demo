@@ -143,8 +143,12 @@ path "sys/capabilities-self" {
   capabilities = ["update"]
 }
 
-path "ssh/" {
-  capabilities = ["read"]
+path "ssh/issue/boundary_role" {
+  capabilities = ["create", "update"]
+}
+
+path "ssh/sign/boundary_role" {
+  capabilities = ["create", "update"]
 }
 EOT
 }
