@@ -61,10 +61,18 @@ resource "vault_ssh_secret_backend_ca" "ssh_ca" {
 resource "vault_ssh_secret_backend_role" "ssh_role" {
   name                   = "boundary_role"
   backend                = vault_mount.ssh.path
-  key_type               = "ca"
-  default_user           = "ubuntu"
-  cidr_list              = "0.0.0.0/0"
+  key_type                = "ca"
   allow_user_certificates = true
+  default_user            = "ubuntu"
+  allowed_users           = "*"
+  
+  default_extensions = [
+    {
+      permit-pty = ""
+    }
+  ]
+  
+  allowed_extensions = "*"
 }
 
 resource "aws_security_group" "nomad_server" {
