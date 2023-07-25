@@ -63,7 +63,7 @@ resource "vault_ssh_secret_backend_role" "ssh_role" {
   backend                = vault_mount.ssh.path
   key_type               = "ca"
   default_user           = "ubuntu"
-  cidr_list              = ["0.0.0.0/0"]
+  cidr_list              = "0.0.0.0/0"
   allow_user_certificates = true
 }
 
