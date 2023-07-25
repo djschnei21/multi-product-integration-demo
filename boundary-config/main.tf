@@ -196,18 +196,13 @@ resource "boundary_host_set_plugin" "nomad_nodes_arm" {
   attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-client-arm"] })
 }
 
-resource "boundary_host_set" "nomad_servers" {
-  host_catalog_id = boundary_host_set_plugin.nomad_servers.host_catalog_id
-  type            = "dynamic"
-}
-
 resource "boundary_target" "nomad_servers" {
   name         = "Nomad Servers"
   type         = "tcp"
   default_port = "22"
   scope_id     = boundary_scope.project.id
   host_source_ids = [
-    boundary_host_set.nomad_servers.id
+    boundary_host_set_plugin.nomad_servers.id
   ]
   brokered_credential_source_ids = [
     boundary_credential_library_vault_ssh_certificate.vault.id
