@@ -198,7 +198,7 @@ resource "boundary_host_set_plugin" "nomad_nodes_arm" {
 
 resource "boundary_target" "nomad_servers" {
   name         = "Nomad Servers"
-  type         = "tcp"
+  type         = "ssh"
   default_port = "22"
   scope_id     = boundary_scope.project.id
   host_source_ids = [
