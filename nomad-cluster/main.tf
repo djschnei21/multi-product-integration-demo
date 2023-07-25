@@ -59,7 +59,7 @@ resource "vault_ssh_secret_backend_ca" "ssh_ca" {
 }
 
 resource "vault_ssh_secret_backend_role" "ssh_role" {
-  name                   = "example_role"
+  name                   = "boundary_role"
   backend                = vault_mount.ssh.path
   key_type               = "ca"
   default_user           = "ubuntu"
