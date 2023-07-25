@@ -116,6 +116,7 @@ resource "boundary_host_catalog_plugin" "aws" {
 }
 
 resource "vault_policy" "boundary_controller" {
+  namespace = "admin"
   name = "boundary-controller"
 
   policy = <<EOT
@@ -150,6 +151,7 @@ EOT
 }
 
 resource "vault_token" "boundary_controller" {
+  namespace = "admin"
   policies = [vault_policy.boundary_controller.name]
 
   no_parent = true
