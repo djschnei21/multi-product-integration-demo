@@ -143,14 +143,14 @@ path "sys/capabilities-self" {
   capabilities = ["update"]
 }
 
-path "admin/ssh/boundary_role" {
+path "boundary_role" {
   capabilities = ["read"]
 }
 EOT
 }
 
 resource "vault_token" "boundary_controller" {
-  policies = [vault_policy.boundary_controller.name]
+  policies = [ vault_policy.boundary_controller.name ]
 
   no_parent = true
   renewable = true
@@ -168,6 +168,7 @@ resource "boundary_credential_store_vault" "vault" {
   address     = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
   token       = vault_token.boundary_controller.client_token 
   scope_id    = boundary_scope.project.id
+  namespace   = "admin"
 }
 
 resource "boundary_credential_library_vault_ssh_certificate" "vault" {
