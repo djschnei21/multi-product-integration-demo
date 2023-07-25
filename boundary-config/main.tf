@@ -152,6 +152,7 @@ EOT
 resource "vault_token" "boundary_controller" {
   policies = [vault_policy.boundary_controller.name]
 
+  no_parent = true
   renewable = true
   ttl = "24h"
 
