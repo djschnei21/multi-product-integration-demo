@@ -202,7 +202,7 @@ resource "boundary_target" "nomad_servers" {
   default_port = "22"
   scope_id     = boundary_scope.project.id
   host_source_ids = [
-    boundary_host_set_plugin.nomad_servers.host_catalog_id 
+    boundary_host_set_plugin.nomad_servers.id 
   ]
   brokered_credential_source_ids = [
     boundary_credential_library_vault_ssh_certificate.vault.credential_store_id 
