@@ -109,3 +109,15 @@ resource "boundary_host_set_plugin" "nomad_servers" {
   host_catalog_id = boundary_host_catalog_plugin.aws.id
   attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-server"] })
 }
+
+resource "boundary_host_set_plugin" "nomad_nodes_x86" {
+  name            = "nomad_nodes_x86"
+  host_catalog_id = boundary_host_catalog_plugin.aws.id
+  attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-client-x86"] })
+}
+
+resource "boundary_host_set_plugin" "nomad_nodes_arm" {
+  name            = "nomad_nodes_arm"
+  host_catalog_id = boundary_host_catalog_plugin.aws.id
+  attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-client-arm"] })
+}
