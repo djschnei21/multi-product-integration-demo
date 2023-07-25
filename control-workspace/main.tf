@@ -9,7 +9,7 @@ terraform {
 provider "tfe" {}
 
 resource "tfe_workspace" "networking" {
-  name          = "networking"
+  name          = "1_networking"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
@@ -25,7 +25,7 @@ resource "tfe_workspace" "networking" {
 }
 
 resource "tfe_workspace" "hcp_clusters" {
-  name          = "hcp-clusters"
+  name          = "2_hcp-clusters"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
@@ -41,7 +41,7 @@ resource "tfe_workspace" "hcp_clusters" {
 }
 
 resource "tfe_workspace" "nomad_cluster" {
-  name          = "nomad-cluster"
+  name          = "3_nomad-cluster"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
@@ -57,7 +57,7 @@ resource "tfe_workspace" "nomad_cluster" {
 }
 
 resource "tfe_workspace" "boundary_config" {
-  name          = "boundary-config"
+  name          = "4_boundary-config"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
@@ -73,7 +73,7 @@ resource "tfe_workspace" "boundary_config" {
 }
 
 resource "tfe_workspace" "nomad_nodes" {
-  name          = "nomad-nodes"
+  name          = "5_nomad-nodes"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
