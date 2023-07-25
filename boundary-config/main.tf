@@ -154,10 +154,8 @@ resource "vault_token" "boundary_controller" {
 
   no_parent = true
   renewable = true
-  ttl = "24h"
 
-  renew_min_lease = 43200
-  renew_increment = 86400
+  period = "20m"
 
   metadata = {
     "purpose" = "service-account"
