@@ -100,7 +100,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
   instance_type = "t3a.medium"
 
   network_interfaces {
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     security_groups = [ 
       data.terraform_remote_state.nomad_cluster.outputs.nomad_sg,
       data.terraform_remote_state.nomad_cluster.outputs.hvn_sg_id
@@ -162,7 +162,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
   instance_type = "t4g.medium"
 
   network_interfaces {
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     security_groups = [ 
       data.terraform_remote_state.nomad_cluster.outputs.nomad_sg,
       data.terraform_remote_state.nomad_cluster.outputs.hvn_sg_id
