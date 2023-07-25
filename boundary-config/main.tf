@@ -174,7 +174,7 @@ resource "boundary_credential_store_vault" "vault" {
 resource "boundary_credential_library_vault_ssh_certificate" "vault" {
   name                = "vault"
   credential_store_id = boundary_credential_store_vault.vault.id
-  path                = "admin/ssh/sign/boundary"
+  path                = "ssh/sign/boundary"
   username            = "ubuntu"
 }
 
