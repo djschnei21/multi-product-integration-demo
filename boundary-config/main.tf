@@ -182,6 +182,7 @@ resource "boundary_host_set_plugin" "nomad_servers" {
   name            = "nomad_servers"
   host_catalog_id = boundary_host_catalog_plugin.aws.id
   attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-server"] })
+  preferred_endpoints   = ["dns:*.com"]
 }
 
 resource "boundary_host_set_plugin" "nomad_nodes_x86" {
