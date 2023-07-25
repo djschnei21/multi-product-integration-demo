@@ -150,8 +150,6 @@ EOT
 }
 
 resource "vault_token" "boundary_controller" {
-  role_name = "boundary_controller"
-
   policies = [vault_policy.boundary_controller.name]
 
   renewable = true
