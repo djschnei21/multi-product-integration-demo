@@ -66,11 +66,9 @@ resource "vault_ssh_secret_backend_role" "ssh_role" {
   default_user            = "ubuntu"
   allowed_users           = "*"
   
-  default_extensions = [
-    {
-      permit-pty = ""
-    }
-  ]
+  default_extensions = {
+    "permit-pty" = ""
+  }
   
   allowed_extensions = "*"
 }
