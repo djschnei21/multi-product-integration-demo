@@ -58,6 +58,15 @@ resource "vault_ssh_secret_backend_ca" "ssh_ca" {
   generate_signing_key = true
 }
 
+resource "vault_ssh_secret_backend_role" "ssh_role" {
+  name                   = "example_role"
+  backend                = vault_mount.ssh.path
+  key_type               = "ca"
+  default_user           = "ubuntu"
+  cidr_list              = ["0.0.0.0/0"]
+  allow_user_certificates = true
+}
+
 resource "aws_security_group" "nomad_server" {
   name   = "nomad-server"
   vpc_id = data.terraform_remote_state.hcp_clusters.outputs.vpc_id
