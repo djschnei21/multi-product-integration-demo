@@ -184,7 +184,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
   instance_type = "t3a.micro"
 
   network_interfaces {
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     security_groups = [ 
       aws_security_group.nomad_server.id,
       aws_security_group.nomad.id,
