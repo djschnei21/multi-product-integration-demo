@@ -48,6 +48,16 @@ provider "vault" {
   namespace = "admin"
 }
 
+resource "vault_mount" "ssh" {
+  path = "ssh"
+  type = "ssh"
+}
+
+resource "vault_ssh_secret_backend_ca" "ssh_ca" {
+  backend               = vault_mount.ssh.path
+  generate_signing_key = true
+}
+
 resource "aws_security_group" "nomad_server" {
   name   = "nomad-server"
   vpc_id = data.terraform_remote_state.hcp_clusters.outputs.vpc_id
@@ -181,9 +191,10 @@ resource "aws_launch_template" "nomad_server_launch_template" {
     templatefile("${path.module}/scripts/nomad-server.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
+        consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token,
+        vault_ssh_pub_key  = vault_ssh_secret_backend_ca.ssh_ca.public_key
       }
     )
   )
