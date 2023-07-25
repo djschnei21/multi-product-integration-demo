@@ -193,12 +193,14 @@ resource "boundary_host_set_plugin" "nomad_nodes_x86" {
   name            = "nomad_nodes_x86"
   host_catalog_id = boundary_host_catalog_plugin.aws.id
   attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-client-x86"] })
+  preferred_endpoints   = ["dns:*.com"]
 }
 
 resource "boundary_host_set_plugin" "nomad_nodes_arm" {
   name            = "nomad_nodes_arm"
   host_catalog_id = boundary_host_catalog_plugin.aws.id
   attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-client-arm"] })
+  preferred_endpoints   = ["dns:*.com"]
 }
 
 resource "boundary_target" "nomad_servers" {
@@ -208,6 +210,32 @@ resource "boundary_target" "nomad_servers" {
   scope_id     = boundary_scope.project.id
   host_source_ids = [
     boundary_host_set_plugin.nomad_servers.id 
+  ]
+  injected_application_credential_source_ids = [
+    boundary_credential_library_vault_ssh_certificate.vault.id 
+  ]
+}
+
+resource "boundary_target" "nomad_nodes_x86" {
+  name         = "Nomad Servers"
+  type         = "ssh"
+  default_port = "22"
+  scope_id     = boundary_scope.project.id
+  host_source_ids = [
+    boundary_host_set_plugin.nomad_nodes_x86.id 
+  ]
+  injected_application_credential_source_ids = [
+    boundary_credential_library_vault_ssh_certificate.vault.id 
+  ]
+}
+
+resource "boundary_target" "nomad_nodes_arm" {
+  name         = "Nomad Servers"
+  type         = "ssh"
+  default_port = "22"
+  scope_id     = boundary_scope.project.id
+  host_source_ids = [
+    boundary_host_set_plugin.nomad_nodes_arm.id 
   ]
   injected_application_credential_source_ids = [
     boundary_credential_library_vault_ssh_certificate.vault.id 
