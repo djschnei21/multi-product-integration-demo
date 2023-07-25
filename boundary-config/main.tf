@@ -217,7 +217,7 @@ resource "boundary_target" "nomad_servers" {
 }
 
 resource "boundary_target" "nomad_nodes_x86" {
-  name         = "Nomad Servers"
+  name         = "Nomad x86 Nodes"
   type         = "ssh"
   default_port = "22"
   scope_id     = boundary_scope.project.id
@@ -230,7 +230,7 @@ resource "boundary_target" "nomad_nodes_x86" {
 }
 
 resource "boundary_target" "nomad_nodes_arm" {
-  name         = "Nomad Servers"
+  name         = "Nomad Arm Nodes"
   type         = "ssh"
   default_port = "22"
   scope_id     = boundary_scope.project.id
