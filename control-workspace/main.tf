@@ -57,7 +57,6 @@ resource "tfe_workspace" "nomad_cluster" {
 }
 
 resource "tfe_workspace" "boundary_config" {
-  depends_on = [ tfe_workspace_run.nomad_cluster ]
   name          = "boundary-config"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
@@ -123,9 +122,9 @@ resource "tfe_workspace_run" "hcp_clusters" {
   }
 }
 
-resource "tfe_workspace_run" "boundary_config" {
+resource "tfe_workspace_run" "nomad_cluster" {
   depends_on = [ tfe_workspace_run.hcp_clusters ]
-  workspace_id    = tfe_workspace.boundary_config.id
+  workspace_id    = tfe_workspace.nomad_cluster.id
 
   apply {
     manual_confirm    = false
@@ -141,9 +140,9 @@ resource "tfe_workspace_run" "boundary_config" {
   }
 }
 
-resource "tfe_workspace_run" "nomad_cluster" {
-  depends_on = [ tfe_workspace_run.hcp_clusters ]
-  workspace_id    = tfe_workspace.nomad_cluster.id
+resource "tfe_workspace_run" "boundary_config" {
+  depends_on = [ tfe_workspace_run.nomad_cluster ]
+  workspace_id    = tfe_workspace.boundary_config.id
 
   apply {
     manual_confirm    = false
