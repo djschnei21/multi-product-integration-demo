@@ -10,11 +10,6 @@ terraform {
       version = "~> 5.8.0"
     }
 
-    hcp = {
-      source  = "hashicorp/hcp"
-      version = "~> 0.66.0"
-    }
-
     vault = {
       source = "hashicorp/vault"
       version = "~> 3.18.0"
@@ -23,8 +18,6 @@ terraform {
 }
 
 provider "doormat" {}
-
-provider "hcp" {}
 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
@@ -49,13 +42,9 @@ data "terraform_remote_state" "hcp_clusters" {
   }
 }
 
-resource "hcp_vault_cluster_admin_token" "provider" {
-  cluster_id = data.terraform_remote_state.hcp_clusters.outputs.vault_cluster_id
-}
-
 provider "vault" {
   address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-  token = hcp_vault_cluster_admin_token.provider.token
+  token = data.terraform_remote_state.hcp_clusters.vault_root_token
   namespace = "admin"
 }
 
