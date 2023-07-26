@@ -37,7 +37,7 @@ data "terraform_remote_state" "hcp_clusters" {
   config = {
     organization = var.tfc_account_name
     workspaces = {
-      name = "hcp-clusters"
+      name = "2_hcp-clusters"
     }
   }
 }
