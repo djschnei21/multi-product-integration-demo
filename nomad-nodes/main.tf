@@ -100,7 +100,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
   instance_type = "t3a.medium"
 
   network_interfaces {
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     security_groups = [ 
       data.terraform_remote_state.nomad_cluster.outputs.nomad_sg,
       data.terraform_remote_state.nomad_cluster.outputs.hvn_sg_id
@@ -116,9 +116,10 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
       {
         nomad_license      = var.nomad_license,
         consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token
-        node_pool          = nomad_node_pool.x86.name
+        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token,
+        node_pool          = nomad_node_pool.x86.name,
+        vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key
       }
     )
   )
@@ -162,7 +163,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
   instance_type = "t4g.medium"
 
   network_interfaces {
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     security_groups = [ 
       data.terraform_remote_state.nomad_cluster.outputs.nomad_sg,
       data.terraform_remote_state.nomad_cluster.outputs.hvn_sg_id
@@ -178,9 +179,10 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
       {
         nomad_license      = var.nomad_license,
         consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token
-        node_pool          = nomad_node_pool.arm.name
+        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token,
+        node_pool          = nomad_node_pool.arm.name,
+        vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key
       }
     )
   )

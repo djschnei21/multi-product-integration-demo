@@ -10,11 +10,6 @@ terraform {
       version = "~> 5.8.0"
     }
 
-    hcp = {
-      source  = "hashicorp/hcp"
-      version = "~> 0.66.0"
-    }
-
     vault = {
       source = "hashicorp/vault"
       version = "~> 3.18.0"
@@ -24,11 +19,9 @@ terraform {
 
 provider "doormat" {}
 
-provider "hcp" {}
-
 data "doormat_aws_credentials" "creds" {
   provider = doormat
-  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_nomad-cluster"
+  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_3_nomad-cluster"
 }
 
 provider "aws" {
@@ -44,19 +37,40 @@ data "terraform_remote_state" "hcp_clusters" {
   config = {
     organization = var.tfc_account_name
     workspaces = {
-      name = "hcp-clusters"
+      name = "2_hcp-clusters"
     }
   }
 }
 
-resource "hcp_vault_cluster_admin_token" "provider" {
-  cluster_id = data.terraform_remote_state.hcp_clusters.outputs.vault_cluster_id
-}
-
 provider "vault" {
   address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-  token = hcp_vault_cluster_admin_token.provider.token
+  token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
   namespace = "admin"
+}
+
+resource "vault_mount" "ssh" {
+  path = "ssh"
+  type = "ssh"
+}
+
+resource "vault_ssh_secret_backend_ca" "ssh_ca" {
+  backend               = vault_mount.ssh.path
+  generate_signing_key = true
+}
+
+resource "vault_ssh_secret_backend_role" "ssh_role" {
+  name                   = "boundary_role"
+  backend                = vault_mount.ssh.path
+  key_type                = "ca"
+  allow_user_certificates = true
+  default_user            = "ubuntu"
+  allowed_users           = "*"
+  
+  default_extensions = {
+    "permit-pty" = ""
+  }
+  
+  allowed_extensions = "*"
 }
 
 resource "aws_security_group" "nomad_server" {
@@ -84,6 +98,13 @@ resource "aws_security_group" "nomad" {
     to_port     = 0
     protocol    = "-1"
     self        = true  # reference to the security group itself
+  }
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
@@ -169,7 +190,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
   instance_type = "t3a.micro"
 
   network_interfaces {
-    associate_public_ip_address = false
+    associate_public_ip_address = true
     security_groups = [ 
       aws_security_group.nomad_server.id,
       aws_security_group.nomad.id,
@@ -186,8 +207,9 @@ resource "aws_launch_template" "nomad_server_launch_template" {
       {
         nomad_license      = var.nomad_license,
         consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
+        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
+        vault_ssh_pub_key  = vault_ssh_secret_backend_ca.ssh_ca.public_key
       }
     )
   )

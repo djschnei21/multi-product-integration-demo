@@ -42,3 +42,26 @@ chown root:root /etc/nomad.d/license.hclic
 chmod 600 /etc/nomad.d/license.hclic
                 
 sudo systemctl restart nomad
+
+# SSH Vault config
+
+# Your vault public endpoint
+ssh_ca_public_key="${vault_ssh_pub_key}"
+
+# Backup existing SSHD config
+echo "Backing up existing SSHD config"
+cp /etc/ssh/sshd_config /etc/ssh/sshd_config.backup
+
+# Configure SSHD to trust this CA for user cert signed auth
+echo "Configuring SSHD to trust the fetched CA"
+echo "TrustedUserCAKeys /etc/ssh/trusted-user-ca-keys.pem" >> /etc/ssh/sshd_config
+
+# Add the fetched public key to trusted keys
+echo "Adding the fetched public key to trusted keys"
+echo $ssh_ca_public_key >> /etc/ssh/trusted-user-ca-keys.pem
+
+# Restart SSHD service
+echo "Restarting SSHD service"
+sudo service sshd restart
+
+echo "Script executed successfully"
