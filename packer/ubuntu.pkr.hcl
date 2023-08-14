@@ -31,6 +31,7 @@ source "amazon-ebs" "amd" {
   tags = {
     timestamp      = "{{timestamp}}"
     consul_enabled = true
+    nomad_enabled = true
   }
 }
 
@@ -53,6 +54,7 @@ source "amazon-ebs" "arm" {
   tags = {
     timestamp      = "{{timestamp}}"
     consul_enabled = true
+    nomad_enabled = true
   }
 }
 
@@ -74,6 +76,7 @@ build {
     build_labels = {
       "timestamp"      = timestamp()
       "consul_enabled" = true
+      "nomad_enabled" = true
     }
   }
 
