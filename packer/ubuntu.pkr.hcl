@@ -30,7 +30,6 @@ source "amazon-ebs" "amd" {
   ami_name      = "amd64-{{timestamp}}"
   tags = {
     timestamp      = "{{timestamp}}"
-    nomad_version  = var.nomad_ent_version
     consul_enabled = true
   }
 }
@@ -53,7 +52,6 @@ source "amazon-ebs" "arm" {
   ami_name      = "arm64-{{timestamp}}"
   tags = {
     timestamp      = "{{timestamp}}"
-    nomad_version  = var.nomad_ent_version
     consul_enabled = true
   }
 }
@@ -75,7 +73,6 @@ build {
 
     build_labels = {
       "timestamp"      = timestamp()
-      "nomad_version"  = var.nomad_ent_version
       "consul_enabled" = true
     }
   }
