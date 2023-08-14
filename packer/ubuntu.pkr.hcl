@@ -1,7 +1,7 @@
-variable "nomad_ent_version" {
-  type    = string
-  default = "1.6.0+ent-1"
-}
+// variable "nomad_ent_version" {
+//   type    = string
+//   default = "1.6.1+ent-1"
+// }
 
 variable "subnet_id" {
   type = string
@@ -25,7 +25,7 @@ source "amazon-ebs" "amd" {
     owners      = ["099720109477"] # Canonical
     most_recent = true
   }
-  instance_type = "t2.micro"
+  instance_type = "t3.medium"
   ssh_username  = "ubuntu"
   ami_name      = "amd64-{{timestamp}}"
   tags = {
@@ -48,7 +48,7 @@ source "amazon-ebs" "arm" {
     owners      = ["099720109477"] # Canonical
     most_recent = true
   }
-  instance_type = "a1.large"
+  instance_type = "t4g.medium"
   ssh_username  = "ubuntu"
   ami_name      = "arm64-{{timestamp}}"
   tags = {
@@ -86,7 +86,7 @@ build {
       "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
       // "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
       "sudo apt update && sudo apt upgrade -y",
-      "sudo apt install -y consul nomad-enterprise=${var.nomad_ent_version}",
+      "sudo apt install -y consul nomad-enterprise",
       "curl -fsSL https://get.docker.com -o get-docker.sh",
       "sh ./get-docker.sh",
       "curl -L -o cni-plugins.tgz \"https://github.com/containernetworking/plugins/releases/download/v1.3.0/cni-plugins-linux-$([ $(uname -m) = aarch64 ] && echo arm64 || echo amd64)\"-v1.3.0.tgz",
