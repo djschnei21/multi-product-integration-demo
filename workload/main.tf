@@ -30,7 +30,7 @@ terraform {
 provider "doormat" {}
 
 provider "consul" {
-  address = data.terraform_remote_state.hcp_clusters.outputs.consul_public_endpoint
+  address = "${data.terraform_remote_state.hcp_clusters.outputs.consul_public_endpoint}:443"
   token = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
   scheme  = "https" 
 }
