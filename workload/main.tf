@@ -32,6 +32,7 @@ provider "doormat" {}
 provider "consul" {
   address = data.terraform_remote_state.hcp_clusters.outputs.consul_public_endpoint
   token = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
+  scheme  = "https" 
 }
 
 data "doormat_aws_credentials" "creds" {
