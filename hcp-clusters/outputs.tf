@@ -27,7 +27,7 @@ output "consul_config_file" {
 }
 
 output "consul_public_endpoint" {
-  value.hcp_consul_cluster.hashistack.consul_public_endpoint_url
+  value = hcp_consul_cluster.hashistack.consul_public_endpoint_url
 }
 
 output "boundary_public_endpoint" {
