@@ -82,7 +82,7 @@ resource "null_resource" "wait_for_db" {
   depends_on = [nomad_job.mongodb]
 
   provisioner "local-exec" {
-    command = "sleep 5 && bash wait-for-nomad-job.sh ${nomad_job.mongodb.id}"
+    command = "sleep 5 && bash wait-for-nomad-job.sh ${nomad_job.mongodb.id} ${data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint}"
   }
 }
 
