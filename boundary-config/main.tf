@@ -42,7 +42,7 @@ data "terraform_remote_state" "hcp_clusters" {
   config = {
     organization = var.tfc_account_name
     workspaces = {
-      name = "hcp-clusters"
+      name = "2_hcp-clusters"
     }
   }
 }
@@ -54,7 +54,7 @@ provider "vault" {
 }
 
 provider "boundary" {
-  addr                            = data.terraform_remote_state.hcp_clusters.outputs.boundary_public_endpoint
+  addr  = data.terraform_remote_state.hcp_clusters.outputs.boundary_public_endpoint
   auth_method_login_name = var.boundary_admin_username
   auth_method_password   = var.boundary_admin_password
 }
