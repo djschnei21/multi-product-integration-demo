@@ -116,7 +116,7 @@ resource "vault_database_secrets_mount" "mongodb" {
     name                 = "mongodb-on-nomad"
     username             = "admin"
     password             = "password"
-    connection_url       = "mongodb://{{username}}:{{password}}@${data.consul_service.mongo_service.address}:27017/admin?tls=false"
+    connection_url       = "mongodb://{{username}}:{{password}}@${[for s in data.consul_service.mongo_service.service : s.address][0]}:27017/admin?tls=false"
     max_open_connections = 0
     allowed_roles = [
       "demo",
