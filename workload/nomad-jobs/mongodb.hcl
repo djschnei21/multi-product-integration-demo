@@ -15,6 +15,7 @@ job "demo-mongodb" {
         service {
             name = "demo-mongodb"
             port = "27017"
+            address = "${attr.unique.platform.aws.public-ipv4}"
 
             connect{
                 sidecar_service {}
