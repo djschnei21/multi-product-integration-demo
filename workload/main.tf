@@ -99,7 +99,6 @@ resource "null_resource" "wait_for_db" {
 
 data "consul_service" "mongo_service" {
     name = "demo-mongodb"
-    datacenter = "dc1"
 }
 
 resource "vault_database_secrets_mount" "mongodb" {
