@@ -1,6 +1,6 @@
 job "demo-mongodb" {
     datacenters = ["dc1"]
-    
+    node_pool = "arm"
     type = "service"
 
     group "mongodb" {
