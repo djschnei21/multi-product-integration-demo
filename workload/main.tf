@@ -114,7 +114,7 @@ resource "null_resource" "mongodb_root_rotation" {
     vault_database_secrets_mount.mongodb
   ]
   provisioner "local-exec" {
-    command = "curl --header \"X-Vault-Token: ${var.vault_token}\" --request POST ${var.vault_addr}/v1/${vault_database_secrets_mount.mongodb.path}/rotate-root/mongodb-on-nomad"
+    command = "curl --header \"X-Vault-Token: ${data.terraform_remote_state.hcp_clusters.outputs.vault_root_token}\" --request POST ${data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint}/v1/${vault_database_secrets_mount.mongodb.path}/rotate-root/mongodb-on-nomad"
   }
 }
 
