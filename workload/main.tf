@@ -19,10 +19,20 @@ terraform {
       source = "hashicorp/nomad"
       version = "2.0.0-beta.1"
     }
+
+    consul = {
+      source = "hashicorp/consul"
+      version = "2.18.0"
+    }
   }
 }
 
 provider "doormat" {}
+
+provider "consul" {
+  address = data.terraform_remote_state.hcp_clusters.outputs.consul_public_endpoint
+  token = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
+}
 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
@@ -86,6 +96,11 @@ resource "null_resource" "wait_for_db" {
   }
 }
 
+data "consul_service" "mongo_service" {
+    name = "demo-mongodb"
+    datacenter = "dc1"
+}
+
 resource "vault_database_secrets_mount" "mongodb" {
   depends_on = [
     null_resource.wait_for_db
@@ -101,7 +116,7 @@ resource "vault_database_secrets_mount" "mongodb" {
     name                 = "mongodb-on-nomad"
     username             = "admin"
     password             = "password"
-    connection_url       = "mongodb://{{username}}:{{password}}@demo-mongodb.service.consul:27017/admin?tls=false"
+    connection_url       = "mongodb://{{username}}:{{password}}@${data.consul_service.mongo_service.address}:27017/admin?tls=false"
     max_open_connections = 0
     allowed_roles = [
       "demo",
