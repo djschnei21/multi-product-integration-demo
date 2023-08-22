@@ -37,7 +37,7 @@ resource "tfe_workspace" "hcp_clusters" {
   working_directory = "hcp-clusters"
   queue_all_runs = false
   assessments_enabled = false
-  remote_state_consumer_ids = [ tfe_workspace.nomad_cluster.id, tfe_workspace.boundary_config.id ]
+  remote_state_consumer_ids = [ tfe_workspace.nomad_cluster.id, tfe_workspace.boundary_config.id, tfe_workspace.workload ]
 }
 
 resource "tfe_workspace" "nomad_cluster" {
@@ -53,7 +53,7 @@ resource "tfe_workspace" "nomad_cluster" {
   working_directory = "nomad-cluster"
   queue_all_runs = false
   assessments_enabled = false
-  remote_state_consumer_ids = [ tfe_workspace.nomad_nodes.id ]
+  remote_state_consumer_ids = [ tfe_workspace.nomad_nodes.id, tfe_workspace.workload ]
 }
 
 resource "tfe_workspace" "boundary_config" {
