@@ -88,6 +88,22 @@ resource "tfe_workspace" "nomad_nodes" {
   remote_state_consumer_ids = [ ]
 }
 
+resource "tfe_workspace" "workload" {
+  name          = "6_workload"
+  organization  = var.tfc_organization
+  project_id    = var.tfc_project_id
+
+  vcs_repo {
+    identifier = var.repo_identifier
+    oauth_token_id = var.oauth_token_id
+  }
+
+  working_directory = "workload"
+  queue_all_runs = false
+  assessments_enabled = false
+  remote_state_consumer_ids = [ ]
+}
+
 resource "tfe_workspace_run" "networking" {
   workspace_id    = tfe_workspace.networking.id
 
