@@ -26,6 +26,10 @@ output "consul_config_file" {
   sensitive = true
 }
 
+output "consul_public_endpoint" {
+  value.hcp_consul_cluster.hashistack.consul_public_endpoint_url
+}
+
 output "boundary_public_endpoint" {
   value = hcp_boundary_cluster.hashistack.cluster_url
 }
