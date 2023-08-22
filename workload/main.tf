@@ -37,7 +37,7 @@ provider "consul" {
  
 data "doormat_aws_credentials" "creds" {
   provider = doormat
-  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_6_workload"
+  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_7_workload"
 }
 
 provider "aws" {
@@ -64,7 +64,7 @@ data "terraform_remote_state" "nomad_cluster" {
   config = {
     organization = var.tfc_account_name
     workspaces = {
-      name = "3_nomad-cluster"
+      name = "4_nomad-cluster"
     }
   }
 }

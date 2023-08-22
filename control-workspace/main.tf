@@ -40,8 +40,24 @@ resource "tfe_workspace" "hcp_clusters" {
   remote_state_consumer_ids = [ tfe_workspace.nomad_cluster.id, tfe_workspace.boundary_config.id, tfe_workspace.workload.id ]
 }
 
+resource "tfe_workspace" "vault_auth_config" {
+  name          = "3_vault-auth-config"
+  organization  = var.tfc_organization
+  project_id    = var.tfc_project_id
+
+  vcs_repo {
+    identifier = var.repo_identifier
+    oauth_token_id = var.oauth_token_id
+  }
+
+  working_directory = "vault-auth-config"
+  queue_all_runs = false
+  assessments_enabled = false
+  remote_state_consumer_ids = [ tfe_workspace.nomad_nodes.id, tfe_workspace.workload.id ]
+}
+
 resource "tfe_workspace" "nomad_cluster" {
-  name          = "3_nomad-cluster"
+  name          = "4_nomad-cluster"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
@@ -57,7 +73,7 @@ resource "tfe_workspace" "nomad_cluster" {
 }
 
 resource "tfe_workspace" "boundary_config" {
-  name          = "4_boundary-config"
+  name          = "5_boundary-config"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
@@ -73,7 +89,7 @@ resource "tfe_workspace" "boundary_config" {
 }
 
 resource "tfe_workspace" "nomad_nodes" {
-  name          = "5_nomad-nodes"
+  name          = "6_nomad-nodes"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
@@ -89,7 +105,7 @@ resource "tfe_workspace" "nomad_nodes" {
 }
 
 resource "tfe_workspace" "workload" {
-  name          = "6_workload"
+  name          = "7_workload"
   organization  = var.tfc_organization
   project_id    = var.tfc_project_id
 
