@@ -34,7 +34,7 @@ provider "consul" {
   token = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token
   scheme  = "https" 
 }
-
+ 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
   role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_6_workload"
