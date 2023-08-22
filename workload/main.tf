@@ -47,6 +47,17 @@ data "terraform_remote_state" "hcp_clusters" {
   }
 }
 
+data "terraform_remote_state" "nomad_cluster" {
+  backend = "remote"
+
+  config = {
+    organization = var.tfc_account_name
+    workspaces = {
+      name = "3_nomad-cluster"
+    }
+  }
+}
+
 provider "vault" {
   address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
   token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
