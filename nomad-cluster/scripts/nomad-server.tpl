@@ -29,7 +29,7 @@ consul {
 vault {
   enabled = true
   address = "${vault_public_endpoint}"
-  token   = "${vault_token}"
+  token   = "${nomad_token}"
 
   # Optional settings:
   create_from_role = "nomad_role"
