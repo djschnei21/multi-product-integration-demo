@@ -28,7 +28,7 @@ consul {
 }
 vault {
   enabled = true
-  namespace = admin
+  namespace = "admin"
   address = "${vault_public_endpoint}"
   token   = "${nomad_token}"
 

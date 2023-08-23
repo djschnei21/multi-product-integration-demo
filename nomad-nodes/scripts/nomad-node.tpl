@@ -29,7 +29,7 @@ consul {
 }
 vault {
   enabled = true
-  namespace = admin
+  namespace = "admin"
   address = "${vault_public_endpoint}"
 }
 bind_addr = "0.0.0.0"
