@@ -62,7 +62,7 @@ resource "vault_policy" "nomad_policy" {
 
 resource "vault_token_auth_backend_role" "nomad_role" {
   role_name = "nomad_role"
-  policies  = [vault_policy.nomad_policy.name]
+  allowed_policies  = [vault_policy.nomad_policy.name]
 }
 
 resource "vault_token" "nomad_token" {
