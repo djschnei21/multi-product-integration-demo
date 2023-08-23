@@ -26,6 +26,15 @@ client {
 consul {
   token = "${consul_acl_token}"
 }
+vault {
+  enabled = true
+  address = "${vault_public_endpoint}"
+  token   = "${vault_token}"
+
+  # Optional settings:
+  create_from_role = "nomad_role"
+  task_token_ttl   = "1h"
+}
 bind_addr = "0.0.0.0"
 acl {
   enabled    = true

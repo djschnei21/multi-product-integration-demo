@@ -55,6 +55,24 @@ data "terraform_remote_state" "hcp_clusters" {
 
 provider "vault" {}
 
+resource "vault_policy" "nomad_policy" {
+  name   = "nomad"
+  policy = file("nomad-server-policy.hcl")
+}
+
+resource "vault_token_auth_backend_role" "nomad_role" {
+  role_name = "nomad_role"
+  policies  = [vault_policy.nomad_policy.name]
+}
+
+resource "vault_token" "nomad_token" {
+  role_name   = vault_token_auth_backend_role.nomad_role.role_name
+  policies    = [vault_policy.nomad_policy.name]
+  ttl         = "1h"
+  max_ttl     = "24h"
+  renewable   = true
+}
+
 resource "vault_mount" "ssh" {
   path = "ssh"
   type = "ssh"
@@ -220,10 +238,12 @@ resource "aws_launch_template" "nomad_server_launch_template" {
     templatefile("${path.module}/scripts/nomad-server.tpl",
       {
         nomad_license      = var.nomad_license,
+        nomad_token        = vault_token.nomad_token.client_token
         consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
         consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
         consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
-        vault_ssh_pub_key  = vault_ssh_secret_backend_ca.ssh_ca.public_key
+        vault_ssh_pub_key  = vault_ssh_secret_backend_ca.ssh_ca.public_key,
+        vault_public_endpoint = data.terraform_remote_state.hcp_clusters.vault_public_endpoint
       }
     )
   )
