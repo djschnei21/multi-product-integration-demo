@@ -43,11 +43,7 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
-provider "vault" {
-  address = data.terraform_remote_state.nomad_cluster.outputs.vault_public_endpoint
-  token = data.terraform_remote_state.nomad_cluster.outputs.vault_root_token
-  namespace = "admin"
-}
+provider "vault" {}
 
 data "vault_kv_secret_v2" "bootstrap" {
   mount = data.terraform_remote_state.nomad_cluster.outputs.bootstrap_kv
