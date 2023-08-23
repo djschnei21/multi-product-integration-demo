@@ -155,8 +155,26 @@ resource "tfe_workspace_run" "hcp_clusters" {
   }
 }
 
-resource "tfe_workspace_run" "nomad_cluster" {
+resource "tfe_workspace_run" "vault_auth_config" {
   depends_on = [ tfe_workspace_run.hcp_clusters ]
+  workspace_id    = tfe_workspace.vault_auth_config.id
+
+  apply {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+}
+
+resource "tfe_workspace_run" "nomad_cluster" {
+  depends_on = [ tfe_workspace_run.vault_auth_config ]
   workspace_id    = tfe_workspace.nomad_cluster.id
 
   apply {
@@ -201,6 +219,18 @@ resource "tfe_workspace_run" "nomad_nodes" {
     retry_attempts    = 5
     retry_backoff_min = 5
   }
+  destroy {
+    manual_confirm    = false
+    wait_for_run      = true
+    retry_attempts    = 5
+    retry_backoff_min = 5
+  }
+}
+
+resource "tfe_workspace_run" "workload" {
+  depends_on = [ tfe_workspace_run.nomad_nodes ]
+  workspace_id    = tfe_workspace.workload.id
+
   destroy {
     manual_confirm    = false
     wait_for_run      = true
