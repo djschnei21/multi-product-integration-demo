@@ -29,6 +29,7 @@ variable "auth_method" {
 
 data "tfe_workspace_ids" "all" {
   names = ["*"]
+  organization = var.tfc_account_name
 }
 
 resource "tfe_variable" "vault_auth_method" {
