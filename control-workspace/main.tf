@@ -210,7 +210,7 @@ resource "tfe_workspace_run" "boundary_config" {
 }
 
 resource "tfe_workspace_run" "nomad_nodes" {
-  depends_on = [ tfe_workspace_run.nomad_cluster ]
+  depends_on = [ tfe_workspace_run.boundary_config ]
   workspace_id    = tfe_workspace.nomad_nodes.id
 
   apply {
