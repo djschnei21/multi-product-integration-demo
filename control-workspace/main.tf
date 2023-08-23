@@ -37,7 +37,7 @@ resource "tfe_workspace" "hcp_clusters" {
   working_directory = "hcp-clusters"
   queue_all_runs = false
   assessments_enabled = false
-  remote_state_consumer_ids = [ tfe_workspace.nomad_cluster.id, tfe_workspace.boundary_config.id, tfe_workspace.workload.id ]
+  remote_state_consumer_ids = [ tfe_workspace.nomad_cluster.id, tfe_workspace.boundary_config.id, tfe_workspace.vault_auth_config.id, tfe_workspace.workload.id ]
 }
 
 resource "tfe_workspace" "vault_auth_config" {
