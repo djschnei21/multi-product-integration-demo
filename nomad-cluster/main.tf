@@ -64,7 +64,6 @@ resource "vault_token_auth_backend_role" "nomad_role" {
   role_name = "nomad_role"
   allowed_policies  = [vault_policy.nomad_policy.name]
   orphan = true
-  token_ttl = "3600"
   token_explicit_max_ttl = "0"
   token_period  = "259200"
   renewable = true
