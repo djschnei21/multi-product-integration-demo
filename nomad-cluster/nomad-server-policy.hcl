@@ -40,3 +40,7 @@ path "sys/capabilities-self" {
 path "auth/token/renew-self" {
   capabilities = ["update"]
 }
+
+path "mongodb/creds/demo" {
+  capabilities = ["create", "read", "update"]
+}
