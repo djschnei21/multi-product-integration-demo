@@ -74,7 +74,7 @@ data "terraform_remote_state" "networking" {
   }
 }
 
-data "terraform_remote_state" "hcp-clusters" {
+data "terraform_remote_state" "hcp_clusters" {
   backend = "remote"
 
   config = {
