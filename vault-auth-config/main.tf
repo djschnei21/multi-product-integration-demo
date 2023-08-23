@@ -112,8 +112,8 @@ module "tfc-auth" {
   }
 
   vault = {
-    addr      = data.tfe_outputs.vault_cluster.values.vault_public_endpoint_url
-    namespace = data.tfe_outputs.vault_cluster.values.vault_namespace
+    addr      = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+    namespace = "admin"
     auth_path = "tfc/djc-tfcb"
   }
 
