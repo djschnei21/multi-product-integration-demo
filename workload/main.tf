@@ -98,7 +98,7 @@ resource "null_resource" "wait_for_db" {
 }
 
 data "consul_service" "mongo_service" {
-    depends_on = [ nomad_job.mongodb ]
+    depends_on = [ null_resource.wait_for_db ]
     name = "demo-mongodb"
 }
 
