@@ -49,7 +49,7 @@ job "demo-dashboard" {
                 sidecar = false
             }
             vault {
-                policies = ["demo"]
+                policies = ["nomad"]
                 change_mode   = "restart"
             }
             template {
