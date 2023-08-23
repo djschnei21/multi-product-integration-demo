@@ -69,11 +69,7 @@ data "terraform_remote_state" "nomad_cluster" {
   }
 }
 
-provider "vault" {
-  address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-  token = data.terraform_remote_state.hcp_clusters.outputs.vault_root_token
-  namespace = "admin"
-}
+provider "vault" {}
 
 data "vault_kv_secret_v2" "bootstrap" {
   mount = data.terraform_remote_state.nomad_cluster.outputs.bootstrap_kv
