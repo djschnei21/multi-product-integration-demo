@@ -176,6 +176,7 @@ resource "boundary_credential_library_vault_ssh_certificate" "vault" {
   credential_store_id = boundary_credential_store_vault.vault.id
   path                = "ssh/sign/boundary_role"
   username            = "ubuntu"
+  key_type            = "ed25519"
 }
 
 resource "boundary_host_set_plugin" "nomad_servers" {
