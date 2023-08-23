@@ -63,6 +63,28 @@ resource "nomad_node_pool" "arm" {
   name = "arm"
 }
 
+data "terraform_remote_state" "networking" {
+  backend = "remote"
+
+  config = {
+    organization = var.tfc_account_name
+    workspaces = {
+      name = "1_networking"
+    }
+  }
+}
+
+data "terraform_remote_state" "hcp-clusters" {
+  backend = "remote"
+
+  config = {
+    organization = var.tfc_account_name
+    workspaces = {
+      name = "2_hcp-clusters"
+    }
+  }
+}
+
 data "terraform_remote_state" "nomad_cluster" {
   backend = "remote"
 
@@ -111,9 +133,9 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
     templatefile("${path.module}/scripts/nomad-node.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file,
-        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token,
+        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
         node_pool          = nomad_node_pool.x86.name,
         vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key
       }
@@ -139,7 +161,7 @@ resource "aws_autoscaling_group" "nomad_client_x86_asg" {
     version = aws_launch_template.nomad_client_x86_launch_template.latest_version
   }
   
-  vpc_zone_identifier = data.terraform_remote_state.nomad_cluster.outputs.subnet_ids
+  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
 
   instance_refresh {
     strategy = "Rolling"
@@ -174,9 +196,9 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
     templatefile("${path.module}/scripts/nomad-node.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.nomad_cluster.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.nomad_cluster.outputs.consul_config_file,
-        consul_acl_token   = data.terraform_remote_state.nomad_cluster.outputs.consul_root_token,
+        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
         node_pool          = nomad_node_pool.arm.name,
         vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key
       }
@@ -202,7 +224,7 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
     version = aws_launch_template.nomad_client_arm_launch_template.latest_version
   }
   
-  vpc_zone_identifier = data.terraform_remote_state.nomad_cluster.outputs.subnet_ids
+  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
 
   instance_refresh {
     strategy = "Rolling"
