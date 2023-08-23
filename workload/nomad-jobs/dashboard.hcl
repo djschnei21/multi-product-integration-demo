@@ -1,6 +1,6 @@
 job "demo-dashboard" {
     datacenters = ["dc1"]
-    node_pool = "arm"
+    node_pool = "amd"
     type = "service"
     
     group "dashboard" {
