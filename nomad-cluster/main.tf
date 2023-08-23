@@ -243,7 +243,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
         consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
         consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
         vault_ssh_pub_key  = vault_ssh_secret_backend_ca.ssh_ca.public_key,
-        vault_public_endpoint = data.terraform_remote_state.hcp_clusters.vault_public_endpoint
+        vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
       }
     )
   )
