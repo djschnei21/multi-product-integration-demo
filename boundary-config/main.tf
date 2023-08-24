@@ -109,7 +109,7 @@ resource "aws_iam_access_key" "boundary_dynamic_host_catalog" {
 # AWS is eventually-consistent when creating IAM Users. Introduce a wait
 # before handing credentails off to boundary.
 resource "time_sleep" "boundary_dynamic_host_catalog_user_ready" {
-  create_duration = "10s"
+  create_duration = "30s"
   depends_on = [aws_iam_access_key.boundary_dynamic_host_catalog]
 }
 
