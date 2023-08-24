@@ -73,26 +73,45 @@ resource "boundary_scope" "project" {
   auto_create_admin_role = true
 }
 
-resource "aws_iam_user" "boundary" {
-  name = "boundary"
+# Grab some information about and from the current AWS account.
+data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
+data "aws_iam_policy" "demo_user_permissions_boundary" {
+  name = "DemoUser"
 }
 
-resource "aws_iam_access_key" "boundary" {
-  user = aws_iam_user.boundary.name
+locals {
+  my_email = split("/", data.aws_caller_identity.current.arn)[2]
 }
 
-data "aws_iam_policy_document" "boundary_ro" {
-  statement {
-    effect    = "Allow"
-    actions   = ["ec2:Describe*"]
-    resources = ["*"]
-  }
+# Create the user to be used in Boundary for dynamic host discovery. Then attach the policy to the user.
+resource "aws_iam_user" "boundary_dynamic_host_catalog" {
+  name                 = "demo-${local.my_email}-bdhc"
+  permissions_boundary = data.aws_iam_policy.demo_user_permissions_boundary.arn
+  force_destroy        = true
 }
 
-resource "aws_iam_user_policy" "lb_ro" {
-  name   = "test"
-  user   = aws_iam_user.boundary.name
-  policy = data.aws_iam_policy_document.boundary_ro.json
+resource "aws_iam_user_policy_attachment" "boundary_dynamic_host_catalog" {
+  user       = aws_iam_user.boundary_dynamic_host_catalog.name
+  policy_arn = data.aws_iam_policy.demo_user_permissions_boundary.arn
+}
+
+# Generate some secrets to pass in to the Boundary configuration.
+# WARNING: These secrets are not encrypted in the state file. Ensure that you do not commit your state file!
+resource "aws_iam_access_key" "boundary_dynamic_host_catalog" {
+  user = aws_iam_user.boundary_dynamic_host_catalog.name
+
+  depends_on = [aws_iam_user_policy_attachment.boundary_dynamic_host_catalog]
+}
+
+# AWS is eventually-consistent when creating IAM Users. Introduce a wait
+# before handing credentails off to boundary.
+resource "time_sleep" "boundary_dynamic_host_catalog_user_ready" {
+  create_duration = "10s"
+
+  depends_on = [aws_iam_access_key.boundary_dynamic_host_catalog]
 }
 
 resource "boundary_host_catalog_plugin" "aws" {
@@ -105,8 +124,8 @@ resource "boundary_host_catalog_plugin" "aws" {
   })
 
   secrets_json = jsonencode({
-    "access_key_id"     = "${aws_iam_access_key.boundary.id}",
-    "secret_access_key" = "${aws_iam_access_key.boundary.secret}"
+    "access_key_id"     = "${aws_iam_access_key.boundary_dynamic_host_catalog.id}",
+    "secret_access_key" = "${aws_iam_access_key.boundary_dynamic_host_catalog.secret}"
   })
 }
 
