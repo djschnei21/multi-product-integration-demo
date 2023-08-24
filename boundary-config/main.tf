@@ -83,7 +83,8 @@ data "aws_iam_policy" "demo_user_permissions_boundary" {
 }
 
 locals {
-  my_email = split("/", data.aws_caller_identity.current.arn)[2]
+  # my_email = split("/", data.aws_caller_identity.current.arn)[2]
+  my_email = "daniel.schneider@hashicorp.com"
 }
 
 # Create the user to be used in Boundary for dynamic host discovery. Then attach the policy to the user.
