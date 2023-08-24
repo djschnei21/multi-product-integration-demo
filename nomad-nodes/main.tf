@@ -57,28 +57,10 @@ provider "nomad" {
 
 resource "nomad_node_pool" "x86" {
   name = "x86"
-
-  provisioner "local-exec" {
-    when    = destroy
-    script  = "${path.module}/scripts/gc_and_check_nodes.sh"
-    environment = {
-      NOMAD_SERVER_URL = data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint
-      NOMAD_TOKEN      = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
-    }
-  }
 }
 
 resource "nomad_node_pool" "arm" {
   name = "arm"
-
-  provisioner "local-exec" {
-    when    = destroy
-    script  = "${path.module}/scripts/gc_and_check_nodes.sh"
-    environment = {
-      NOMAD_SERVER_URL = data.terraform_remote_state.nomad_cluster.outputs.nomad_public_endpoint
-      NOMAD_TOKEN      = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
-    }
-  }
 }
 
 data "terraform_remote_state" "networking" {
