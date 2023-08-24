@@ -110,11 +110,11 @@ resource "aws_iam_access_key" "boundary_dynamic_host_catalog" {
 # before handing credentails off to boundary.
 resource "time_sleep" "boundary_dynamic_host_catalog_user_ready" {
   create_duration = "10s"
-
   depends_on = [aws_iam_access_key.boundary_dynamic_host_catalog]
 }
 
 resource "boundary_host_catalog_plugin" "aws" {
+  depends_on = [ time_sleep.boundary_dynamic_host_catalog_user_ready ]
   name            = "My aws catalog"
   scope_id        = boundary_scope.project.id
   plugin_name     = "aws"
