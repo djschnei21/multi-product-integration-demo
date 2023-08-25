@@ -23,3 +23,8 @@ variable "boundary_admin_password" {
   description = "The admin user's password on the Boundary cluster"
   sensitive   = true
 }
+
+variable "my_email" {
+  type = string
+  description = "email for the user deploying the stack (required for doormat demo IAM user creation)"
+}
