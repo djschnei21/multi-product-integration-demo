@@ -101,7 +101,7 @@ resource "tfe_workspace" "nomad_nodes" {
   working_directory = "nomad-nodes"
   queue_all_runs = false
   assessments_enabled = false
-  remote_state_consumer_ids = [ ]
+  remote_state_consumer_ids = [ tfe_workspace.workload.id ]
 }
 
 resource "tfe_workspace" "workload" {
