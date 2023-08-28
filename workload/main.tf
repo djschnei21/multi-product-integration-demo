@@ -69,6 +69,17 @@ data "terraform_remote_state" "nomad_cluster" {
   }
 }
 
+data "terraform_remote_state" "nomad_nodes" {
+  backend = "remote"
+
+  config = {
+    organization = var.tfc_account_name
+    workspaces = {
+      name = "5_nomad-nodes"
+    }
+  }
+}
+
 provider "vault" {}
 
 data "vault_kv_secret_v2" "bootstrap" {
