@@ -75,7 +75,7 @@ data "terraform_remote_state" "nomad_nodes" {
   config = {
     organization = var.tfc_account_name
     workspaces = {
-      name = "5_nomad-nodes"
+      name = "6_nomad-nodes"
     }
   }
 }
