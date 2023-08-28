@@ -267,6 +267,6 @@ resource "aws_lb" "nomad_clients" {
   name               = "nomad-client-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.nomad_client_alb.id]
-  subnets            = [ data.terraform_remote_state.networking.outputs.subnet_ids ]
+  security_groups    = [ aws_security_group.nomad_client_alb.id ]
+  subnets            = data.terraform_remote_state.networking.outputs.subnet_ids
 }
