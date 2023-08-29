@@ -168,18 +168,18 @@ resource "nomad_job" "dashboard" {
   jobspec = file("${path.module}/nomad-jobs/dashboard.hcl")
 }
 
-resource "aws_lb_target_group" "dashboard_tg" {
-  name     = "dashboard-tg"
-  port     = 80
-  protocol = "HTTP"
-  vpc_id   = data.terraform_remote_state.networking.outputs.vpc_id
-}
+# resource "aws_lb_target_group" "dashboard_tg" {
+#   name     = "dashboard-tg"
+#   port     = 80
+#   protocol = "HTTP"
+#   vpc_id   = data.terraform_remote_state.networking.outputs.vpc_id
+# }
 
-resource "aws_lb_target_group_attachment" "dashboard_tg" {
-  target_group_arn = aws_lb_target_group.dashboard_tg.arn
-  port             = 80
-  target_id        = data.terraform_remote_state.nomad_nodes.outputs.nomad_client_x86_asg
-}
+# resource "aws_lb_target_group_attachment" "dashboard_tg" {
+#   target_group_arn = aws_lb_target_group.dashboard_tg.arn
+#   port             = 80
+#   target_id        = data.terraform_remote_state.nomad_nodes.outputs.nomad_client_x86_asg
+# }
 
 # // Optional Full KVM based VM Example
 # resource "nomad_job" "fullvm" {
