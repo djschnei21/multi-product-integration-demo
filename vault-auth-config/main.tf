@@ -102,13 +102,13 @@ module "tfc-auth" {
       ]
     },
     {
-      workspace_name = "4_nomad-cluster"
+      workspace_name = "5_nomad-cluster"
       token_policies = [
         vault_policy.admin.name
       ]
     },
     {
-      workspace_name = "5_boundary-config"
+      workspace_name = "4_boundary-config"
       token_policies = [
         vault_policy.admin.name
       ]
