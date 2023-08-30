@@ -15,6 +15,7 @@ job "demo-dashboard" {
         service {
             name = "demo-dashboard"
             port = "http"
+            address = "${attr.unique.platform.aws.public-ipv4}"
 
             connect {
                 sidecar_service {
