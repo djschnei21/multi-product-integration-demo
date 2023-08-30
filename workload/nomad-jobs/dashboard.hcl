@@ -1,9 +1,9 @@
-job "demo-dashboard" {
+job "demo-frontend" {
     datacenters = ["dc1"]
     node_pool = "x86"
     type = "service"
     
-    group "dashboard" {
+    group "frontend" {
         network {
             mode = "bridge"
 
@@ -13,7 +13,7 @@ job "demo-dashboard" {
             }
         }
         service {
-            name = "demo-dashboard"
+            name = "demo-frontend"
             port = "http"
             address = "${attr.unique.platform.aws.public-ipv4}"
 
@@ -28,7 +28,7 @@ job "demo-dashboard" {
                 }
             }
         }
-        task "dashboard" {
+        task "frontend" {
             driver = "docker"
             vault {
                 policies = ["nomad"]

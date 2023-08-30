@@ -161,22 +161,22 @@ resource "vault_database_secret_backend_role" "mongodb" {
   ]
 }
 
-resource "nomad_job" "dashboard" {
+resource "nomad_job" "frontend" {
   depends_on = [
     vault_database_secret_backend_role.mongodb
   ]
-  jobspec = file("${path.module}/nomad-jobs/dashboard.hcl")
+  jobspec = file("${path.module}/nomad-jobs/frontend.hcl")
 }
 
-# resource "aws_lb_target_group" "dashboard_tg" {
-#   name     = "dashboard-tg"
+# resource "aws_lb_target_group" "frontend_tg" {
+#   name     = "frontend-tg"
 #   port     = 80
 #   protocol = "HTTP"
 #   vpc_id   = data.terraform_remote_state.networking.outputs.vpc_id
 # }
 
-# resource "aws_lb_target_group_attachment" "dashboard_tg" {
-#   target_group_arn = aws_lb_target_group.dashboard_tg.arn
+# resource "aws_lb_target_group_attachment" "frontend_tg" {
+#   target_group_arn = aws_lb_target_group.frontend_tg.arn
 #   port             = 80
 #   target_id        = data.terraform_remote_state.nomad_nodes.outputs.nomad_client_x86_asg
 # }
