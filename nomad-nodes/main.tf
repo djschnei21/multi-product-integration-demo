@@ -158,6 +158,8 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
   image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_x86.cloud_image_id
   instance_type = "t3a.medium"
 
+  iam_instance_profile = aws_iam_instance_profile.efs_instance_profile.name
+
   network_interfaces {
     associate_public_ip_address = true
     security_groups = [ 
@@ -204,7 +206,6 @@ resource "aws_autoscaling_group" "nomad_client_x86_asg" {
   }
   
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
-  iam_instance_profile = aws_iam_instance_profile.efs_instance_profile.name
 
   instance_refresh {
     strategy = "Rolling"
@@ -222,6 +223,8 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
   name_prefix   = "lt-"
   image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_arm.cloud_image_id
   instance_type = "t4g.medium"
+
+  iam_instance_profile = aws_iam_instance_profile.efs_instance_profile.name
 
   network_interfaces {
     associate_public_ip_address = true
@@ -269,7 +272,6 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
   }
   
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
-  iam_instance_profile = aws_iam_instance_profile.efs_instance_profile.name
 
   instance_refresh {
     strategy = "Rolling"
