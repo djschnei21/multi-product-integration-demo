@@ -39,6 +39,11 @@ acl {
   policy_ttl = "60s"
   role_ttl   = "60s"
 }
+plugin "docker" {
+  config {
+    allow_privileged = true
+  }
+}
 EOF
 chown root:root /etc/nomad.d/nomad.hcl
 chmod 600 /etc/nomad.d/nomad.hcl

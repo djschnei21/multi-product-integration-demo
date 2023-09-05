@@ -112,6 +112,47 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   region         = "us-east-2"
 }
 
+resource "aws_iam_role" "efs_role" {
+  name = "efs-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = "sts:AssumeRole",
+        Effect = "Allow",
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "efs_policy" {
+  name = "efs-policy"
+  role = aws_iam_role.efs_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "elasticfilesystem:*"
+        ],
+        Effect = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_instance_profile" "efs_instance_profile" {
+  name = "efs-instance-profile"
+  role = aws_iam_role.efs_role.name
+}
+
+
 resource "aws_launch_template" "nomad_client_x86_launch_template" {
   name_prefix   = "lt-"
   image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_x86.cloud_image_id
@@ -163,6 +204,7 @@ resource "aws_autoscaling_group" "nomad_client_x86_asg" {
   }
   
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
+  iam_instance_profile = aws_iam_instance_profile.efs_instance_profile.name
 
   instance_refresh {
     strategy = "Rolling"
@@ -227,6 +269,7 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
   }
   
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
+  iam_instance_profile = aws_iam_instance_profile.efs_instance_profile.name
 
   instance_refresh {
     strategy = "Rolling"
