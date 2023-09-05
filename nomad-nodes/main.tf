@@ -159,7 +159,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
   instance_type = "t3a.medium"
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.efs_instance_profile.name
+    arn = aws_iam_instance_profile.efs_instance_profile.arn
   }
 
   network_interfaces {
@@ -227,7 +227,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
   instance_type = "t4g.medium"
 
   iam_instance_profile {
-    name = aws_iam_instance_profile.efs_instance_profile.name
+    arn = aws_iam_instance_profile.efs_instance_profile.arn
   }
 
   network_interfaces {
