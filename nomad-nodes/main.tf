@@ -55,14 +55,6 @@ provider "nomad" {
   secret_id = data.vault_kv_secret_v2.bootstrap.data["SecretID"]
 }
 
-resource "nomad_node_pool" "x86" {
-  name = "x86"
-}
-
-resource "nomad_node_pool" "arm" {
-  name = "arm"
-}
-
 data "terraform_remote_state" "networking" {
   backend = "remote"
 
