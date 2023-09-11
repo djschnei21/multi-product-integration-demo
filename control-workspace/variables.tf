@@ -13,7 +13,3 @@ variable "repo_identifier" {
 variable "oauth_token_id" {
   type = string
 }
-
-variable "TFC_CONFIGURATION_VERSION_GIT_COMMIT_SHA" {
-  type = string
-}
