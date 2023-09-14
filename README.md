@@ -42,7 +42,7 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 
 - You need a doormat created AWS sandbox account
 - You need a HCP account with an organization scoped service principal
-- You need a TFC account, a TFC Project, and a TFC user token 
+- You need a TFC account and a TFC user token 
 - You need a pre-configured OAuth connection between TFC and GitHub
 
 Preparing your AWS account to leverage the doormat provider on TFC:
@@ -55,8 +55,10 @@ export AWS_SECRET_ACCESS_KEY=************************
 export AWS_SESSION_TOKEN=************************
 ```
 3) `terraform init`
-4) Run a plan passing in your TFC account name.  For example `terraform plan -var "tfc_organization=something"`
-5) Assuming everything looks good, run an aaply passing in your TFC account name `terraform apply -var "tfc_organization=something"`
+4) Run a plan passing in your TFC account name.  For example 
+```terraform plan -var "tfc_organization=something"```
+5) Assuming everything looks good, run an apply passing in your TFC account name 
+```terraform apply -var "tfc_organization=something"```
 
 Preparing your TFC account:
 
