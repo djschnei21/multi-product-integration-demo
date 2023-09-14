@@ -19,7 +19,7 @@ The following integrations are utilized:
   - SSH signed Certificate injection in **Boundary**
   - Dynamic MongoDB credentials injection via **Nomad** templates
 - **Packer** is used to create **Nomad** Server and Client AMIs in AWS
-- **Terraform** queries **HCP Packer** for latest Nomad AMI
+- **Terraform** queries **HCP Packer** for AMI management
 - **Consul** service registration via **Nomad** 
 - **Consul** Connect (service mesh) used for **Nomad** job east/west communication
 
