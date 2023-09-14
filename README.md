@@ -78,23 +78,23 @@ Preparing your TFC account:
 
 | Key | Value | Sensitive? | Type |
 |-----|-------|------------|------|
-|boundary_admin_password|<intended boundary admin password>|yes|terraform|
-|my_email|<your email>|no|terraform|
-|nomad_license|<your nomad ent license>|yes|terraform|
-|region|<the region which will be used on HCP and AWS>|no|terraform|
-|stack_id|<will be used to consistently name resources>|no|terraform|
-|tfc_organization|<your TFC account name>|no|terraform|
-|HCP_CLIENT_ID|<HCP Service Principal Client ID>|no|env|
-|HCP_CLIENT_SECRET|<HCP Service Principal Client Secret>|yes|env|
-|HCP_PROJECT_ID|<your HCP Project ID retrieved from HCP>|no|env|
-|TFC_WORKLOAD_IDENTITY_AUDIENCE|<can be literally anything>|no|env|
-|TFE_TOKEN|<TFC User token>|yes|env|
+|boundary_admin_password|\<intended boundary admin password\>|yes|terraform|
+|my_email|\<your email\>|no|terraform|
+|nomad_license|\<your nomad ent license\>|yes|terraform|
+|region|\<the region which will be used on HCP and AWS\>|no|terraform|
+|stack_id|\<will be used to consistently name resources\>|no|terraform|
+|tfc_organization|\<your TFC account name\>|no|terraform|
+|HCP_CLIENT_ID|\<HCP Service Principal Client ID\>|no|env|
+|HCP_CLIENT_SECRET|\<HCP Service Principal Client Secret\>|yes|env|
+|HCP_PROJECT_ID|\<your HCP Project ID retrieved from HCP\>|no|env|
+|TFC_WORKLOAD_IDENTITY_AUDIENCE|\<can be literally anything\>|no|env|
+|TFE_TOKEN|\<TFC User token\>|yes|env|
 
 4) Create a new workspace within your TFC project called "0_control-workspace", attaching it to this VCS repository, specifying the working directory as "control-workspace"
 5) Create the following workspace variables within "0_control-workspace":
 
 | Key | Value | Sensitive? | Type |
 |-----|-------|------------|------|
-|oauth_token_id|<the ot- ID of your OAuth connection>|no|terraform|
+|oauth_token_id|\<the ot- ID of your OAuth connection\>|no|terraform|
 |repo_identifier|djschnei21/multi-cloud-hashistack|no|terraform|
-|tfc_project_id|<the prj- ID of your TFC Project>|no|terraform|
+|tfc_project_id|\<the prj- ID of your TFC Project\>|no|terraform|
