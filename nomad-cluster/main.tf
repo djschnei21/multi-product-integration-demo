@@ -213,7 +213,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_amd" {
   component_type = "amazon-ebs.amd"
   channel        = "latest"
   cloud_provider = "aws"
-  region         = "us-east-2"
+  region         = var.region
 }
 
 data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
@@ -221,7 +221,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   component_type = "amazon-ebs.arm"
   channel        = "latest"
   cloud_provider = "aws"
-  region         = "us-east-2"
+  region         = var.region
 }
 
 resource "aws_launch_template" "nomad_server_launch_template" {
