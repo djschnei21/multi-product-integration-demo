@@ -48,25 +48,6 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 ### Preparing your HCP Packer Registry
 
 1) You must enable the HCP Packer registry before Packer can publish build metadata to it. Click the Create a registry button after clicking on the Packer link under "Services" in the left navigation. This only needs to be done once.
-2) navigate to the doormat-prereqs directory
-```
-cd packer/
-```
-3) paste your doormat generated AWS credentials, exporting them to your shell
-```
-export AWS_ACCESS_KEY_ID=************************
-export AWS_SECRET_ACCESS_KEY=************************
-export AWS_SESSION_TOKEN=************************
-```
-4) export your HCP_CLIENT_ID and HCP_CLIENT_SECRET to your shell
-```
-export HCP_CLIENT_ID=************************                                    
-export HCP_CLIENT_SECRET=************************
-```
-5) Trigger a packer build specifying a pre-existing, publicly accesible subnet of your AWS account for build to happen within
-```
-packer build -var "subnet_id=subnet-xxxxxxxxxxxx" ubuntu.pkr.hcl
-```
 
 ### Preparing your AWS account to leverage the doormat provider on TFC:
 
@@ -122,9 +103,33 @@ terraform apply -var "tfc_organization=something"
 |repo_identifier|djschnei21/multi-product-integration-demo|no|terraform|
 |tfc_project_id|\<the prj- ID of your TFC Project\>|no|terraform|
 
+## Building the Nomad AMI using Packer
+
+1) navigate to the packer directory
+```
+cd packer/
+```
+2) paste your doormat generated AWS credentials, exporting them to your shell
+```
+export AWS_ACCESS_KEY_ID=************************
+export AWS_SECRET_ACCESS_KEY=************************
+export AWS_SESSION_TOKEN=************************
+```
+3) export your HCP_CLIENT_ID and HCP_CLIENT_SECRET to your shell
+```
+export HCP_CLIENT_ID=************************                                    
+export HCP_CLIENT_SECRET=************************
+```
+4) Trigger a packer build specifying a pre-existing, publicly accesible subnet of your AWS account for build to happen within
+```
+packer build -var "subnet_id=subnet-xxxxxxxxxxxx" ubuntu.pkr.hcl
+```
+
 ## Triggering the deployment
 
-Now comes the easy part, simply trigger a run on "0_control-workspace" and watch the environment unfold! Once the run is complete, you can access each tool by:
+Now comes the easy part, simply trigger a run on "0_control-workspace" and watch the environment unfold! 
+
+Once the run is complete, you can access each tool by:
 - **HCP Consul**: Navigate to the cluster in HCP and generate a root token
 - **HCP Vault**: Navigate to the cluster in HCP and generate a root token
 - **HCP Boundary**: Navigate to the cluster in HCP or via the Desktop app:
@@ -134,3 +139,5 @@ Now comes the easy part, simply trigger a run on "0_control-workspace" and watch
 ```
 vault kv get -mount=hashistack-admin/ nomad_bootstrap/SecretID
 ```
+
+### Stay Tuned for a video walkthrough of this demo and environment 
