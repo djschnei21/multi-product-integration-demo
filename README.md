@@ -99,3 +99,15 @@ terraform apply -var "tfc_organization=something"
 |repo_identifier|djschnei21/multi-product-integration-demo|no|terraform|
 |tfc_project_id|\<the prj- ID of your TFC Project\>|no|terraform|
 
+## Triggering the deployment
+
+Now comes the easy part, simply trigger a run on "0_control-workspace" and watch the environment unfold! Once the run is complete, you can access each tool by:
+- **HCP Consul**: Navigate to the cluster in HCP and generate a root token
+- **HCP Vault**: Navigate to the cluster in HCP and generate a root token
+- **HCP Boundary**: Navigate to the cluster in HCP or via the Desktop app:
+  - *username*: admin
+  - *password*: this is whatever you set in the variable set
+- **Nomad Ent**: The "5_nomad-cluster" workspace will have an output containing the public ALB endpoint to access the Nomad UI.  The Admin token for this can be retrieved from Vault using
+```
+vault kv get -mount=hashistack-admin/ nomad_bootstrap/SecretID
+```
