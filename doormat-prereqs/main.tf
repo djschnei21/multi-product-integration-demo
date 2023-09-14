@@ -6,9 +6,9 @@ terraform {
   }
 }
 
-variable "tfc_account_name" {
+variable "tfc_organization" {
   type    = string
-  default = "djs-tfcb"
+  default = ""
 }
 
 variable "tfc_workspace_names" {
@@ -20,7 +20,7 @@ resource "aws_iam_role" "doormat_role" {
   for_each = var.tfc_workspace_names
   name = "tfc-doormat-role_${each.key}"
   tags = {
-    hc-service-uri = "app.terraform.io/${var.tfc_account_name}/${each.key}"
+    hc-service-uri = "app.terraform.io/${var.tfc_organization}/${each.key}"
   }
   max_session_duration = 43200
   assume_role_policy   = data.aws_iam_policy_document.doormat_assume.json

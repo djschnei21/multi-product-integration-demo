@@ -7,7 +7,7 @@ variable "stack_id" {
   description = "The name of your stack"
 }
 
-variable "tfc_account_name" {
+variable "tfc_organization" {
   type    = string
 }
 

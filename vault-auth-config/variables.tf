@@ -1,3 +1,3 @@
-variable "tfc_account_name" {
+variable "tfc_organization" {
   type    = string
 }

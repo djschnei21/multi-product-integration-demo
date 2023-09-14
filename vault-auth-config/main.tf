@@ -16,7 +16,7 @@ data "terraform_remote_state" "hcp_clusters" {
   backend = "remote"
 
   config = {
-    organization = var.tfc_account_name
+    organization = var.tfc_organization
     workspaces = {
       name = "2_hcp-clusters"
     }
@@ -29,7 +29,7 @@ variable "auth_method" {
 
 data "tfe_workspace_ids" "all" {
   names = ["*"]
-  organization = var.tfc_account_name
+  organization = var.tfc_organization
 }
 
 resource "tfe_variable" "vault_auth_method" {

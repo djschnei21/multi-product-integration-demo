@@ -59,7 +59,7 @@ data "terraform_remote_state" "networking" {
   backend = "remote"
 
   config = {
-    organization = var.tfc_account_name
+    organization = var.tfc_organization
     workspaces = {
       name = "1_networking"
     }
@@ -70,7 +70,7 @@ data "terraform_remote_state" "hcp_clusters" {
   backend = "remote"
 
   config = {
-    organization = var.tfc_account_name
+    organization = var.tfc_organization
     workspaces = {
       name = "2_hcp-clusters"
     }
@@ -81,7 +81,7 @@ data "terraform_remote_state" "nomad_cluster" {
   backend = "remote"
 
   config = {
-    organization = var.tfc_account_name
+    organization = var.tfc_organization
     workspaces = {
       name = "5_nomad-cluster"
     }
