@@ -47,18 +47,28 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 
 Preparing your AWS account to leverage the doormat provider on TFC:
 
-1) `cd doormat-prereqs/`
+1) navigate to the doormat-prereqs directory
+```
+cd doormat-prereqs/
+```
 2) paste your doormat generated AWS credentials, exporting them to your shell
 ```
 export AWS_ACCESS_KEY_ID=************************
 export AWS_SECRET_ACCESS_KEY=************************
 export AWS_SESSION_TOKEN=************************
 ```
-3) `terraform init`
-4) Run a plan passing in your TFC account name.  For example 
-```terraform plan -var "tfc_organization=something"```
+3) Initialize terraform
+```
+terraform init
+```
+4) Run a plan passing in your TFC account name
+```
+terraform plan -var "tfc_organization=something"
+```
 5) Assuming everything looks good, run an apply passing in your TFC account name 
-```terraform apply -var "tfc_organization=something"```
+```
+terraform apply -var "tfc_organization=something"
+```
 
 Preparing your TFC account:
 
