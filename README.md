@@ -45,7 +45,7 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 - You need a TFC account and a TFC user token 
 - You need a pre-configured OAuth connection between TFC and GitHub
 
-Preparing your AWS account to leverage the doormat provider on TFC:
+### Preparing your AWS account to leverage the doormat provider on TFC:
 
 1) navigate to the doormat-prereqs directory
 ```
@@ -70,7 +70,7 @@ terraform plan -var "tfc_organization=something"
 terraform apply -var "tfc_organization=something"
 ```
 
-Preparing your TFC account:
+### Preparing your TFC account:
 
 1) Create a new Project (I called mine "hashistack")
 2) Create a new Variable Set (again, I called mine "hashistack") and scope it to your previously created Project
