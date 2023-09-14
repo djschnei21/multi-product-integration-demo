@@ -12,7 +12,7 @@ This repository is intended to help members of WWTFO quickly create reproducable
 
 More importantly, the resulting environment is preconfigured to highlight the "better together" story, with a focus on interproduct integrations. A demo could span the entire environment or focus on any individual aspect.  The aim was to provide a very flexible environment which can be used as the basis for all usecase demos.
 
-The following integrations are highlighted:
+The following integrations are highlighted by default:
 - **Terraform** is leveraged to deploy, configure, and integrate the other products
 - **Vault** is used for dynamic credentials in several locations:
   - Dynamic Provider credentials used by **Terraform**
