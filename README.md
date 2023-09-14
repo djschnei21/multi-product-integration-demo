@@ -10,9 +10,9 @@ This repository is intended to help members of WWTFO quickly create reproducable
 - Nomad Enterprise
 - Terraform (TFC)
 
-More importantly, the resulting environment is preconfigured to highlight the "better together" story, with a focus on interproduct integrations.  
+More importantly, the resulting environment is preconfigured to highlight the "better together" story, with a focus on interproduct integrations. A demo could span the entire environment or focus on any individual aspect.  The aim was to provide a very flexible environment which can be used as the basis for all usecase demos.
 
-The following integrations are utilized:
+The following integrations are highlighted:
 - **Terraform** is leveraged to deploy, configure, and integrate the other products
 - **Vault** is used for dynamic credentials in several locations:
   - Dynamic Provider credentials used by **Terraform**
@@ -98,3 +98,4 @@ terraform apply -var "tfc_organization=something"
 |oauth_token_id|\<the ot- ID of your OAuth connection\>|no|terraform|
 |repo_identifier|djschnei21/multi-product-integration-demo|no|terraform|
 |tfc_project_id|\<the prj- ID of your TFC Project\>|no|terraform|
+
