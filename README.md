@@ -21,7 +21,7 @@ The following integrations are highlighted by default:
 - **Packer** is used to create **Nomad** Server and Client AMIs in AWS
 - **Terraform** integrates with **HCP Packer** for AMI management
 - **Consul** service registration via **Nomad** 
-- **Consul** Connect (service mesh) used for **Nomad** job east/west communication
+- **Consul** Connect (service mesh) used by **Nomad** jobs
 
 ## Repository Structure
 
