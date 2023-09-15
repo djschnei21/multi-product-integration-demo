@@ -29,7 +29,7 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 - **control-workspace**:  Orchestrates all other workspaces
 - **networking**: Creates a VPC in AWS with 3 subnets, an HVN in HCP, and the peering connection between the two
 - **hcp-clusters**: Creates an HCP Vault cluster, an HCP Boundary cluster, an HCP Consul cluster within the HVN
-- **vault-auth-config**: On the first run, will utilize the root token generated in **hcp-clusters** to bootstrap Vault JWT Auth for Terraform Cloud.  After the first run this JWT Auth will be leverage by TFC for all subsequent runs
+- **vault-auth-config**: On the first run, will utilize the root token generated in **hcp-clusters** to bootstrap Vault JWT Auth for Terraform Cloud.  After the first run this JWT Auth will be leverage by TFC for all subsequent runs that require Vault access
 - **boundary-config**: Will configure the Boundary instance, configure the dynamic host catalogues, and integrate Vault for SSH signed cert injection
 - **nomad-cluster**: Provisions a 3 node Nomad server cluster as an AWS ASG, boostraps its ACLs, and stores the bootstrap token in Vault
 - **nomad-nodes**: Provisions 2 ASGs of 2 nodes each.  1 node pool for x86 nodes and 1 node pool for ARM nodes

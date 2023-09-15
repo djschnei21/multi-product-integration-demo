@@ -1,8 +1,3 @@
-// variable "nomad_ent_version" {
-//   type    = string
-//   default = "1.6.1+ent-1"
-// }
-
 variable "subnet_id" {
   type = string
 }
