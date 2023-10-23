@@ -21,7 +21,7 @@ resource "tfe_workspace" "networking" {
   working_directory = "networking"
   queue_all_runs = false
   assessments_enabled = true
-  remote_state_consumer_ids = [ tfe_workspace.hcp_clusters.id, tfe_workspace.nomad_cluster.id, tfe_workspace.nomad_nodes.id, tfe_workspace.workload.id ]
+  global_remote_state = true
 }
 
 resource "tfe_workspace" "hcp_clusters" {
@@ -37,7 +37,7 @@ resource "tfe_workspace" "hcp_clusters" {
   working_directory = "hcp-clusters"
   queue_all_runs = false
   assessments_enabled = true
-  remote_state_consumer_ids = [ tfe_workspace.vault_auth_config.id, tfe_workspace.nomad_cluster.id, tfe_workspace.boundary_config.id, tfe_workspace.nomad_nodes.id, tfe_workspace.workload.id ]
+  global_remote_state = true
 }
 
 resource "tfe_workspace" "vault_auth_config" {
@@ -53,7 +53,7 @@ resource "tfe_workspace" "vault_auth_config" {
   working_directory = "vault-auth-config"
   queue_all_runs = false
   assessments_enabled = true
-  remote_state_consumer_ids = [ tfe_workspace.workload.id ]
+  global_remote_state = true
 }
 
 resource "tfe_workspace" "boundary_config" {
@@ -69,7 +69,7 @@ resource "tfe_workspace" "boundary_config" {
   working_directory = "boundary-config"
   queue_all_runs = false
   assessments_enabled = true
-  remote_state_consumer_ids = [ ]
+  global_remote_state = true
 }
 
 resource "tfe_workspace" "nomad_cluster" {
@@ -85,7 +85,7 @@ resource "tfe_workspace" "nomad_cluster" {
   working_directory = "nomad-cluster"
   queue_all_runs = false
   assessments_enabled = true
-  remote_state_consumer_ids = [ tfe_workspace.nomad_nodes.id, tfe_workspace.workload.id ]
+  global_remote_state = true
 }
 
 resource "tfe_workspace" "nomad_nodes" {
@@ -101,24 +101,7 @@ resource "tfe_workspace" "nomad_nodes" {
   working_directory = "nomad-nodes"
   queue_all_runs = false
   assessments_enabled = true
-  remote_state_consumer_ids = [ tfe_workspace.workload.id ]
-}
-
-
-resource "tfe_workspace" "workload" {
-  name          = "7_workload"
-  organization  = var.tfc_organization
-  project_id    = var.tfc_project_id
-
-  vcs_repo {
-    identifier = var.repo_identifier
-    oauth_token_id = var.oauth_token_id
-  }
-
-  working_directory = "workload"
-  queue_all_runs = false
-  assessments_enabled = false
-  remote_state_consumer_ids = [ ]
+  global_remote_state = true
 }
 
 resource "tfe_workspace_run" "networking" {
