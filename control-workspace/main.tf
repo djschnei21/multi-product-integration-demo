@@ -104,6 +104,23 @@ resource "tfe_workspace" "nomad_nodes" {
   global_remote_state = true
 }
 
+
+resource "tfe_workspace" "workload" {
+  name          = "7_workload"
+  organization  = var.tfc_organization
+  project_id    = var.tfc_project_id
+
+  vcs_repo {
+    identifier = var.repo_identifier
+    oauth_token_id = var.oauth_token_id
+  }
+
+  working_directory = "workload"
+  queue_all_runs = false
+  assessments_enabled = false
+  global_remote_state = true
+}
+
 resource "tfe_workspace_run" "networking" {
   workspace_id    = tfe_workspace.networking.id
 
