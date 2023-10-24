@@ -91,7 +91,7 @@ module "tfc-auth" {
   vault = {
     addr      = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
     namespace = "admin"
-    auth_path = "tfc/djc-tfcb"
+    auth_path = "tfc/${var.tfc_organization}"
   }
 
   roles = [
@@ -126,4 +126,21 @@ module "tfc-auth" {
       ]
     }
   ]
+}
+
+resource "vault_jwt_auth_backend_role" "new_role" {
+  role_name = "project_role"
+  backend   = "tfc/${var.tfc_organization}"
+
+  bound_audiences = ["vault.workload.identity"]
+  user_claim      = "terraform_full_workspace"
+  role_type       = "jwt"
+  token_ttl       = 300
+  token_policies  = [vault_policy.admin.name]
+
+  bound_claims = {
+    "sub" = "[organization:${var.tfc_organization}:project:hashistack:workspace:*:run_phase:*]"
+  }
+
+  bound_claims_type = "glob"
 }
