@@ -9,8 +9,14 @@ terraform {
       source = "hashicorp/vault"
       version = "~> 3.18.0"
     }
+
+    tfe = {
+        version = "~> 0.49.0"
+    }
   }
 }
+
+provider "tfe" {}
 
 data "terraform_remote_state" "hcp_clusters" {
   backend = "remote"
