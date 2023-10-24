@@ -118,12 +118,6 @@ module "tfc-auth" {
       token_policies = [
         vault_policy.admin.name
       ]
-    },
-    {
-      workspace_name = "7_workload"
-      token_policies = [
-        vault_policy.admin.name
-      ]
     }
   ]
 }
