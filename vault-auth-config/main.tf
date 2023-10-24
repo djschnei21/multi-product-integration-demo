@@ -130,7 +130,7 @@ resource "tfe_variable" "tfc_vault_namespace" {
 
 resource "tfe_variable" "tfc_vault_run_role" {
   key          = "TFC_VAULT_RUN_ROLE"
-  value        = vault_jwt_auth_backend_role.project_admin_role.name
+  value        = vault_jwt_auth_backend_role.project_admin_role.role_name
   category     = "env"
   variable_set_id = tfe_variable_set.project_vault_auth.id
 }
