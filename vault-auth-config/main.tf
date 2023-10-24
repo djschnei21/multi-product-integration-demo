@@ -139,7 +139,7 @@ resource "tfe_variable" "tfc_vault_auth_path" {
   key          = "TFC_VAULT_AUTH_PATH"
   value        = vault_jwt_auth_backend.tfc.path
   category     = "env"
-  variable_set_id = "tfc/${var.tfc_organization}"
+  variable_set_id = tfe_variable_set.project_vault_auth.id
 }
 
 resource "tfe_variable" "vault_addr" {
