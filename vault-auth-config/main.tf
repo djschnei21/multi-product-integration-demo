@@ -36,7 +36,6 @@ resource "tfe_variable" "vault_auth_method" {
   description = "What Vault Auth method should we use?"
 }
 
-
 provider "vault" {
   address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
 
@@ -77,6 +76,11 @@ module "tfc-auth" {
   roles = []
 }
 
+data "tfe_project" "project" {
+  name = "hashistack"
+  organization = "${var.tfc_organization}"
+}
+
 resource "vault_jwt_auth_backend" "tfc" {
   path               = "tfc_new/${var.tfc_organization}"
   oidc_discovery_url = "https://app.terraform.io"
@@ -94,21 +98,21 @@ resource "vault_jwt_auth_backend_role" "project_admin_role" {
   token_policies  = [vault_policy.admin.name]
 
   bound_claims = {
-    "sub" = "[organization:${var.tfc_organization}:project:hashistack:workspace:*:run_phase:*]"
+    "sub" = "[organization:${var.tfc_organization}:project:${tfe_project.project.name}:workspace:*:run_phase:*]"
   }
 
   bound_claims_type = "glob"
 }
 
 resource "tfe_variable_set" "project_vault_auth" {
-  name        = "project_vault_auth_${var.tfc_project_id}"
+  name        = "project_vault_auth_${tfe_project.project.name}"
   description = "A set of example variables"
   global      = false
 }
 
 resource "tfe_project_variable_set" "project_vault_auth" {
   variable_set_id = tfe_variable_set.project_vault_auth.id
-  project_id      = var.tfc_project_id
+  project_id      = tfe_project.project.id
 }
 
 // Create variables within the variable set
