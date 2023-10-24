@@ -95,7 +95,12 @@ resource "vault_jwt_auth_backend_role" "project_admin_role" {
   token_policies  = [vault_policy.admin.name]
 
   bound_claims = {
-    "sub" = "[organization:${var.tfc_organization}:project:*:workspace:*:run_phase:*]"
+    "sub" = join(":", [
+      "organization:${var.tfc_organization}",
+      "project:${data.tfe_project.project.name}",
+      "workspace:*",
+      "run_phase:*",
+    ])
   }
 
   bound_claims_type = "glob"
