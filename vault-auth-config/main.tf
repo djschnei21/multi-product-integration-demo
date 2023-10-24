@@ -27,15 +27,6 @@ variable "auth_method" {
   default = "admin_token"
 }
 
-resource "tfe_variable" "vault_auth_method" {
-  key          = "auth_method"
-  value        = "dynamic_creds"
-  category     = "terraform"
-  workspace_id = data.tfe_workspace_ids.all.ids[terraform.workspace]
-
-  description = "What Vault Auth method should we use?"
-}
-
 provider "vault" {
   address = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
 
@@ -98,14 +89,14 @@ resource "vault_jwt_auth_backend_role" "project_admin_role" {
   token_policies  = [vault_policy.admin.name]
 
   bound_claims = {
-    "sub" = "[organization:${var.tfc_organization}:project:${tfe_project.project.name}:workspace:*:run_phase:*]"
+    "sub" = "[organization:${var.tfc_organization}:project:${data.tfe_project.project.name}:workspace:*:run_phase:*]"
   }
 
   bound_claims_type = "glob"
 }
 
 resource "tfe_variable_set" "project_vault_auth" {
-  name        = "project_vault_auth_${tfe_project.project.name}"
+  name        = "project_vault_auth_${data.tfe_project.project.name}"
   description = "A set of example variables"
   global      = false
 }
@@ -165,3 +156,9 @@ resource "tfe_variable" "vault_namespace" {
   variable_set_id = tfe_variable_set.project_vault_auth.id
 }
 
+resource "tfe_variable" "vault_auth_method" {
+  key          = "auth_method"
+  value        = "dynamic_creds"
+  category     = "terraform"
+  variable_set_id = tfe_variable_set.project_vault_auth.id
+}
