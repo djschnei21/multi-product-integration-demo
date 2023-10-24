@@ -56,23 +56,6 @@ resource "vault_policy" "admin" {
   policy = data.vault_policy_document.admin.hcl
 }
 
-module "tfc-auth" {
-  source  = "hashi-strawb/terraform-cloud-jwt-auth/vault"
-  version = ">= 0.2.1"
-
-  terraform = {
-    org = "djs-tfcb"
-  }
-
-  vault = {
-    addr      = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
-    namespace = "admin"
-    auth_path = "tfc/${var.tfc_organization}"
-  }
-
-  roles = []
-}
-
 data "tfe_project" "project" {
   name = "hashistack"
   organization = "${var.tfc_organization}"
