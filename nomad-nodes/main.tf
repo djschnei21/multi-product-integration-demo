@@ -253,11 +253,6 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
   }
 }
 
-import {
-  to = aws_autoscaling_group.nomad_client_arm_asg
-  id = "nomad-client-arm"
-}
-
 resource "aws_autoscaling_group" "nomad_client_arm_asg" {
   desired_capacity  = 1
   max_size          = 1
