@@ -69,7 +69,7 @@ resource "vault_jwt_auth_backend" "tfc" {
 
 resource "vault_jwt_auth_backend_role" "project_admin_role" {
   role_name = "project_role"
-  backend   = "tfc_new/${var.tfc_organization}"
+  backend   = "tfc/${var.tfc_organization}"
 
   bound_audiences = ["vault.workload.identity"]
   user_claim      = "terraform_full_workspace"

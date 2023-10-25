@@ -41,6 +41,6 @@ path "auth/token/renew-self" {
   capabilities = ["update"]
 }
 
-path "mongodb/creds/demo" {
+path "*/creds/demo" {
   capabilities = ["create", "read", "update"]
 }
