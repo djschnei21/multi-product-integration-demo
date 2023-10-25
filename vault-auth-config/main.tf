@@ -62,7 +62,7 @@ data "tfe_project" "project" {
 }
 
 resource "vault_jwt_auth_backend" "tfc" {
-  path               = "tfc_new/${var.tfc_organization}"
+  path               = "tfc/${var.tfc_organization}"
   oidc_discovery_url = "https://app.terraform.io"
   bound_issuer       = "https://app.terraform.io"
 }
