@@ -280,34 +280,3 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
     create_before_destroy = true
   }
 }
-
-resource "aws_security_group" "nomad_client_alb" {
-  name   = "nomad-client-alb-sg"
-  vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
-
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = [ "0.0.0.0/0" ]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "tcp"
-    security_groups = [ data.terraform_remote_state.nomad_cluster.outputs.nomad_sg ]
-  }
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_lb" "nomad_clients" {
-  name               = "nomad-client-alb"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [ aws_security_group.nomad_client_alb.id ]
-  subnets            = data.terraform_remote_state.networking.outputs.subnet_ids
-}
