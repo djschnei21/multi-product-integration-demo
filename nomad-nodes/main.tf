@@ -33,7 +33,7 @@ provider "hcp" {}
 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
-  role_arn = "arn:aws:iam::365006510262:role/tfc-doormat-role_6_nomad-nodes"
+  role_arn = "arn:aws:iam::${var.aws_account_id}:role/tfc-doormat-role_6_nomad-nodes"
 }
 
 provider "aws" {

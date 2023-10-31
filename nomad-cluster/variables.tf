@@ -1,6 +1,9 @@
 # variable "tfc_organization" {
 #   type = string
 # }
+variable "aws_account_id" {
+  type = string
+}
 
 variable "stack_id" {
   type        = string
