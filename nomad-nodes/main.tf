@@ -284,7 +284,7 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
 ########### Below is for RHEL nodes 
 
 data "hcp_packer_image" "rhel_hashi_x86" {
-  bucket_name    = "rhel-hashi"
+  bucket_name    = "rhel9-hashi"
   component_type = "amazon-ebs.amd"
   channel        = "latest"
   cloud_provider = "aws"
