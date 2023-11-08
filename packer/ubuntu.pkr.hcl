@@ -78,8 +78,8 @@ build {
   provisioner "shell" {
     inline = [
       "wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg",
-      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
-      // "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
+      //"echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
+      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
       "sudo apt update && sudo apt upgrade -y",
       "sudo apt install -y consul nomad-enterprise",
       "curl -fsSL https://get.docker.com -o get-docker.sh",

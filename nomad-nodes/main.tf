@@ -280,3 +280,81 @@ resource "aws_autoscaling_group" "nomad_client_arm_asg" {
     create_before_destroy = true
   }
 }
+
+########### Below is for RHEL nodes 
+
+data "hcp_packer_image" "rhel_hashi_x86" {
+  bucket_name    = "rhel-hashi"
+  component_type = "amazon-ebs.amd"
+  channel        = "latest"
+  cloud_provider = "aws"
+  region         = var.region
+}
+
+resource "aws_launch_template" "nomad_client_rhel_x86_launch_template" {
+  name_prefix   = "lt-"
+  image_id      = data.hcp_packer_image.rhel_hashi_x86.cloud_image_id
+  instance_type = "t3a.medium"
+
+  iam_instance_profile {
+    arn = aws_iam_instance_profile.efs_instance_profile.arn
+  }
+
+  network_interfaces {
+    associate_public_ip_address = true
+    security_groups = [ 
+      data.terraform_remote_state.nomad_cluster.outputs.nomad_sg,
+      data.terraform_remote_state.networking.outputs.hvn_sg_id
+    ]
+  }
+
+  private_dns_name_options {
+    hostname_type = "resource-name"
+  }
+
+  user_data = base64encode(
+    templatefile("${path.module}/scripts/nomad-node.tpl",
+      {
+        nomad_license      = var.nomad_license,
+        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
+        node_pool          = "rhel",
+        vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key,
+        vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+      }
+    )
+  )
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "nomad_client_rhel_x86_asg" {
+  desired_capacity  = 1
+  max_size          = 1
+  min_size          = 1
+  health_check_type = "EC2"
+  health_check_grace_period = "60"
+
+  name = "nomad-client-rhel-x86"
+
+  launch_template {
+    id = aws_launch_template.nomad_client_rhel_x86_launch_template.id
+    version = aws_launch_template.nomad_client_rhel_x86_launch_template.latest_version
+  }
+  
+  vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
+
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
