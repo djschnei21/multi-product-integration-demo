@@ -332,9 +332,9 @@ resource "aws_launch_template" "nomad_client_rhel_x86_launch_template" {
 }
 
 resource "aws_autoscaling_group" "nomad_client_rhel_x86_asg" {
-  desired_capacity  = 1
+  desired_capacity  = 0
   max_size          = 1
-  min_size          = 1
+  min_size          = 0
   health_check_type = "EC2"
   health_check_grace_period = "60"
 
