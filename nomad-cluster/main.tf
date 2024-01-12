@@ -294,7 +294,7 @@ resource "null_resource" "bootstrap_acl" {
   provisioner "local-exec" {
     command = <<EOF
     sleep 60  # wait for the instances in ASG to be up and running
-    MAX_RETRIES=5
+    MAX_RETRIES=10
     COUNT=0
     while [ $COUNT -lt $MAX_RETRIES ]; do
       RESPONSE=$(curl --write-out %%{http_code} --silent --output /dev/null http://${aws_alb.nomad.dns_name}/v1/agent/health?type=server)
