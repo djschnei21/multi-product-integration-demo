@@ -118,7 +118,7 @@ resource "tfe_workspace" "nomad_nodes" {
 #   vcs_repo {
 #     identifier = var.repo_identifier
 #     oauth_token_id = var.oauth_token_id
-    branch = var.repo_branch
+#    branch = var.repo_branch
 #   }
 
 #   working_directory = "workload"
