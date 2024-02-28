@@ -16,6 +16,7 @@ resource "tfe_workspace" "networking" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = "sko"
   }
 
   working_directory = "networking"
@@ -32,6 +33,7 @@ resource "tfe_workspace" "hcp_clusters" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = "sko"
   }
 
   working_directory = "hcp-clusters"
@@ -48,6 +50,7 @@ resource "tfe_workspace" "vault_auth_config" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = "sko"
   }
 
   working_directory = "vault-auth-config"
@@ -64,6 +67,7 @@ resource "tfe_workspace" "boundary_config" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = "sko"
   }
 
   working_directory = "boundary-config"
@@ -80,6 +84,7 @@ resource "tfe_workspace" "nomad_cluster" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = "sko"
   }
 
   working_directory = "nomad-cluster"
@@ -96,6 +101,7 @@ resource "tfe_workspace" "nomad_nodes" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = "sko"
   }
 
   working_directory = "nomad-nodes"
@@ -112,6 +118,7 @@ resource "tfe_workspace" "nomad_nodes" {
 #   vcs_repo {
 #     identifier = var.repo_identifier
 #     oauth_token_id = var.oauth_token_id
+    branch = "sko"
 #   }
 
 #   working_directory = "workload"
