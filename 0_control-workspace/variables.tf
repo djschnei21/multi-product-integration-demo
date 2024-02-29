@@ -10,6 +10,10 @@ variable "repo_identifier" {
   type = string
 }
 
+variable "repo_branch" {
+  type = string
+}
+
 variable "oauth_token_id" {
   type = string
 }

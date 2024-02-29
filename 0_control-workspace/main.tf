@@ -16,11 +16,12 @@ resource "tfe_workspace" "networking" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = var.repo_branch
   }
 
-  working_directory = "networking"
+  working_directory = "1_networking"
   queue_all_runs = false
-  assessments_enabled = true
+  assessments_enabled = false
   global_remote_state = true
 }
 
@@ -32,11 +33,12 @@ resource "tfe_workspace" "hcp_clusters" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = var.repo_branch
   }
 
-  working_directory = "hcp-clusters"
+  working_directory = "2_hcp-clusters"
   queue_all_runs = false
-  assessments_enabled = true
+  assessments_enabled = false
   global_remote_state = true
 }
 
@@ -48,11 +50,12 @@ resource "tfe_workspace" "vault_auth_config" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = var.repo_branch
   }
 
-  working_directory = "vault-auth-config"
+  working_directory = "3_vault-auth-config"
   queue_all_runs = false
-  assessments_enabled = true
+  assessments_enabled = false
   global_remote_state = true
 }
 
@@ -64,11 +67,12 @@ resource "tfe_workspace" "boundary_config" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = var.repo_branch
   }
 
-  working_directory = "boundary-config"
+  working_directory = "4_boundary-config"
   queue_all_runs = false
-  assessments_enabled = true
+  assessments_enabled = false
   global_remote_state = true
 }
 
@@ -80,11 +84,12 @@ resource "tfe_workspace" "nomad_cluster" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = var.repo_branch
   }
 
-  working_directory = "nomad-cluster"
+  working_directory = "5_nomad-cluster"
   queue_all_runs = false
-  assessments_enabled = true
+  assessments_enabled = false
   global_remote_state = true
 }
 
@@ -96,29 +101,14 @@ resource "tfe_workspace" "nomad_nodes" {
   vcs_repo {
     identifier = var.repo_identifier
     oauth_token_id = var.oauth_token_id
+    branch = var.repo_branch
   }
 
-  working_directory = "nomad-nodes"
+  working_directory = "6_nomad-nodes"
   queue_all_runs = false
-  assessments_enabled = true
+  assessments_enabled = false
   global_remote_state = true
 }
-
-# resource "tfe_workspace" "workload" {
-#   name          = "7_workload"
-#   organization  = var.tfc_organization
-#   project_id    = var.tfc_project_id
-
-#   vcs_repo {
-#     identifier = var.repo_identifier
-#     oauth_token_id = var.oauth_token_id
-#   }
-
-#   working_directory = "workload"
-#   queue_all_runs = false
-#   assessments_enabled = false
-#   global_remote_state = true
-# }
 
 resource "tfe_workspace_run" "networking" {
   workspace_id    = tfe_workspace.networking.id
