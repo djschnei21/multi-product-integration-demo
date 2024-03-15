@@ -82,6 +82,7 @@ terraform apply -var "tfc_organization=something"
 
 | Key | Value | Sensitive? | Type |
 |-----|-------|------------|------|
+|aws_account_id|\<your AWS account ID\>|no|terraform|
 |boundary_admin_password|\<intended boundary admin password\>|yes|terraform|
 |my_email|\<your email\>|no|terraform|
 |nomad_license|\<your nomad ent license\>|yes|terraform|
