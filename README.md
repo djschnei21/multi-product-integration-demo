@@ -41,7 +41,7 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 ## Prerequisites
 
 - You need a doormat created AWS sandbox account
-- You need a doormat enrolled TFC Account [Instructions](https://docs.prod.secops.hashicorp.services/doormat/tf_provider/#onboard-tfc-organization-to-doormat)
+- You need a doormat enrolled TFC Account [Instructions - Only Steps 1-5!](https://docs.prod.secops.hashicorp.services/doormat/tf_provider/#onboard-tfc-organization-to-doormat)
 - You need a HCP account with an organization scoped service principal
 - You need a Packer Registry Initialized within your HCP Project
 - You need a TFC account and a TFC user token 
