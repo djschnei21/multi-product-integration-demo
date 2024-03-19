@@ -42,6 +42,7 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 
 - You need a doormat created AWS sandbox account
 - You need a HCP account with an organization scoped service principal
+- You need a Packer Registry Initialized within your HCP Project
 - You need a TFC account and a TFC user token 
 - You need a pre-configured OAuth connection between TFC and GitHub
 
@@ -95,13 +96,14 @@ terraform apply -var "tfc_organization=something"
 |TFC_WORKLOAD_IDENTITY_AUDIENCE|\<can be literally anything\>|no|env|
 |TFE_TOKEN|\<TFC User token\>|yes|env|
 
-4) Create a new workspace within your TFC project called "0_control-workspace", attaching it to this VCS repository, specifying the working directory as "control-workspace"
+4) Create a new workspace within your TFC project called "0_control-workspace", attaching it to this VCS repository, specifying the working directory as "0_control-workspace"
 5) Create the following workspace variables within "0_control-workspace":
 
 | Key | Value | Sensitive? | Type |
 |-----|-------|------------|------|
 |oauth_token_id|\<the ot- ID of your OAuth connection\>|no|terraform|
 |repo_identifier|djschnei21/multi-product-integration-demo|no|terraform|
+|repo_branch|main|no|terraform|
 |tfc_project_id|\<the prj- ID of your TFC Project\>|no|terraform|
 
 ## Building the Nomad AMI using Packer
@@ -116,14 +118,15 @@ export AWS_ACCESS_KEY_ID=************************
 export AWS_SECRET_ACCESS_KEY=************************
 export AWS_SESSION_TOKEN=************************
 ```
-3) export your HCP_CLIENT_ID and HCP_CLIENT_SECRET to your shell
+3) export your HCP_CLIENT_ID, HCP_CLIENT_SECRET, and HCP_PROJECT_ID to your shell
 ```
 export HCP_CLIENT_ID=************************                                    
 export HCP_CLIENT_SECRET=************************
+export HCP_PROJECT_ID=************************
 ```
-4) Trigger a packer build specifying a pre-existing, publicly accesible subnet of your AWS account for build to happen within
+4) Trigger a packer build specifying a pre-existing, publicly accesible subnet of your AWS account and your targetted region for build to happen within
 ```
-packer build -var "subnet_id=subnet-xxxxxxxxxxxx" ubuntu.pkr.hcl
+packer build -var "subnet_id=subnet-xxxxxxxxxxxx" -var "region=xxxxx" ubuntu.pkr.hcl
 ```
 
 ## Triggering the deployment
