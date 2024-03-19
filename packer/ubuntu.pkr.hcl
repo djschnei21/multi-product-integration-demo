@@ -13,7 +13,7 @@ source "amazon-ebs" "amd" {
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
-      name                = "ubuntu/images/hvm-ssd/ubuntu-lunar-23.04-amd64-server-*"
+      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-mantic-23.10-amd64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -36,7 +36,7 @@ source "amazon-ebs" "arm" {
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
-      name                = "ubuntu/images/hvm-ssd/ubuntu-lunar-23.04-arm64-server-*"
+      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-mantic-23.10-arm64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -60,12 +60,12 @@ build {
   ]
 
   hcp_packer_registry {
-    bucket_name = "ubuntu-lunar-hashi"
-    description = "Ubuntu Lunar Lobster with Nomad and Consul installed"
+    bucket_name = "ubuntu-mantic-hashi"
+    description = "Ubuntu Mantic Minotaur with Nomad and Consul installed"
 
     bucket_labels = {
       "os"             = "Ubuntu",
-      "ubuntu-version" = "23.04",
+      "ubuntu-version" = "23.10",
     }
 
     build_labels = {
@@ -77,9 +77,10 @@ build {
 
   provisioner "shell" {
     inline = [
+      "sudo apt update && sudo apt install gpg -y",
       "wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg",
-      "echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
-      //"echo \"deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee -a /etc/apt/sources.list.d/hashicorp.list",
+      "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main\" | sudo tee /etc/apt/sources.list.d/hashicorp.list",
+      // "echo \"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) test\" | sudo tee /etc/apt/sources.list.d/hashicorp.list",
       "sudo apt update && sudo apt upgrade -y",
       "sudo apt install -y consul nomad-enterprise",
       "curl -fsSL https://get.docker.com -o get-docker.sh",
