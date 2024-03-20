@@ -14,10 +14,17 @@ terraform {
       source = "hashicorp/vault"
       version = "~> 3.18.0"
     }
+
+    hcp = {
+      source  = "hashicorp/hcp"
+      version = "~> 0.66.0"
+    }
   }
 }
 
 provider "doormat" {}
+
+provider "hcp" {}
 
 data "doormat_aws_credentials" "creds" {
   provider = doormat
