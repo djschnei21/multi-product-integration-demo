@@ -92,6 +92,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_x86" {
   bucket_name    = "ubuntu-mantic-hashi"
   component_type = "amazon-ebs.amd"
   channel        = "latest"
+  version        = "v2"
   cloud_provider = "aws"
   region         = var.region
 }
@@ -100,6 +101,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   bucket_name    = "ubuntu-mantic-hashi"
   component_type = "amazon-ebs.arm"
   channel        = "latest"
+  version        = "v2"
   cloud_provider = "aws"
   region         = var.region
 }
