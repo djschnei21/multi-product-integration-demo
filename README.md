@@ -90,7 +90,7 @@ terraform apply -var "tfc_organization=something"
 |my_email|\<your email\>|no|terraform|
 |nomad_license|\<your nomad ent license\>|yes|terraform|
 |region|\<the region which will be used on HCP and AWS\>|no|terraform|
-|stack_id|\<will be used to consistently name resources\>|no|terraform|
+|stack_id|\<will be used to consistently name resources - 3-36 characters.  Can only contain letters, numbers and hyphens\>|no|terraform|
 |tfc_organization|\<your TFC account name\>|no|terraform|
 |HCP_CLIENT_ID|\<HCP Service Principal Client ID\>|no|env|
 |HCP_CLIENT_SECRET|\<HCP Service Principal Client Secret\>|yes|env|
