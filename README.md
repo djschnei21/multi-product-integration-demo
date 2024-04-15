@@ -154,8 +154,8 @@ To demonstrate the full stack and all the pre-configured integrations, we've cre
 6) Select "Add Module to no-code provision allowlist" 
 7) Publish
 8) [OPTIONAL] Once the module has been published, go to "Configure Settings" and click "Edit Versions and Variable Settings":
-- tfc_organization: <your tfc org name>
-- region: <the region you deployed the HashiStack to>
+- tfc_organization: your tfc org name
+- region: the region you deployed the HashiStack to
 - mongodb_image: "mongo:5" (you may also add others to show variability, but during your demo always use v5)
 - frontend_app_image: "huggingface/mongoku:1.3.0" (you may also add others to show variability, but during your demo always use v1.3.0)
 - Save changes
@@ -163,13 +163,13 @@ To demonstrate the full stack and all the pre-configured integrations, we've cre
 - create_consul_intention: true
 - frontend_app_image: "huggingface/mongoku:1.3.0"
 - mongodb_image: "mongo:5"
-- region: <the region you deployed the HashiStack to>
-- stack_id: <name your demo app> (I typically use something like "app001-dev")
-- tfc_organization: <your tfc org name>
+- region: the region you deployed the HashiStack to
+- stack_id: name your demo app> (I typically use something like "app001-dev")
+- tfc_organization: your tfc org name
 10) Click "Next: Workspace Settings"
 11) Provide the workspace settings:
-- Workspace name: <Name the workspace> (I typically use the stack_id I used above, "app001-dev")
-- Project: <must be the same project the HashiStack was deployed to> (e.g. "HashiStack")
+- Workspace name: Name the workspace (I typically use the stack_id I used above, "app001-dev")
+- Project: must be the same project the HashiStack was deployed to (e.g. "HashiStack")
 - Click "Create Workspace"
 ![](https://github.com/djschnei21/multi-product-integration-demo/blob/main/plan.png?raw=true)
 
