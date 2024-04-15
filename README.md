@@ -136,8 +136,8 @@ packer build -var "subnet_id=subnet-xxxxxxxxxxxx" -var "region=xxxxx" ubuntu.pkr
 Now comes the easy part, simply trigger a run on "0_control-workspace" and watch the environment unfold! 
 
 Once the run is complete, you can access each tool by:
-- **HCP Consul**: Navigate to the cluster in HCP and generate a root token
-- **HCP Vault**: Navigate to the cluster in HCP and generate a root token
+- **HCP Consul**: Navigate to the cluster in HCP and generate an admin token
+- **HCP Vault**: Navigate to the cluster in HCP and generate an admin token
 - **HCP Boundary**: Navigate to the cluster in HCP or via the Desktop app:
   - *username*: admin
   - *password*: this is whatever you set in the variable set
