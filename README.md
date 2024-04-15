@@ -174,4 +174,4 @@ To demonstrate the full stack and all the pre-configured integrations, we've cre
 ![](https://github.com/djschnei21/multi-product-integration-demo/blob/main/plan.png?raw=true)
 
 ### Video Walkthrough of workload deployment
-![](https://drive.google.com/file/d/1GckbTYTFcxwkvgboHW1jwbkmRvVUB9HA/view?usp=sharing)
+[Video Link](https://drive.google.com/file/d/1GckbTYTFcxwkvgboHW1jwbkmRvVUB9HA/view?usp=sharing)
