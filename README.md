@@ -40,13 +40,13 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 
 ## Prerequisites
 
-- You need a doormat created AWS sandbox account
+- You need a doormat created AWS sandbox account [Docs](https://docs.prod.secops.hashicorp.services/doormat/aws/create_individual_sandbox_account/)
 - You need a doormat enrolled TFC Account [Instructions - Only Steps 1-5!](https://docs.prod.secops.hashicorp.services/doormat/tf_provider/#onboard-tfc-organization-to-doormat)
-- You need a HCP account with an organization scoped service principal
-- You need a Packer Registry Initialized within your HCP Project
-- You need a TFC account and a TFC user token 
-- You need a pre-configured OAuth connection between TFC and GitHub
-  - Once created note your OAuth Token ID.  This can be found by navigating in TFC to Org "Settings" --> "Version Control - Providers" --> "OAuth Token Id"
+- You need a HCP account with an organization scoped service principal [Docs](https://developer.hashicorp.com/hcp/docs/hcp/admin/iam/service-principals#organization-level-service-principals-1)
+- You need a Packer Registry Initialized within your HCP Project [Docs](https://developer.hashicorp.com/hcp/docs/packer/manage-registry#view-and-change-registry-tier)
+- You need a TFC account and a TFC user token [Docs](https://developer.hashicorp.com/terraform/cloud-docs/users-teams-organizations/users#tokens)
+- You need a pre-configured OAuth connection between TFC and GitHub [Docs](https://developer.hashicorp.com/terraform/cloud-docs/vcs/github)
+  - Once created, note your OAuth Token ID.  This can be found by navigating in TFC to Org "Settings" --> "Version Control - Providers" --> "OAuth Token Id"
 
 ### Preparing your HCP Packer Registry
 
