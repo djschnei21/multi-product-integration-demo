@@ -1,5 +1,3 @@
-
-
 variable "boundary_admin_password" {
   type = string
 }
