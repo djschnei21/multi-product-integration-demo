@@ -21,8 +21,3 @@ variable "region" {
 variable "stack_id" {
   type = string
 }
-
-variable "tfc_organization" {
-  type = string
-}
-
