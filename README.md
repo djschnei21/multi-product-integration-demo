@@ -173,4 +173,5 @@ To demonstrate the full stack and all the pre-configured integrations, we've cre
 - Click "Create Workspace"
 ![](https://github.com/djschnei21/multi-product-integration-demo/blob/main/plan.png?raw=true)
 
-### Stay Tuned for a video walkthrough of this demo and environment 
+### Video Walkthrough of workload deployment
+![](https://drive.google.com/file/d/1GckbTYTFcxwkvgboHW1jwbkmRvVUB9HA/view?usp=sharing)
