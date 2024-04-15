@@ -46,6 +46,7 @@ The entire environment is orchestrated by the "control-workspace" directory.  Af
 - You need a Packer Registry Initialized within your HCP Project
 - You need a TFC account and a TFC user token 
 - You need a pre-configured OAuth connection between TFC and GitHub
+  - Once created note your OAuth Token ID.  This can be found by navigating in TFC to Org "Settings" --> "Version Control - Providers" --> "OAuth Token Id"
 
 ### Preparing your HCP Packer Registry
 
