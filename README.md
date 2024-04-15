@@ -97,6 +97,7 @@ terraform apply -var "tfc_organization=something"
 |HCP_PROJECT_ID|\<your HCP Project ID retrieved from HCP\>|no|env|
 |TFC_WORKLOAD_IDENTITY_AUDIENCE|\<can be literally anything\>|no|env|
 |TFE_TOKEN|\<TFC User token\>|yes|env|
+|TFC_ORGANIZATION|\<your TFC account name\>|no|env|
 
 4) Create a new workspace within your TFC project called "0_control-workspace", attaching it to this VCS repository, specifying the working directory as "0_control-workspace"
 5) Create the following workspace variables within "0_control-workspace":
