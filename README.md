@@ -2,7 +2,7 @@
 
 ## Overview 
 
-This repository is intended to help members of WWTFO quickly create reproducable demo environments which showcase:
+This repository is intended to help members of WWTFO quickly create reproducible demo environments which showcase:
 - HCP Vault
 - HCP Consul
 - HCP Boundary
@@ -10,7 +10,7 @@ This repository is intended to help members of WWTFO quickly create reproducable
 - Nomad Enterprise
 - Terraform (TFC)
 
-More importantly, the resulting environment is preconfigured to highlight the "better together" story, with a focus on interproduct integrations. A demo could span the entire environment or focus on any individual aspect.  The aim was to provide a very flexible environment which can be used as the basis for all usecase demos.
+More importantly, the resulting environment is pre-configured to highlight the "better together" story, with a focus on inter-product integrations. A demo could span the entire environment or focus on any individual aspect.  The aim was to provide a very flexible environment which can be used as the basis for all use case demos.
 
 The following integrations are highlighted by default:
 - **Terraform** is leveraged to deploy, configure, and integrate the other products
@@ -25,7 +25,7 @@ The following integrations are highlighted by default:
 
 ## Repository Structure
 
-The entire environment is orchestrated by the "control-workspace" directory.  After completing a few prerequesite manual operations (which we will discuss below in the "Prerequisites" section), you will plan/apply the "control-workspace" in TFC.  This workspace will orchestrate the creation and triggering of all downstream workspaces (Shoutout to @lucymhdavies for the multi-space idea!).  
+The entire environment is orchestrated by the "control-workspace" directory.  After completing a few prerequesite manual operations (which we will discuss below in the "Prerequisites" section), you will plan/apply the "control-workspace" in TFC.  This workspace will orchestrate the creation and triggering of all downstream workspaces (Shout out to @lucymhdavies for the multi-space idea!).  
 - **control-workspace**:  Orchestrates all other workspaces
 - **networking**: Creates a VPC in AWS with 3 subnets, an HVN in HCP, and the peering connection between the two
 - **hcp-clusters**: Creates an HCP Vault cluster, an HCP Boundary cluster, an HCP Consul cluster within the HVN
@@ -123,7 +123,7 @@ export HCP_CLIENT_ID=************************
 export HCP_CLIENT_SECRET=************************
 export HCP_PROJECT_ID=************************
 ```
-4) Trigger a packer build specifying a pre-existing, publicly accesible subnet of your AWS account and your targetted region for build to happen within
+4) Trigger a packer build specifying a pre-existing, publicly accessible subnet of your AWS account and your targeted region for build to happen within
 ```
 packer build -var "subnet_id=subnet-xxxxxxxxxxxx" -var "region=xxxxx" ubuntu.pkr.hcl
 ```
