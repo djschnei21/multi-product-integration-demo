@@ -6,7 +6,7 @@ terraform {
   }
 }
 
-terraform {}
+provider "aws" {}
 
 variable "tfc_organization" {
   type    = string
