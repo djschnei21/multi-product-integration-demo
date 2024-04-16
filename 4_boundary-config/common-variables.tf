@@ -4,4 +4,5 @@ variable "nomad_license" {
 
 variable "auth_method" {
   type = string
+  default = "admin_token"
 }

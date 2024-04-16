@@ -16,5 +16,6 @@ variable "tfc_organization" {
 
 variable "auth_method" {
   type = string
+  default = "admin_token"
 }
 
