@@ -6,6 +6,8 @@ terraform {
   }
 }
 
+terraform {}
+
 variable "tfc_organization" {
   type    = string
   default = ""
