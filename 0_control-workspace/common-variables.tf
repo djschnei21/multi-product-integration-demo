@@ -21,3 +21,8 @@ variable "region" {
 variable "stack_id" {
   type = string
 }
+
+variable "auth_method" {
+  type = string
+  default = "admin_token"
+}
