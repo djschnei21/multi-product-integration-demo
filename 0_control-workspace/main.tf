@@ -113,7 +113,7 @@ resource "tfe_workspace_run_task" "nomad_cluster" {
   workspace_id      = resource.tfe_workspace.nomad_cluster.id
   task_id           = resource.tfe_organization_run_task.hcp_packer.id
   enforcement_level = "mandatory"
-  stage             = "post-plan"
+  stage             = "post_plan"
 }
 
 resource "tfe_workspace" "nomad_nodes" {
@@ -137,7 +137,7 @@ resource "tfe_workspace_run_task" "nomad_nodes" {
   workspace_id      = resource.tfe_workspace.nomad_nodes.id
   task_id           = resource.tfe_organization_run_task.hcp_packer.id
   enforcement_level = "mandatory"
-  stage             = "post-plan"
+  stage             = "post_plan"
 }
 
 resource "tfe_workspace_run" "networking" {
