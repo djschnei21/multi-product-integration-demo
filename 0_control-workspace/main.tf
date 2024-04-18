@@ -1,12 +1,28 @@
 terraform {
   required_providers {
     tfe = {
-      version = "~> 0.49.0"
+      version = "0.49.0"
+    }
+    hcp = {
+      source = "hashicorp/hcp"
+      version = "0.86.0"
     }
   }
 }
 
 provider "tfe" {}
+
+resource "hcp_packer_run_task" "registry" {
+  regenerate_hmac = true
+}
+
+resource "tfe_organization_run_task" "hcp_packer" {
+  organization = var.tfc_organization
+  url          = hcp_packer_run_task.registry.endpoint_url
+  name         = "packer"
+  enabled      = true
+  hmac_key     = hcp_packer_run_task.registry.hmac_key
+}
 
 resource "tfe_workspace" "networking" {
   name          = "1_networking"
@@ -89,8 +105,15 @@ resource "tfe_workspace" "nomad_cluster" {
 
   working_directory = "5_nomad-cluster"
   queue_all_runs = false
-  assessments_enabled = false
+  assessments_enabled = true
   global_remote_state = true
+}
+
+resource "tfe_workspace_run_task" "nomad_cluster" {
+  workspace_id      = resource.tfe_workspace.nomad_cluster.id
+  task_id           = resource.tfe_organization_run_task.hcp_packer.id
+  enforcement_level = "mandatory"
+  stage             = "post-plan"
 }
 
 resource "tfe_workspace" "nomad_nodes" {
@@ -106,8 +129,15 @@ resource "tfe_workspace" "nomad_nodes" {
 
   working_directory = "6_nomad-nodes"
   queue_all_runs = false
-  assessments_enabled = false
+  assessments_enabled = true
   global_remote_state = true
+}
+
+resource "tfe_workspace_run_task" "nomad_nodes" {
+  workspace_id      = resource.tfe_workspace.nomad_nodes.id
+  task_id           = resource.tfe_organization_run_task.hcp_packer.id
+  enforcement_level = "mandatory"
+  stage             = "post-plan"
 }
 
 resource "tfe_workspace_run" "networking" {
