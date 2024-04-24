@@ -64,13 +64,13 @@ export AWS_SESSION_TOKEN=************************
 ```
 terraform init
 ```
-4) Run a plan passing in your TFC account name
+4) Run a plan passing in your TFC account name and AWS region
 ```
-terraform plan -var "tfc_organization=something"
+terraform plan -var "tfc_organization=something" -var "region=aws_region"
 ```
-5) Assuming everything looks good, run an apply passing in your TFC account name 
+5) Assuming everything looks good, run an apply passing in your TFC account name and AWS region 
 ```
-terraform apply -var "tfc_organization=something"
+terraform apply -var "tfc_organization=something" -var "region=aws_region"
 ```
 
 ### Preparing your TFC account:

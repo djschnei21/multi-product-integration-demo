@@ -6,7 +6,9 @@ terraform {
   }
 }
 
-provider "aws" {}
+provider "aws" {
+  region = var.region
+}
 
 variable "tfc_organization" {
   type    = string
@@ -16,6 +18,10 @@ variable "tfc_organization" {
 variable "tfc_workspace_names" {
   type    = set(string)
   default = ["1_networking", "5_nomad-cluster", "4_boundary-config", "6_nomad-nodes"]
+}
+
+variable "region" {
+  type = string
 }
 
 resource "aws_iam_role" "doormat_role" {
