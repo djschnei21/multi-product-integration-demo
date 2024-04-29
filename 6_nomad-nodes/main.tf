@@ -134,6 +134,13 @@ resource "aws_iam_role_policy" "efs_policy" {
         ],
         Effect = "Allow",
         Resource = "*"
+      },
+      {
+        Action = [
+          "ec2:DescribeAvailabilityZones"
+        ],
+        Effect = "Allow",
+        Resource = "*"
       }
     ]
   })
