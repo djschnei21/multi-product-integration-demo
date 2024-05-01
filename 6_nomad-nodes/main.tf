@@ -158,7 +158,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
   instance_type = "t3a.medium"
 
   block_device_mappings {
-    device_name = "/dev/sda"
+    device_name = "/dev/sda1"
 
     ebs {
       volume_size = 20
@@ -235,7 +235,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
   instance_type = "t4g.medium"
 
   block_device_mappings {
-    device_name = "/dev/sda"
+    device_name = "/dev/sda1"
 
     ebs {
       volume_size = 20
