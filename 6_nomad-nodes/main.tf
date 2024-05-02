@@ -104,7 +104,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
   region         = var.region
 }
 
-resource "aws_iam_role" "efs_role" {
+resource "aws_iam_role" "role" {
   name = "efs-role"
 
   assume_role_policy = jsonencode({
@@ -121,9 +121,9 @@ resource "aws_iam_role" "efs_role" {
   })
 }
 
-resource "aws_iam_role_policy" "efs_policy" {
-  name = "efs-policy"
-  role = aws_iam_role.efs_role.id
+resource "aws_iam_role_policy" "policy" {
+  name = "nomad-policy"
+  role = aws_iam_role.role.id
 
   policy = jsonencode({
     Version = "2012-10-17",
@@ -137,7 +137,7 @@ resource "aws_iam_role_policy" "efs_policy" {
       },
       {
         Action = [
-          "ec2:DescribeAvailabilityZones"
+          "ec2:*"
         ],
         Effect = "Allow",
         Resource = "*"
@@ -146,11 +146,10 @@ resource "aws_iam_role_policy" "efs_policy" {
   })
 }
 
-resource "aws_iam_instance_profile" "efs_instance_profile" {
-  name = "efs-instance-profile"
-  role = aws_iam_role.efs_role.name
+resource "aws_iam_instance_profile" "instance_profile" {
+  name = "nomad-instance-profile"
+  role = aws_iam_role.role.name
 }
-
 
 resource "aws_launch_template" "nomad_client_x86_launch_template" {
   name_prefix   = "lt-"
@@ -167,7 +166,7 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
   
 
   iam_instance_profile {
-    arn = aws_iam_instance_profile.efs_instance_profile.arn
+    arn = aws_iam_instance_profile.instance_profile.arn
   }
 
   network_interfaces {
@@ -243,7 +242,7 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
   }
 
   iam_instance_profile {
-    arn = aws_iam_instance_profile.efs_instance_profile.arn
+    arn = aws_iam_instance_profile.instance_profile.arn
   }
 
   network_interfaces {
