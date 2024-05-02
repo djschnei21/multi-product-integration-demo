@@ -105,7 +105,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
 }
 
 resource "aws_iam_role" "role" {
-  name = "efs-role"
+  name = "nomad-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
