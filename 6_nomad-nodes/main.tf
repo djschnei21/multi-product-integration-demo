@@ -201,9 +201,9 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
 }
 
 resource "aws_autoscaling_group" "nomad_client_x86_asg" {
-  desired_capacity  = 1
-  max_size          = 1
-  min_size          = 1
+  desired_capacity  = 2
+  max_size          = 2
+  min_size          = 2
   health_check_type = "EC2"
   health_check_grace_period = "60"
 
@@ -277,9 +277,9 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
 }
 
 resource "aws_autoscaling_group" "nomad_client_arm_asg" {
-  desired_capacity  = 1
-  max_size          = 1
-  min_size          = 1
+  desired_capacity  = 2
+  max_size          = 2
+  min_size          = 2
   health_check_type = "EC2"
   health_check_grace_period = "60"
 
