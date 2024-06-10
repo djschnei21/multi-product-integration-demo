@@ -10,7 +10,9 @@ terraform {
   }
 }
 
-provider "tfe" {}
+provider "tfe" {
+  organization = var.tfc_organization
+}
 
 resource "hcp_packer_run_task" "registry" {
   regenerate_hmac = true
