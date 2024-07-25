@@ -11,7 +11,7 @@ terraform {
     }
 
     vault = {
-      source = "hashicorp/vault"
+      source  = "hashicorp/vault"
       version = "~> 3.18.0"
     }
 
@@ -62,23 +62,42 @@ data "terraform_remote_state" "hcp_clusters" {
 
 provider "vault" {}
 
-resource "vault_policy" "nomad_policy" {
-  name   = "nomad"
-  policy = file("nomad-server-policy.hcl")
+resource "vault_jwt_auth_backend" "nomad" {
+  description        = "JWT for Nomad Workload Identity"
+  path               = "nomad"
+  jwks_url           = "http://${aws_alb.nomad.dns_name}/.well-known/jwks.json"
+  jwt_supported_algs = ["RS256", "EdDSA"]
+  default_role       = "nomad-workloads"
 }
 
-resource "vault_token_auth_backend_role" "nomad_role" {
-  role_name = "nomad_role"
-  allowed_policies  = [vault_policy.nomad_policy.name]
-  orphan = true
-  token_explicit_max_ttl = "0"
-  token_period  = "259200"
-  renewable = true
+resource "vault_jwt_auth_backend_role" "nomad_workloads_role" {
+  backend        = vault_jwt_auth_backend.nomad.path
+  role_name      = "nomad-workloads"
+  token_policies = ["nomad-workloads"]
+
+  bound_audiences = ["vault.io"]
+  bound_claims = {
+    nomad_namespace = "default"
+  }
+
+  claim_mappings = {
+    nomad_namespace = "nomad_namespace"
+    nomad_job_id    = "nomad_job_id"
+    nomad_task      = "nomad_task"
+  }
+
+  user_claim              = "/nomad_job_id"
+  user_claim_json_pointer = true
+  role_type               = "jwt"
 }
 
-resource "vault_token" "nomad_token" {
-  role_name   = vault_token_auth_backend_role.nomad_role.role_name
-  policies    = [vault_policy.nomad_policy.name]
+resource "vault_policy" "nomad_workloads_policy" {
+  name = "nomad-workloads"
+  policy = templatefile("${path.module}/nomad-workloads-policy.hcl.tpl",
+    {
+      accessor = vault_jwt_auth_backend.nomad.accessor
+    }
+  )
 }
 
 resource "vault_mount" "ssh" {
@@ -87,22 +106,22 @@ resource "vault_mount" "ssh" {
 }
 
 resource "vault_ssh_secret_backend_ca" "ssh_ca" {
-  backend               = vault_mount.ssh.path
+  backend              = vault_mount.ssh.path
   generate_signing_key = true
 }
 
 resource "vault_ssh_secret_backend_role" "ssh_role" {
-  name                   = "boundary_role"
-  backend                = vault_mount.ssh.path
+  name                    = "boundary_role"
+  backend                 = vault_mount.ssh.path
   key_type                = "ca"
   allow_user_certificates = true
   default_user            = "ubuntu"
   allowed_users           = "*"
-  
+
   default_extensions = {
     "permit-pty" = ""
   }
-  
+
   allowed_extensions = "*"
 }
 
@@ -111,10 +130,10 @@ resource "aws_security_group" "nomad_server" {
   vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
 
   ingress {
-    from_port   = 4646
-    to_port     = 4646
-    protocol    = "tcp"
-    security_groups = [ aws_security_group.nomad_lb.id ]
+    from_port       = 4646
+    to_port         = 4646
+    protocol        = "tcp"
+    security_groups = [aws_security_group.nomad_lb.id]
   }
 
   lifecycle {
@@ -127,10 +146,10 @@ resource "aws_security_group" "nomad" {
   vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
 
   ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    self        = true  # reference to the security group itself
+    from_port = 0
+    to_port   = 0
+    protocol  = "-1"
+    self      = true # reference to the security group itself
   }
 
   ingress {
@@ -155,7 +174,7 @@ resource "aws_security_group" "nomad" {
 resource "aws_security_group" "nomad_lb" {
   name        = "nomad_lb_sg"
   description = "Allow inbound traffic"
-  vpc_id = data.terraform_remote_state.networking.outputs.vpc_id
+  vpc_id      = data.terraform_remote_state.networking.outputs.vpc_id
 
   ingress {
     from_port   = 80
@@ -173,9 +192,9 @@ resource "aws_security_group" "nomad_lb" {
 }
 
 resource "aws_alb" "nomad" {
-  name               = "nomad-alb"
-  security_groups    = [ aws_security_group.nomad_lb.id ]
-  subnets            = data.terraform_remote_state.networking.outputs.subnet_ids
+  name            = "nomad-alb"
+  security_groups = [aws_security_group.nomad_lb.id]
+  subnets         = data.terraform_remote_state.networking.outputs.subnet_ids
 }
 
 resource "aws_alb_target_group" "nomad" {
@@ -224,7 +243,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
 
   network_interfaces {
     associate_public_ip_address = true
-    security_groups = [ 
+    security_groups = [
       aws_security_group.nomad_server.id,
       aws_security_group.nomad.id,
       data.terraform_remote_state.networking.outputs.hvn_sg_id
@@ -239,12 +258,10 @@ resource "aws_launch_template" "nomad_server_launch_template" {
     templatefile("${path.module}/scripts/nomad-server.tpl",
       {
         nomad_license      = var.nomad_license,
-        nomad_token        = vault_token.nomad_token.client_token
         consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
         consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
         consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
-        vault_ssh_pub_key  = vault_ssh_secret_backend_ca.ssh_ca.public_key,
-        vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+        vault_ssh_pub_key  = vault_ssh_secret_backend_ca.ssh_ca.public_key
       }
     )
   )
@@ -255,19 +272,19 @@ resource "aws_launch_template" "nomad_server_launch_template" {
 }
 
 resource "aws_autoscaling_group" "nomad_server_asg" {
-  desired_capacity  = 3
-  max_size          = 5
-  min_size          = 1
-  health_check_type = "ELB"
+  desired_capacity          = 3
+  max_size                  = 5
+  min_size                  = 1
+  health_check_type         = "ELB"
   health_check_grace_period = "60"
 
   name = "nomad-server"
 
   launch_template {
-    id = aws_launch_template.nomad_server_launch_template.id
+    id      = aws_launch_template.nomad_server_launch_template.id
     version = aws_launch_template.nomad_server_launch_template.latest_version
   }
-  
+
   vpc_zone_identifier = data.terraform_remote_state.networking.outputs.subnet_ids
 
   instance_refresh {
@@ -284,20 +301,20 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
 
 resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
-  lb_target_group_arn   = aws_alb_target_group.nomad.arn
+  lb_target_group_arn    = aws_alb_target_group.nomad.arn
 }
 
 resource "vault_mount" "kvv2" {
-  path        = "hashistack-admin"
-  type        = "kv"
-  options     = { version = "2" }
+  path    = "hashistack-admin"
+  type    = "kv"
+  options = { version = "2" }
 }
 
 resource "null_resource" "bootstrap_acl" {
   triggers = {
     asg = aws_autoscaling_group.nomad_server_asg.id
   }
-  depends_on = [ vault_mount.kvv2 ]
+  depends_on = [vault_mount.kvv2]
   provisioner "local-exec" {
     command = <<EOF
     sleep 60  # wait for the instances in ASG to be up and running

@@ -29,12 +29,15 @@ consul {
 vault {
   enabled = true
   namespace = "admin"
-  address = "${vault_public_endpoint}"
-  token   = "${nomad_token}"
 
   # Optional settings:
-  create_from_role = "nomad_role"
+  create_from_role = "nomad-workloads"
   task_token_ttl   = "1h"
+
+  default_identity {
+    aud = ["vault.io"]
+    ttl = "1h"
+  }
 }
 bind_addr = "0.0.0.0"
 acl {
