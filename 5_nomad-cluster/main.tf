@@ -63,6 +63,8 @@ data "terraform_remote_state" "hcp_clusters" {
 provider "vault" {}
 
 resource "vault_jwt_auth_backend" "nomad" {
+  depends_on = [null_resource.bootstrap_acl]
+
   description        = "JWT for Nomad Workload Identity"
   path               = "nomad"
   jwks_url           = "http://${aws_alb.nomad.dns_name}/.well-known/jwks.json"
