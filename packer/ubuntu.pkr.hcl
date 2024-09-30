@@ -13,7 +13,7 @@ source "amazon-ebs" "amd" {
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
-      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-mantic-23.10-amd64-server-*"
+      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-amd64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -36,7 +36,7 @@ source "amazon-ebs" "arm" {
   associate_public_ip_address = true
   source_ami_filter {
     filters = {
-      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-mantic-23.10-arm64-server-*"
+      name                = "ubuntu/images/hvm-ssd-gp3/ubuntu-noble-24.04-arm64-server-*"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
@@ -60,12 +60,12 @@ build {
   ]
 
   hcp_packer_registry {
-    bucket_name = "ubuntu-mantic-hashi"
-    description = "Ubuntu Mantic Minotaur with Nomad and Consul installed"
+    bucket_name = "ubuntu-noble-hashi"
+    description = "Ubuntu Noble Numbat with Nomad and Consul installed"
 
     bucket_labels = {
       "os"             = "Ubuntu",
-      "ubuntu-version" = "23.10",
+      "ubuntu-version" = "24.04",
     }
 
     build_labels = {
