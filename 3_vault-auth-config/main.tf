@@ -16,7 +16,9 @@ terraform {
   }
 }
 
-provider "tfe" {}
+provider "tfe" {
+  organization = var.tfc_organization
+}
 
 data "terraform_remote_state" "hcp_clusters" {
   backend = "remote"
