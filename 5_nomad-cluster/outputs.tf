@@ -1,5 +1,5 @@
 output "nomad_sg" {
-    value = aws_security_group.nomad.id
+  value = aws_security_group.nomad.id
 }
 
 output "nomad_public_endpoint" {

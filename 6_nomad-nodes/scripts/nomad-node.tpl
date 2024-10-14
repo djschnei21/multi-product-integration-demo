@@ -31,6 +31,7 @@ vault {
   enabled = true
   namespace = "admin"
   address = "${vault_public_endpoint}"
+  jwt_auth_backend_path = "nomad"
 }
 bind_addr = "0.0.0.0"
 acl {
