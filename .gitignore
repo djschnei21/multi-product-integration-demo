@@ -1,5 +1,5 @@
-doormat-prereqs/.terraform
-doormat-prereqs/.terraform.lock.hcl
-doormat-prereqs/terraform.tfstate
-doormat-prereqs/terraform.tfstate.backup
+doormat-prereqs/
 .DS_Store
+.terraform.lock.hcl
+.terraform/modules/terraform-sources.json
+.terraform/providers/
