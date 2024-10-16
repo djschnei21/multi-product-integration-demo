@@ -27,7 +27,7 @@ data "aws_availability_zones" "available" {
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "5.1.0"
+  version = "5.13.0"
 
   azs                  = data.aws_availability_zones.available.names
   cidr                 = var.vpc_cidr_block
@@ -46,7 +46,7 @@ resource "hcp_hvn" "main" {
 
 module "aws_hcp_network_config" {
   source  = "hashicorp/hcp-consul/aws"
-  version = "~> 0.12.1"
+  version = "~> 0.13.0"
 
   hvn             = hcp_hvn.main
   vpc_id          = module.vpc.vpc_id
