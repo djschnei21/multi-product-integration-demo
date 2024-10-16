@@ -9,7 +9,6 @@ required_providers {
     }
 }
 
-# Setting "this" as the alias name
 provider "aws" "this" {
     config {
         region = var.region
