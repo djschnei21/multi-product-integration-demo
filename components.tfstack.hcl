@@ -1,7 +1,7 @@
 component "networking" {
   source = "./1_networking"
   providers = {
-    tfe = provider.tfe.this
+    aws = provider.aws.this
     hcp = provider.hcp.this
   }
   inputs = {
