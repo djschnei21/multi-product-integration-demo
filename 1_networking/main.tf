@@ -1,10 +1,5 @@
 terraform {
   required_providers {
-    doormat = {
-      source  = "doormat.hashicorp.services/hashicorp-security/doormat"
-      version = "~> 0.0.6"
-    }
-
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.8.0"
@@ -17,18 +12,8 @@ terraform {
   }
 }
 
-provider "doormat" {}
-
-data "doormat_aws_credentials" "creds" {
-  provider = doormat
-  role_arn = "arn:aws:iam::${var.aws_account_id}:role/tfc-doormat-role_1_networking"
-}
-
 provider "aws" {
   region     = var.region
-  access_key = data.doormat_aws_credentials.creds.access_key
-  secret_key = data.doormat_aws_credentials.creds.secret_key
-  token      = data.doormat_aws_credentials.creds.token
 }
 
 provider "hcp" {}
