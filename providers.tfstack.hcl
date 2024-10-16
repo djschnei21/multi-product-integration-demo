@@ -21,7 +21,7 @@ provider "aws" "this" {
 
 provider "hcp" "this" {
   config {
-    project_id = var.project_id
+    project_id = var.hcp_project_id
     workload_identity {
       resource_name = var.hcp_resource_name
       token = var.hcp_identity_token

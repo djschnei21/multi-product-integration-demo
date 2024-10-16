@@ -12,7 +12,7 @@ variable "aws_identity_token" {
     ephemeral = true
 }
 
-variable "project_id" {
+variable "hcp_project_id" {
     type = string
 }
 
