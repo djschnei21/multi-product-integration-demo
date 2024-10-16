@@ -81,6 +81,5 @@ variable "boundary_admin_username" {
 variable "boundary_admin_password" {
   type        = string
   description = "The admin user's password on the Boundary cluster"
-  sensitive   = true
   ephemeral = true
 }
