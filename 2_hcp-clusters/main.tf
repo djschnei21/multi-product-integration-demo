@@ -23,5 +23,5 @@ resource "hcp_boundary_cluster" "hashistack" {
   cluster_id = "${var.stack_id}-boundary-cluster"
   tier       = var.boundary_cluster_tier
   username   = var.boundary_admin_username
-  password   = data.hcp_vault_secrets_app.boundary_admin_password.value
+  password   = data.hcp_vault_secrets_app.boundary_admin_password.secret_value
 }
