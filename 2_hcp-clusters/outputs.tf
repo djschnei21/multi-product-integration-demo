@@ -30,6 +30,6 @@ output "hcp_vault_cluster_admin_token" {
 }
 
 output "hcp_consul_cluster_admin_token" {
-  value = hcp_consul_cluster_admin_token.token.secret_id
+  value = hcp_consul_cluster_root_token.token.secret_id
   sensitive = true
 }
