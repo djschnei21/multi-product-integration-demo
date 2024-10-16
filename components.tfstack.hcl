@@ -13,3 +13,19 @@ component "networking" {
     hvn_cidr_block = var.hvn_cidr_block
   }
 }
+
+component "hcp-clusters" {
+  source = "./2_hcp_clusters"
+  providers = {
+    hcp = provider.hcp.this
+  }
+  inputs = {
+    stack_id = var.stack_id
+    hvn_id = component.networking.hvn_id
+    vault_cluster_tier = var.vault_cluster_tier
+    consul_cluster_tier = var.consul_cluster_tier
+    boundary_cluster_tier = var.boundary_cluster_tier
+    boundary_admin_username = var.boundary_admin_username
+    boundary_admin_password = var.boundary_admin_password
+  }
+}
