@@ -10,13 +10,13 @@ required_providers {
 }
 
 provider "aws" "this" {
-    config {
-        region = var.region
-        assume_role_with_web_identity {
-          role_arn = var.aws_role_arn
-          web_identity_token = var.aws_identity_token
-        }
+  config {
+    region = var.region
+    assume_role_with_web_identity {
+      role_arn = var.aws_role_arn
+      web_identity_token = var.aws_identity_token
     }
+  }
 }
 
 provider "hcp" "this" {
