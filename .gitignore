@@ -1,5 +1,4 @@
 doormat-prereqs/
 .DS_Store
-.terraform.lock.hcl
 .terraform/modules/terraform-sources.json
 .terraform/providers/
