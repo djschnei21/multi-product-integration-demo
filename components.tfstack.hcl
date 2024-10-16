@@ -15,7 +15,7 @@ component "networking" {
 }
 
 component "hcp-clusters" {
-  source = "./2_hcp_clusters"
+  source = "./2_hcp-clusters"
   providers = {
     hcp = provider.hcp.this
   }
