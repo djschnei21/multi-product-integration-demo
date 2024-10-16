@@ -3,6 +3,28 @@ variable "region" {
   description = "The AWS and HCP region to create resources in"
 }
 
+variable "aws_role_arn" {
+    type = string
+}
+
+variable "aws_identity_token" {
+    type      = string
+    ephemeral = true
+}
+
+variable "project_id" {
+    type = string
+}
+
+variable "hcp_identity_token" {
+    type      = string
+    ephemeral = true
+}
+
+variable "hcp_resource_name" {
+    type = string 
+}
+
 variable "stack_id" {
   type        = string
   description = "The name of your stack"
