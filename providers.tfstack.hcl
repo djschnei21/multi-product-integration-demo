@@ -7,11 +7,6 @@ required_providers {
         source  = "hashicorp/hcp"
         version = "~> 0.97.0"
     }
-    boundary = {
-      source = "hashicorp/boundary"
-      version = "~> 1.1.15"
-    }
-
     vault = {
       source = "hashicorp/vault"
       version = "~> 4.4.0"
@@ -35,13 +30,5 @@ provider "hcp" "this" {
       resource_name = var.hcp_resource_name
       token = var.hcp_identity_token
     }
-  }
-}
-
-provider "boundary" "this" {
-  config {
-    addr = component.hcp-clusters.boundary_public_endpoint
-    auth_method_login_name = var.boundary_admin_username
-    auth_method_login_password = var.boundary_admin_password
   }
 }

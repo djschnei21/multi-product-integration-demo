@@ -1,5 +1,10 @@
 terraform {}
 
+data "hcp_vault_secrets_secret" "boundary_admin_password" {
+  app_name    = "hashistack"
+  secret_name = "boundary_admin_password"
+}
+
 resource "hcp_vault_cluster" "hashistack" {
   cluster_id      = "${var.stack_id}-vault-cluster"
   hvn_id          = var.hvn_id
@@ -19,7 +24,7 @@ resource "hcp_boundary_cluster" "hashistack" {
   cluster_id = "${var.stack_id}-boundary-cluster"
   tier       = var.boundary_cluster_tier
   username   = var.boundary_admin_username
-  password   = var.boundary_admin_password
+  password   = data.hcp_vault_secrets_secret.boundary_admin_password.secret_value
 }
 
 resource "hcp_vault_cluster_admin_token" "token" {

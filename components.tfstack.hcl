@@ -26,6 +26,5 @@ component "hcp-clusters" {
     consul_cluster_tier = var.consul_cluster_tier
     boundary_cluster_tier = var.boundary_cluster_tier
     boundary_admin_username = var.boundary_admin_username
-    boundary_admin_password = var.boundary_admin_password
   }
 }
