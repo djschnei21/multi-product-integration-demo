@@ -1,22 +1,4 @@
-terraform {
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.8.0"
-    }
-
-    hcp = {
-      source  = "hashicorp/hcp"
-      version = "~> 0.66.0"
-    }
-  }
-}
-
-provider "aws" {
-  region     = var.region
-}
-
-provider "hcp" {}
+terraform {}
 
 data "aws_availability_zones" "available" {
   filter {
