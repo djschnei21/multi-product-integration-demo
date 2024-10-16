@@ -7,11 +7,6 @@ data "aws_availability_zones" "available" {
   }
 }
 
-provider "aws" {
-}
-
-provider "hcp" {} 
-
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
