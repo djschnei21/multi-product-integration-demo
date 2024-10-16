@@ -31,6 +31,6 @@ resource "hcp_vault_cluster_admin_token" "token" {
   cluster_id = hcp_vault_cluster.hashistack.cluster_id
 }
 
-resource "hcp_consul_cluster_admin_token" "token" {
+resource "hcp_consul_cluster_root_token" "token" {
   cluster_id = hcp_consul_cluster.hashistack.cluster_id
 }
