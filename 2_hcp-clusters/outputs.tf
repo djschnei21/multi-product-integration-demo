@@ -23,3 +23,13 @@ output "consul_public_endpoint" {
 output "boundary_public_endpoint" {
   value = hcp_boundary_cluster.hashistack.cluster_url
 }
+
+output "hcp_vault_cluster_admin_token" {
+  value = hcp_vault_cluster_admin_token.token.token
+  sensitive = true
+}
+
+output "hcp_consul_cluster_admin_token" {
+  value = hcp_consul_cluster_admin_token.token.secret_id
+  sensitive = true
+}

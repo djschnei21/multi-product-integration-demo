@@ -26,3 +26,11 @@ resource "hcp_boundary_cluster" "hashistack" {
   username   = var.boundary_admin_username
   password   = data.hcp_vault_secrets_secret.boundary_admin_password.secret_value
 }
+
+resource "hcp_vault_cluster_admin_token" "token" {
+  cluster_id = hcp_vault_cluster.hashistack.cluster_id
+}
+
+resource "hcp_consul_cluster_admin_token" "token" {
+  cluster_id = hcp_consul_cluster.hashistack.cluster_id
+}
