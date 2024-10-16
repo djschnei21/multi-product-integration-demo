@@ -77,9 +77,3 @@ variable "boundary_admin_username" {
   description = "The admin username to be created on the Boundary cluster"
   default     = "admin"
 }
-
-variable "boundary_admin_password" {
-  type        = string
-  description = "The admin user's password on the Boundary cluster"
-  ephemeral = true
-}
