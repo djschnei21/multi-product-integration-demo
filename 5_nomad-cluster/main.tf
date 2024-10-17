@@ -1,11 +1,3 @@
-# terraform {
-#   required_providers {
-#     http = {
-#       source  = "hashicorp/http"
-#     }
-#   }
-# }
-
 data "hcp_vault_secrets_secret" "nomad_license" {
   app_name    = "hashistack"
   secret_name = "nomad_license"
