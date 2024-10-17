@@ -4,7 +4,7 @@ data "hcp_vault_secrets_secret" "boundary_admin_password" {
 }
 
 resource "vault_jwt_auth_backend" "nomad" {
-  depends_on = [null_resource.bootstrap_acl]
+  depends_on = [http.nomad_acl_bootstrap]
 
   description        = "JWT for Nomad Workload Identity"
   path               = "nomad"
@@ -163,7 +163,7 @@ resource "aws_alb_listener" "nomad" {
   }
 }
 
-data "hcp_packer_image" "ubuntu_lunar_hashi_amd" {
+data "hcp_packer_artifact" "ubuntu_lunar_hashi_amd" {
   bucket_name    = "ubuntu-mantic-hashi"
   component_type = "amazon-ebs.amd"
   channel        = "latest"
@@ -171,7 +171,7 @@ data "hcp_packer_image" "ubuntu_lunar_hashi_amd" {
   region         = var.region
 }
 
-data "hcp_packer_image" "ubuntu_lunar_hashi_arm" {
+data "hcp_packer_artifact" "ubuntu_lunar_hashi_arm" {
   bucket_name    = "ubuntu-mantic-hashi"
   component_type = "amazon-ebs.arm"
   channel        = "latest"
@@ -247,7 +247,7 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   lb_target_group_arn    = aws_alb_target_group.nomad.arn
 }
 
-resource "http" "nomad_server_health" {
+data "http" "nomad_server_health" {
   url = "http://${aws_alb.nomad.dns_name}/v1/agent/health?type=server"
   
   retry {
@@ -264,7 +264,7 @@ resource "http" "nomad_server_health" {
   }
 }
 
-resource "http" "nomad_acl_bootstrap" {
+data "http" "nomad_acl_bootstrap" {
   url    = "http://${aws_alb.nomad.dns_name}/v1/acl/bootstrap"
   method = "POST"
 
