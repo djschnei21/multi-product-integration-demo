@@ -11,7 +11,7 @@ output "ssh_ca_pub_key" {
 }
 
 output "nomad_bootstrap_secret_id" {
-  value = jsondecode(data.http.bootstrap.response_body).SecretID
+  value = data.http.bootstrap.response_body
   description = "The SecretID from the Nomad ACL bootstrap."
-  sensitive = true
+  sensitive = false
 }
