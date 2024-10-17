@@ -244,3 +244,27 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
   lb_target_group_arn    = aws_alb_target_group.nomad.arn
 }
+
+data "http" "bootstrap" {
+  depends_on = [aws_autoscaling_attachment.asg_attachment]
+  lifecycle {
+    replace_triggered_by = [aws_autoscaling_group.nomad_server_asg]
+  }
+  trigger
+  url        = "http://${aws_alb.nomad.dns_name}/v1/acl/bootstrap"
+  method     = "POST"
+  insecure   = true
+
+  retry {
+    attempts = 5
+    max_delay_ms = 15000
+    min_delay_ms = 10000
+  }
+
+  lifecycle {
+    postcondition {
+      condition     = contains([200], self.status_code)
+      error_message = "Status code invalid"
+    }
+  }
+}
