@@ -252,7 +252,7 @@ data "http" "bootstrap" {
   insecure   = true
 
   retry {
-    attempts = 5
+    attempts = 10
     max_delay_ms = 15000
     min_delay_ms = 10000
   }
