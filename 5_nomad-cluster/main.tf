@@ -4,8 +4,6 @@ data "hcp_vault_secrets_secret" "nomad_license" {
 }
 
 resource "vault_jwt_auth_backend" "nomad" {
-  depends_on = [data.http.nomad_acl_bootstrap]
-
   description        = "JWT for Nomad Workload Identity"
   path               = "nomad"
   jwks_url           = "http://${aws_alb.nomad.dns_name}/.well-known/jwks.json"
