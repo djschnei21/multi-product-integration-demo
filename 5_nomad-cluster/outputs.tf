@@ -9,3 +9,9 @@ output "nomad_public_endpoint" {
 output "ssh_ca_pub_key" {
   value = vault_ssh_secret_backend_ca.ssh_ca.public_key
 }
+
+output "nomad_bootstrap_secret_id" {
+  value = jsondecode(data.http.bootstrap.response_body).SecretID
+  description = "The SecretID from the Nomad ACL bootstrap."
+  sensitive = true
+}
