@@ -247,10 +247,6 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
 
 data "http" "bootstrap" {
   depends_on = [aws_autoscaling_attachment.asg_attachment]
-  lifecycle {
-    replace_triggered_by = [aws_autoscaling_group.nomad_server_asg]
-  }
-  trigger
   url        = "http://${aws_alb.nomad.dns_name}/v1/acl/bootstrap"
   method     = "POST"
   insecure   = true
