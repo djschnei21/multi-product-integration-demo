@@ -12,8 +12,8 @@ required_providers {
       version = "~> 4.4.0"
     }
     null = {
-        source  = "hashicorp/null"
-        version = "~> 3.2.3"
+        source  = "hashicorp/http"
+        version = "~> 3.4.5"
     }
 }
 
@@ -45,4 +45,4 @@ provider "vault" "this" {
   }
 }
 
-provider "null" "this" {}
+provider "http" "this" {}

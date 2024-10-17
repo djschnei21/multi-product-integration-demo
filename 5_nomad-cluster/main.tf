@@ -247,40 +247,47 @@ resource "aws_autoscaling_attachment" "asg_attachment" {
   lb_target_group_arn    = aws_alb_target_group.nomad.arn
 }
 
-resource "vault_mount" "kvv2" {
-  path    = "hashistack-admin"
-  type    = "kv"
-  options = { version = "2" }
+resource "http" "nomad_server_health" {
+  url = "http://${aws_alb.nomad.dns_name}/v1/agent/health?type=server"
+  
+  retry {
+    attempts      = 10
+    min_delay_ms  = 10000 # 10 seconds
+    max_delay_ms  = 10000 # 10 seconds
+  }
+
+  lifecycle {
+    postcondition {
+      condition     = self.status_code == 200
+      error_message = "Nomad server is not healthy."
+    }
+  }
 }
 
-resource "null_resource" "bootstrap_acl" {
-  triggers = {
-    asg = aws_autoscaling_group.nomad_server_asg.id
+resource "http" "nomad_acl_bootstrap" {
+  url    = "http://${aws_alb.nomad.dns_name}/v1/acl/bootstrap"
+  method = "POST"
+
+  retry {
+    attempts      = 10
+    min_delay_ms  = 10000 # 10 seconds
+    max_delay_ms  = 10000 # 10 seconds
   }
-  depends_on = [vault_mount.kvv2]
-  provisioner "local-exec" {
-    command = <<EOF
-    sleep 60  # wait for the instances in ASG to be up and running
-    MAX_RETRIES=10
-    COUNT=0
-    while [ $COUNT -lt $MAX_RETRIES ]; do
-      RESPONSE=$(curl --write-out %%{http_code} --silent --output /dev/null http://${aws_alb.nomad.dns_name}/v1/agent/health?type=server)
-      if [ $RESPONSE -eq 200 ]; then
-        curl --request POST http://${aws_alb.nomad.dns_name}/v1/acl/bootstrap >> nomad_bootstrap.json
-        JSON_DATA=$(jq -c . < nomad_bootstrap.json)
-        for key in $(echo $JSON_DATA | jq -r 'keys[]'); do
-            value=$(echo $JSON_DATA | jq -r --arg key "$key" '.[$key] | @uri')
-            curl --header "X-Vault-Token: ${var.vault_root_token}" \
-                --header "X-Vault-Namespace: admin" \
-                --request PUT \
-                --data "{ \"data\": { \"$key\": \"$value\" }}" \
-                ${var.vault_public_endpoint}/v1/hashistack-admin/data/nomad_bootstrap/$key
-        done
-        break
-      fi
-      COUNT=$((COUNT + 1))
-      sleep 10
-    done
-    EOF
+
+  lifecycle {
+    precondition {
+      condition     = http.nomad_server_health.status_code == 200
+      error_message = "Nomad server health check failed, cannot bootstrap ACL."
+    }
   }
+}
+
+resource "hcp_vault_secrets_secret" "nomad_bootstrap" {
+  for_each = { for key, value in jsondecode(http.nomad_acl_bootstrap.response_body) : key => value }
+
+  app_name     = "hashistack"
+  secret_name  = each.key
+  secret_value = each.value
+
+  depends_on = [http.nomad_acl_bootstrap]
 }

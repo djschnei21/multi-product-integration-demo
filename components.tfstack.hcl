@@ -40,8 +40,6 @@ component "nomad-cluster" {
   inputs = {
     region = var.region
     stack_id = var.stack_id
-    vault_root_token = component.hcp-clusters.hcp_vault_cluster_admin_token
-    vault_public_endpoint = component.hcp-clusters.hcp_vault_cluster.public_endpoint
     vpc_id = component.networking.vpc_id
     subnet_cidrs = component.networking.subnet_cidrs
     subnet_ids = component.networking.subnet_ids

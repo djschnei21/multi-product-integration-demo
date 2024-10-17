@@ -8,15 +8,6 @@ variable "stack_id" {
   description = "The name of your stack"
 }
 
-variable "vault_root_token" {
-  type = string
-  sensitive = true
-}
-
-variable "vault_public_endpoint" {
-  type = string
-}
-
 variable "vpc_id" {
   type = string
 }
