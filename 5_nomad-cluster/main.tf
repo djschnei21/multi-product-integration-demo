@@ -4,7 +4,7 @@ data "hcp_vault_secrets_secret" "nomad_license" {
 }
 
 resource "vault_jwt_auth_backend" "nomad" {
-  depends_on = [http.nomad_acl_bootstrap]
+  depends_on = [data.http.nomad_acl_bootstrap]
 
   description        = "JWT for Nomad Workload Identity"
   path               = "nomad"
@@ -181,7 +181,7 @@ data "hcp_packer_artifact" "ubuntu_lunar_hashi_arm" {
 
 resource "aws_launch_template" "nomad_server_launch_template" {
   name_prefix   = "lt-"
-  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_amd.cloud_image_id
+  image_id      = data.hcp_packer_artifact.ubuntu_lunar_hashi_amd.cloud_image_id
   instance_type = "t3a.micro"
 
   network_interfaces {
@@ -276,7 +276,7 @@ data "http" "nomad_acl_bootstrap" {
 
   lifecycle {
     precondition {
-      condition     = http.nomad_server_health.status_code == 200
+      condition     = data.http.nomad_server_health.status_code == 200
       error_message = "Nomad server health check failed, cannot bootstrap ACL."
     }
   }
@@ -289,5 +289,5 @@ resource "hcp_vault_secrets_secret" "nomad_bootstrap" {
   secret_name  = each.key
   secret_value = each.value
 
-  depends_on = [http.nomad_acl_bootstrap]
+  depends_on = [data.http.nomad_acl_bootstrap]
 }
