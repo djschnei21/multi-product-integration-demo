@@ -181,7 +181,7 @@ data "hcp_packer_artifact" "ubuntu_lunar_hashi_arm" {
 
 resource "aws_launch_template" "nomad_server_launch_template" {
   name_prefix   = "lt-"
-  image_id      = data.hcp_packer_artifact.ubuntu_lunar_hashi_amd.cloud_image_id
+  image_id      = data.hcp_packer_artifact.ubuntu_lunar_hashi_amd.external_id
   instance_type = "t3a.micro"
 
   network_interfaces {
@@ -283,7 +283,7 @@ data "http" "nomad_acl_bootstrap" {
 }
 
 resource "hcp_vault_secrets_secret" "nomad_bootstrap" {
-  for_each = { for key, value in jsondecode(http.nomad_acl_bootstrap.response_body) : key => value }
+  for_each = { for key, value in jsondecode(data.http.nomad_acl_bootstrap.response_body) : key => value }
 
   app_name     = "hashistack"
   secret_name  = each.key
