@@ -11,10 +11,10 @@ required_providers {
       source = "hashicorp/vault"
       version = "~> 4.4.0"
     }
-    http = {
-        source  = "hashicorp/http"
-        version = "~> 3.4.5"
-    }
+    # http = {
+    #     source  = "hashicorp/http"
+    #     version = "~> 3.4.5"
+    # }
 }
 
 provider "aws" "this" {
@@ -45,4 +45,4 @@ provider "vault" "this" {
   }
 }
 
-provider "http" "this" {}
+# provider "http" "this" {}

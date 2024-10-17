@@ -35,7 +35,7 @@ component "nomad-cluster" {
     aws = provider.aws.this
     vault = provider.vault.this
     hcp = provider.hcp.this
-    http = provider.http.this
+    # http = provider.http.this
   }
   inputs = {
     region = var.region
