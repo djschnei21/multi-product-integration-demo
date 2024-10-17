@@ -181,7 +181,7 @@ data "hcp_packer_artifact" "ubuntu_lunar_hashi_arm" {
 
 resource "aws_launch_template" "nomad_server_launch_template" {
   name_prefix   = "lt-"
-  image_id      = data.hcp_packer_artifact.ubuntu_lunar_hashi_amd.external_id
+  image_id      = data.hcp_packer_artifact.ubuntu_lunar_hashi_amd.external_identifier
   instance_type = "t3a.micro"
 
   network_interfaces {
