@@ -6,10 +6,10 @@ identity_token "hcp" {
   audience = ["hcp.workload.identity"]
 }
 
-deployment "dev" {
+deployment "devops" {
   inputs = {
     region         = "us-east-2"
-    stack_id       = "dev"
+    stack_id       = "devops"
     aws_role_arn   = "arn:aws:iam::365006510262:role/tfc-wif"
     hcp_project_id = "092c0213-a9d0-4489-bfe1-e672a3e38392"
     hcp_resource_name = "iam/project/092c0213-a9d0-4489-bfe1-e672a3e38392/service-principal/hcp-terraform/workload-identity-provider/hcp-terraform-dynamic-credentials"
