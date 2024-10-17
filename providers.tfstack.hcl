@@ -11,7 +11,7 @@ required_providers {
       source = "hashicorp/vault"
       version = "~> 4.4.0"
     }
-    null = {
+    http = {
         source  = "hashicorp/http"
         version = "~> 3.4.5"
     }
