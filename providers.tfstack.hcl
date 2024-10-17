@@ -11,6 +11,10 @@ required_providers {
       source = "hashicorp/vault"
       version = "~> 4.4.0"
     }
+    null = {
+        source  = "hashicorp/null"
+        version = "~> 3.2.3"
+    }
 }
 
 provider "aws" "this" {
@@ -40,3 +44,5 @@ provider "vault" "this" {
     namespace = "admin"
   }
 }
+
+provider "null" "this" {}
