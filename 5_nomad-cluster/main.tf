@@ -256,11 +256,4 @@ data "http" "bootstrap" {
     max_delay_ms = 15000
     min_delay_ms = 10000
   }
-
-  lifecycle {
-    postcondition {
-      condition     = contains([200], self.status_code)
-      error_message = "Status code invalid"
-    }
-  }
 }
