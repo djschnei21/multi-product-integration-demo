@@ -28,3 +28,25 @@ component "hcp-clusters" {
     boundary_admin_username = var.boundary_admin_username
   }
 }
+
+component "nomad-cluster" {
+  source = "./5_nomad-cluster"
+  providers = {
+    aws = provider.aws.this
+    vault = provider.vault.this
+    hcp = provider.hcp.this
+  }
+  inputs = {
+    region = var.region
+    stack_id = var.stack_id
+    vault_root_token = component.hcp-clusters.hcp_vault_cluster_admin_token
+    vault_public_endpoint = component.hcp-clusters.hcp_vault_cluster.public_endpoint
+    vpc_id = component.networking.vpc_id
+    subnet_cidrs = component.networking.subnet_cidrs
+    subnet_ids = component.networking.subnet_ids
+    hvn_sg_id = component.networking.hvn_sg_id
+    consul_ca_file = component.hcp-clusters.consul_ca_file
+    consul_config_file = component.hcp-clusters.consul_config_file
+    consul_root_token = component.hcp-clusters.hcp_consul_cluster_admin_token
+  }
+}
