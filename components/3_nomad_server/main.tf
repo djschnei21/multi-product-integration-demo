@@ -260,7 +260,7 @@ data "http" "bootstrap" {
 
 locals {
   is_first_bootstrap = can(jsondecode(data.http.bootstrap.response_body).SecretID)
-  secret_id          = local.is_first_bootstrap ? jsondecode(data.http.bootstrap.response_body).SecretID : null
+  secret_id          = local.is_first_bootstrap ? jsondecode(data.http.bootstrap.response_body).SecretID : "not the first bootstrap"
 }
 
 resource "hcp_vault_secrets_secret" "bootstrap" {
