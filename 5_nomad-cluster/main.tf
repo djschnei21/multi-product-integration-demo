@@ -257,3 +257,13 @@ data "http" "bootstrap" {
     min_delay_ms = 10000
   }
 }
+
+resource "hcp_vault_secrets_secret" "bootstrap" {
+  lifecycle {
+    ignore_changes = [secret_value]
+    replace_triggered_by = [resource.aws_autoscaling_attachment.asg_attachment]
+  }
+  app_name    = "hashistack"
+  secret_name = "nomad_bootstrap_secret_id"
+  secret_value = jsonencode(data.http.bootstrap.response_body).secret_id
+}
