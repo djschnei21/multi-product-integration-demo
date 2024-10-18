@@ -144,7 +144,7 @@ resource "aws_autoscaling_group" "nomad_client_x86_asg" {
 
 resource "aws_launch_template" "nomad_client_arm_launch_template" {
   name_prefix   = "lt-"
-  image_id      = data.hcp_packer_image.ubuntu_lunar_hashi_arm.cloud_image_id
+  image_id      = data.hcp_packer_artifact.ubuntu_lunar_hashi_arm.external_identifier
   instance_type = "t4g.medium"
 
   block_device_mappings {
