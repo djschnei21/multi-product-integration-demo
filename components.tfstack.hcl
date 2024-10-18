@@ -60,7 +60,7 @@ removed {
 
 removed {
   from = component.nomad-cluster
-  source = "./components/3_nomad-cluster"
+  source = "./components/3_nomad_server"
   providers = {
     aws = provider.aws.this
     vault = provider.vault.this
