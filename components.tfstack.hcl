@@ -67,7 +67,7 @@ component "nomad_nodes" {
     consul_ca_file = component.hcp_clusters.consul_ca_file
     consul_config_file = component.hcp_clusters.consul_config_file
     consul_root_token = component.hcp_clusters.hcp_consul_cluster_admin_token
-    ssh_ca_pub_key = component.hcp_clusters.ssh_ca_pub_key
+    ssh_ca_pub_key = component.nomad_cluster.ssh_ca_pub_key
     vault_public_endpoint = component.hcp_clusters.vault_public_endpoint
   }
 }
