@@ -89,7 +89,7 @@ path "auth/token/renew-self" {
 path "auth/token/revoke-self" {
   capabilities = ["update"]
 }
-vault_public_endpoint
+
 path "sys/leases/renew" {
   capabilities = ["update"]
 }
