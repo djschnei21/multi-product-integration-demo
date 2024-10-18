@@ -258,6 +258,11 @@ data "http" "bootstrap" {
   }
 }
 
+locals {
+  nomad_bootstrap = jsondecode(data.http.bootstrap.response.body)
+  SecretID = local.nomad_bootstrap.SecretID
+}
+
 resource "hcp_vault_secrets_secret" "bootstrap" {
   lifecycle {
     ignore_changes = [secret_value]
@@ -265,5 +270,5 @@ resource "hcp_vault_secrets_secret" "bootstrap" {
   }
   app_name      = "hashistack"
   secret_name   = "nomad_bootstrap_secret_id"
-  secret_value  = jsonencode(data.http.bootstrap.response_body).SecretID
+  secret_value  = local.SecretID
 }
