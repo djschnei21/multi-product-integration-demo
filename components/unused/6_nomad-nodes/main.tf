@@ -72,7 +72,7 @@ data "terraform_remote_state" "hcp_clusters" {
   config = {
     organization = var.tfc_organization
     workspaces = {
-      name = "2_hcp-clusters"
+      name = "2_hcp_clusters"
     }
   }
 }
@@ -83,7 +83,7 @@ data "terraform_remote_state" "nomad_cluster" {
   config = {
     organization = var.tfc_organization
     workspaces = {
-      name = "5_nomad-cluster"
+      name = "5_nomad_server"
     }
   }
 }
