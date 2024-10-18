@@ -259,7 +259,7 @@ data "http" "bootstrap" {
 }
 
 locals {
-  nomad_bootstrap = jsondecode(data.http.bootstrap.response.body)
+  nomad_bootstrap = jsondecode(data.http.bootstrap.response.response_body)
   SecretID = local.nomad_bootstrap.SecretID
 }
 
