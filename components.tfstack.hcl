@@ -35,6 +35,7 @@ component "boundary_config" {
     boundary = provider.boundary.this
     aws = provider.aws.this
     vault = provider.vault.this
+    time = provider.time.this
   }
   inputs = {
     region = var.region

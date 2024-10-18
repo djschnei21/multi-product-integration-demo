@@ -19,6 +19,10 @@ required_providers {
         source  = "hashicorp/http"
         version = "~> 3.4.5"
     }
+    time = {
+        source  = "hashicorp/time"
+        version = "~> 0.12.1"
+    }
 }
 
 provider "aws" "this" {
@@ -51,8 +55,9 @@ provider "vault" "this" {
 
 provider "boundary" "this" {
   config {
-    address = component.hcp_clusters.boundary_public_endpoint
-    token = component.hcp_clusters.hcp_boundary_cluster_admin_password
+    addr = component.hcp_clusters.boundary_public_endpoint
+    auth_method_login_name = var.boundary_admin_username
+    auth_method_password = component.hcp_clusters.hcp_boundary_cluster_admin_password
   }
 }
 
