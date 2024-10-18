@@ -39,8 +39,8 @@ provider "hcp" "this" {
 
 provider "vault" "this" {
   config {
-    address = component.hcp-clusters.vault_public_endpoint
-    token = component.hcp-clusters.hcp_vault_cluster_admin_token
+    address = component.hcp_clusters.vault_public_endpoint
+    token = component.hcp_clusters.hcp_vault_cluster_admin_token
     namespace = "admin"
   }
 }
