@@ -16,13 +16,17 @@ variable "hcp_project_id" {
     type = string
 }
 
+variable "hcp_sp_name" {
+    type = string 
+}
+
+variable "hcp_wif_name" {
+    type = string
+}
+
 variable "hcp_identity_token" {
     type      = string
     ephemeral = true
-}
-
-variable "hcp_resource_name" {
-    type = string 
 }
 
 variable "stack_id" {
