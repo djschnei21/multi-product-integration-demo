@@ -29,6 +29,20 @@ component "hcp_clusters" {
   }
 }
 
+component "boundary_config" {
+  source = "./components/boundary_config"
+  providers = {
+    boundary = provider.boundary.this
+    aws = provider.aws.this
+    vault = provider.vault.this
+  }
+  inputs = {
+    region = var.region
+    my_email = var.my_email
+    vault_public_endpoint = component.hcp_clusters.vault_public_endpoint
+  }
+}
+
 component "nomad_cluster" {
   source = "./components/nomad_cluster"
   providers = {

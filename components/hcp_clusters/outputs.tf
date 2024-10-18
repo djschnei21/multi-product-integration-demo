@@ -33,3 +33,8 @@ output "hcp_consul_cluster_admin_token" {
   value = hcp_consul_cluster_root_token.token.secret_id
   sensitive = true
 }
+
+output "hcp_boundary_cluster_admin_password" {
+  value = hcp_boundary_cluster.hashistack.password
+  sensitive = true
+}

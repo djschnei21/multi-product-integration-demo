@@ -1,59 +1,3 @@
-terraform {
-  required_providers {
-    doormat = {
-      source  = "doormat.hashicorp.services/hashicorp-security/doormat"
-    }
-
-    aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.8.0"
-    }
-
-    boundary = {
-      source = "hashicorp/boundary"
-      version = "~> 1.1.9"
-    }
-
-    vault = {
-      source = "hashicorp/vault"
-      version = "~> 3.18.0"
-    }
-  }
-}
-
-provider "doormat" {}
-
-data "doormat_aws_credentials" "creds" {
-  provider = doormat
-  role_arn = "arn:aws:iam::${var.aws_account_id}:role/tfc-doormat-role_4_boundary-config"
-}
-
-provider "aws" {
-  region     = var.region
-  access_key = data.doormat_aws_credentials.creds.access_key
-  secret_key = data.doormat_aws_credentials.creds.secret_key
-  token      = data.doormat_aws_credentials.creds.token
-}
-
-data "terraform_remote_state" "hcp-clusters" {
-  backend = "remote"
-
-  config = {
-    organization = var.tfc_organization
-    workspaces = {
-      name = "2_hcp-clusters"
-    }
-  }
-}
-
-provider "vault" {}
-
-provider "boundary" {
-  addr  = data.terraform_remote_state.hcp-clusters.outputs.boundary_public_endpoint
-  auth_method_login_name = var.boundary_admin_username
-  auth_method_password   = var.boundary_admin_password
-}
-
 resource "boundary_scope" "global" {
   global_scope = true
   scope_id     = "global"
@@ -140,7 +84,7 @@ path "auth/token/renew-self" {
 path "auth/token/revoke-self" {
   capabilities = ["update"]
 }
-
+vault_public_endpoint
 path "sys/leases/renew" {
   capabilities = ["update"]
 }
@@ -179,7 +123,7 @@ resource "vault_token" "boundary_controller" {
 resource "boundary_credential_store_vault" "vault" {
   name        = "foo"
   description = "My first Vault credential store!"
-  address     = data.terraform_remote_state.hcp-clusters.outputs.vault_public_endpoint
+  address     = var.vault_public_endpoint
   token       = vault_token.boundary_controller.client_token 
   scope_id    = boundary_scope.project.id
   namespace   = "admin"

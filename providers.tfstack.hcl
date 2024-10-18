@@ -11,6 +11,10 @@ required_providers {
       source = "hashicorp/vault"
       version = "~> 4.4.0"
     }
+    boundary = {
+      source = "hashicorp/boundary"
+      version = "~> 1.1.15"
+    }
     http = {
         source  = "hashicorp/http"
         version = "~> 3.4.5"
@@ -42,6 +46,13 @@ provider "vault" "this" {
     address = component.hcp_clusters.vault_public_endpoint
     token = component.hcp_clusters.hcp_vault_cluster_admin_token
     namespace = "admin"
+  }
+}
+
+provider "boundary" "this" {
+  config {
+    address = component.hcp_clusters.boundary_public_endpoint
+    token = component.hcp_clusters.hcp_boundary_cluster_admin_password
   }
 }
 
