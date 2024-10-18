@@ -266,7 +266,7 @@ locals {
 resource "hcp_vault_secrets_secret" "bootstrap" {
   lifecycle {
     ignore_changes = [secret_value]
-    replace_triggered_by = [resource.aws_alb_target_group.nomad_server_asg]
+    replace_triggered_by = [resource.aws_autoscaling_group.nomad_server_asg]
   }
   app_name      = "hashistack"
   secret_name   = "nomad_bootstrap_secret_id"
