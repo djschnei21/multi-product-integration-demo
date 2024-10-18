@@ -13,7 +13,7 @@ output "boundary_public_endpoint" {
   value = component.hcp_clusters.boundary_public_endpoint
 }
 
-output "nomad_public_endpoint" {
-  type = string
-  value = component.nomad_cluster.nomad_public_endpoint
-}
+# output "nomad_public_endpoint" {
+#   type = string
+#   value = component.nomad_cluster.nomad_public_endpoint
+# }
