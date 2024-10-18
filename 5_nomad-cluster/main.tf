@@ -265,5 +265,5 @@ resource "hcp_vault_secrets_secret" "bootstrap" {
   }
   app_name      = "hashistack"
   secret_name   = "nomad_bootstrap_secret_id"
-  secret_value  = jsonencode(tostring(data.http.bootstrap.response_body)).secret_id
+  secret_value  = jsonencode(data.http.bootstrap.response_body).SecretID
 }
