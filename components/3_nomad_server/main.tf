@@ -259,8 +259,8 @@ data "http" "bootstrap" {
 }
 
 locals {
-  nomad_bootstrap = jsondecode(data.http.bootstrap.response_body)
-  SecretID = local.nomad_bootstrap.SecretID
+  is_first_bootstrap = can(jsondecode(data.http.bootstrap.response_body).SecretID)
+  secret_id          = local.is_first_bootstrap ? jsondecode(data.http.bootstrap.response_body).SecretID : null
 }
 
 resource "hcp_vault_secrets_secret" "bootstrap" {
@@ -270,5 +270,5 @@ resource "hcp_vault_secrets_secret" "bootstrap" {
   }
   app_name      = "hashistack"
   secret_name   = "nomad_bootstrap_secret_id"
-  secret_value  = local.SecretID
+  secret_value  = local.secret_id
 }
