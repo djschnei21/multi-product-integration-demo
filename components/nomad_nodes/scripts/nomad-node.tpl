@@ -16,7 +16,6 @@ cat <<EOF > /etc/nomad.d/nomad.hcl
 datacenter = "dc1"
 data_dir = "/opt/nomad"
 server {
-  license_path = "/etc/nomad.d/license.hclic"
   enabled          = false
   bootstrap_expect = 3
 }
@@ -48,10 +47,6 @@ plugin "docker" {
 EOF
 chown root:root /etc/nomad.d/nomad.hcl
 chmod 600 /etc/nomad.d/nomad.hcl
-
-echo "${nomad_license}" | sudo tee /etc/nomad.d/license.hclic
-chown root:root /etc/nomad.d/license.hclic
-chmod 600 /etc/nomad.d/license.hclic
                 
 sudo systemctl restart nomad
 

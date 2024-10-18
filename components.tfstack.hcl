@@ -49,3 +49,25 @@ component "nomad_cluster" {
     consul_root_token = component.hcp_clusters.hcp_consul_cluster_admin_token
   }
 }
+
+component "nomad_nodes" {
+  source = "./components/nomad_nodes"
+  providers = {
+    aws = provider.aws.this
+    hcp = provider.hcp.this
+  }
+  inputs = {
+    region = var.region
+    stack_id = var.stack_id
+    vpc_id = component.networking.vpc_id
+    subnet_cidrs = component.networking.subnet_cidrs
+    subnet_ids = component.networking.subnet_ids
+    nomad_sg = component.nomad_cluster.nomad_sg
+    hvn_sg_id = component.networking.hvn_sg_id
+    consul_ca_file = component.hcp_clusters.consul_ca_file
+    consul_config_file = component.hcp_clusters.consul_config_file
+    consul_root_token = component.hcp_clusters.hcp_consul_cluster_admin_token
+    ssh_ca_pub_key = component.hcp_clusters.ssh_ca_pub_key
+    vault_public_endpoint = component.hcp_clusters.vault_public_endpoint
+  }
+}

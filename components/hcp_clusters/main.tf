@@ -1,5 +1,3 @@
-terraform {}
-
 data "hcp_vault_secrets_secret" "boundary_admin_password" {
   app_name    = "hashistack"
   secret_name = "boundary_admin_password"
