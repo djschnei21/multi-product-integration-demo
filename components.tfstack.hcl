@@ -36,10 +36,10 @@ component "boundary_config" {
     aws = provider.aws.this
     vault = provider.vault.this
     time = provider.time.this
+    hcp = provider.hcp.this
   }
   inputs = {
     region = var.region
-    my_email = var.my_email
     vault_public_endpoint = component.hcp_clusters.vault_public_endpoint
   }
 }

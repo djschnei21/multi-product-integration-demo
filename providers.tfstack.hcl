@@ -62,3 +62,5 @@ provider "boundary" "this" {
 }
 
 provider "http" "this" {}
+
+provider "time" "this" {}
