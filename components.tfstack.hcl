@@ -29,29 +29,7 @@ component "hcp_clusters" {
   }
 }
 
-component "nomad_cluster" {
-  source = "./components/nomad_cluster"
-  providers = {
-    aws = provider.aws.this
-    vault = provider.vault.this
-    hcp = provider.hcp.this
-    http = provider.http.this
-  }
-  inputs = {
-    region = var.region
-    stack_id = var.stack_id
-    vpc_id = component.networking.vpc_id
-    subnet_cidrs = component.networking.subnet_cidrs
-    subnet_ids = component.networking.subnet_ids
-    hvn_sg_id = component.networking.hvn_sg_id
-    consul_ca_file = component.hcp_clusters.consul_ca_file
-    consul_config_file = component.hcp_clusters.consul_config_file
-    consul_root_token = component.hcp_clusters.hcp_consul_cluster_admin_token
-  }
-}
-
-# removed {
-#   from = component.nomad_cluster
+# component "nomad_cluster" {
 #   source = "./components/nomad_cluster"
 #   providers = {
 #     aws = provider.aws.this
@@ -59,4 +37,26 @@ component "nomad_cluster" {
 #     hcp = provider.hcp.this
 #     http = provider.http.this
 #   }
+#   inputs = {
+#     region = var.region
+#     stack_id = var.stack_id
+#     vpc_id = component.networking.vpc_id
+#     subnet_cidrs = component.networking.subnet_cidrs
+#     subnet_ids = component.networking.subnet_ids
+#     hvn_sg_id = component.networking.hvn_sg_id
+#     consul_ca_file = component.hcp_clusters.consul_ca_file
+#     consul_config_file = component.hcp_clusters.consul_config_file
+#     consul_root_token = component.hcp_clusters.hcp_consul_cluster_admin_token
+#   }
 # }
+
+removed {
+  from = component.nomad_cluster
+  source = "./components/nomad_cluster"
+  providers = {
+    aws = provider.aws.this
+    vault = provider.vault.this
+    hcp = provider.hcp.this
+    http = provider.http.this
+  }
+}
