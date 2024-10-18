@@ -66,13 +66,13 @@ data "terraform_remote_state" "networking" {
   }
 }
 
-data "terraform_remote_state" "hcp_clusters" {
+data "terraform_remote_state" "hcp-clusters" {
   backend = "remote"
 
   config = {
     organization = var.tfc_organization
     workspaces = {
-      name = "2_hcp_clusters"
+      name = "2_hcp-clusters"
     }
   }
 }
@@ -83,7 +83,7 @@ data "terraform_remote_state" "nomad_cluster" {
   config = {
     organization = var.tfc_organization
     workspaces = {
-      name = "5_nomad_server"
+      name = "5_nomad-cluster"
     }
   }
 }
@@ -185,12 +185,12 @@ resource "aws_launch_template" "nomad_client_x86_launch_template" {
     templatefile("${path.module}/scripts/nomad-node.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
+        consul_ca_file     = data.terraform_remote_state.hcp-clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp-clusters.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.hcp-clusters.outputs.consul_root_token,
         node_pool          = "x86",
         vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key,
-        vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+        vault_public_endpoint = data.terraform_remote_state.hcp-clusters.outputs.vault_public_endpoint
       }
     )
   )
@@ -261,12 +261,12 @@ resource "aws_launch_template" "nomad_client_arm_launch_template" {
     templatefile("${path.module}/scripts/nomad-node.tpl",
       {
         nomad_license      = var.nomad_license,
-        consul_ca_file     = data.terraform_remote_state.hcp_clusters.outputs.consul_ca_file,
-        consul_config_file = data.terraform_remote_state.hcp_clusters.outputs.consul_config_file,
-        consul_acl_token   = data.terraform_remote_state.hcp_clusters.outputs.consul_root_token,
+        consul_ca_file     = data.terraform_remote_state.hcp-clusters.outputs.consul_ca_file,
+        consul_config_file = data.terraform_remote_state.hcp-clusters.outputs.consul_config_file,
+        consul_acl_token   = data.terraform_remote_state.hcp-clusters.outputs.consul_root_token,
         node_pool          = "arm",
         vault_ssh_pub_key  = data.terraform_remote_state.nomad_cluster.outputs.ssh_ca_pub_key,
-        vault_public_endpoint = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+        vault_public_endpoint = data.terraform_remote_state.hcp-clusters.outputs.vault_public_endpoint
       }
     )
   )

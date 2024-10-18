@@ -66,7 +66,7 @@ resource "vault_ssh_secret_backend_role" "ssh_role" {
   allowed_extensions = "*"
 }
 
-resource "aws_security_group" "nomad_server" {
+resource "aws_security_group" "nomad-cluster" {
   name   = "nomad-server"
   vpc_id = var.vpc_id
 
@@ -177,7 +177,7 @@ data "hcp_packer_artifact" "ubuntu_lunar_hashi_arm" {
   region         = var.region
 }
 
-resource "aws_launch_template" "nomad_server_launch_template" {
+resource "aws_launch_template" "nomad-cluster_launch_template" {
   name_prefix   = "lt-"
   image_id      = data.hcp_packer_artifact.ubuntu_lunar_hashi_amd.external_identifier
   instance_type = "t3a.micro"
@@ -185,7 +185,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
   network_interfaces {
     associate_public_ip_address = true
     security_groups = [
-      aws_security_group.nomad_server.id,
+      aws_security_group.nomad-cluster.id,
       aws_security_group.nomad.id,
       var.hvn_sg_id
     ]
@@ -212,7 +212,7 @@ resource "aws_launch_template" "nomad_server_launch_template" {
   }
 }
 
-resource "aws_autoscaling_group" "nomad_server_asg" {
+resource "aws_autoscaling_group" "nomad-cluster_asg" {
   desired_capacity          = 3
   max_size                  = 5
   min_size                  = 1
@@ -222,8 +222,8 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
   name = "nomad-server"
 
   launch_template {
-    id      = aws_launch_template.nomad_server_launch_template.id
-    version = aws_launch_template.nomad_server_launch_template.latest_version
+    id      = aws_launch_template.nomad-cluster_launch_template.id
+    version = aws_launch_template.nomad-cluster_launch_template.latest_version
   }
 
   vpc_zone_identifier = var.subnet_ids
@@ -241,7 +241,7 @@ resource "aws_autoscaling_group" "nomad_server_asg" {
 }
 
 resource "aws_autoscaling_attachment" "asg_attachment" {
-  autoscaling_group_name = aws_autoscaling_group.nomad_server_asg.id
+  autoscaling_group_name = aws_autoscaling_group.nomad-cluster_asg.id
   lb_target_group_arn    = aws_alb_target_group.nomad.arn
 }
 
@@ -266,7 +266,7 @@ locals {
 resource "hcp_vault_secrets_secret" "bootstrap" {
   lifecycle {
     ignore_changes = [secret_value]
-    replace_triggered_by = [resource.aws_autoscaling_group.nomad_server_asg]
+    replace_triggered_by = [resource.aws_autoscaling_group.nomad-cluster_asg]
   }
   app_name      = "hashistack"
   secret_name   = "nomad_bootstrap_secret_id"

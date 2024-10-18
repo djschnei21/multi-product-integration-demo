@@ -35,13 +35,13 @@ provider "aws" {
   token      = data.doormat_aws_credentials.creds.token
 }
 
-data "terraform_remote_state" "hcp_clusters" {
+data "terraform_remote_state" "hcp-clusters" {
   backend = "remote"
 
   config = {
     organization = var.tfc_organization
     workspaces = {
-      name = "2_hcp_clusters"
+      name = "2_hcp-clusters"
     }
   }
 }
@@ -49,7 +49,7 @@ data "terraform_remote_state" "hcp_clusters" {
 provider "vault" {}
 
 provider "boundary" {
-  addr  = data.terraform_remote_state.hcp_clusters.outputs.boundary_public_endpoint
+  addr  = data.terraform_remote_state.hcp-clusters.outputs.boundary_public_endpoint
   auth_method_login_name = var.boundary_admin_username
   auth_method_password   = var.boundary_admin_password
 }
@@ -179,7 +179,7 @@ resource "vault_token" "boundary_controller" {
 resource "boundary_credential_store_vault" "vault" {
   name        = "foo"
   description = "My first Vault credential store!"
-  address     = data.terraform_remote_state.hcp_clusters.outputs.vault_public_endpoint
+  address     = data.terraform_remote_state.hcp-clusters.outputs.vault_public_endpoint
   token       = vault_token.boundary_controller.client_token 
   scope_id    = boundary_scope.project.id
   namespace   = "admin"
@@ -193,8 +193,8 @@ resource "boundary_credential_library_vault_ssh_certificate" "vault" {
   key_type            = "ed25519"
 }
 
-resource "boundary_host_set_plugin" "nomad_servers" {
-  name            = "nomad_servers"
+resource "boundary_host_set_plugin" "nomad-clusters" {
+  name            = "nomad-clusters"
   host_catalog_id = boundary_host_catalog_plugin.aws.id
   attributes_json = jsonencode({ "filters" = ["tag:aws:autoscaling:groupName=nomad-server"] })
   preferred_endpoints   = ["dns:*.com"]
@@ -214,13 +214,13 @@ resource "boundary_host_set_plugin" "nomad_nodes_arm" {
   preferred_endpoints   = ["dns:*.com"]
 }
 
-resource "boundary_target" "nomad_servers" {
+resource "boundary_target" "nomad-clusters" {
   name         = "Nomad Servers"
   type         = "ssh"
   default_port = "22"
   scope_id     = boundary_scope.project.id
   host_source_ids = [
-    boundary_host_set_plugin.nomad_servers.id 
+    boundary_host_set_plugin.nomad-clusters.id 
   ]
   injected_application_credential_source_ids = [
     boundary_credential_library_vault_ssh_certificate.vault.id 
