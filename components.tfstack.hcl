@@ -49,3 +49,22 @@ component "nomad_server" {
     consul_root_token = component.hcp_clusters.hcp_consul_cluster_admin_token
   }
 }
+
+removed {
+  from = "component.hcp-clusters"
+  source = "./components/2_hcp_clusters"
+  providers = {
+    hcp = provider.hcp.this
+  }
+}
+
+removed {
+  from = "component.nomad-cluster"
+  source = "./components/3_nomad-cluster"
+  providers = {
+    aws = provider.aws.this
+    vault = provider.vault.this
+    hcp = provider.hcp.this
+    http = provider.http.this
+  }
+}
