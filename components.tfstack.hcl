@@ -51,7 +51,7 @@ component "nomad_server" {
 }
 
 removed {
-  from = "component.hcp-clusters"
+  from = component.hcp-clusters
   source = "./components/2_hcp_clusters"
   providers = {
     hcp = provider.hcp.this
@@ -59,7 +59,7 @@ removed {
 }
 
 removed {
-  from = "component.nomad-cluster"
+  from = component.nomad-cluster
   source = "./components/3_nomad-cluster"
   providers = {
     aws = provider.aws.this
