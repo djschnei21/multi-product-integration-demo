@@ -14,7 +14,7 @@ component "networking" {
   }
 }
 
-component "hcp-clusters" {
+component "hcp_clusters" {
   source = "./components/2_hcp_clusters"
   providers = {
     hcp = provider.hcp.this
@@ -29,8 +29,8 @@ component "hcp-clusters" {
   }
 }
 
-component "nomad-cluster" {
-  source = "./components/3_nomad_server"
+component "nomad_cluster" {
+  source = "./components/3_nomad_cluster"
   providers = {
     aws = provider.aws.this
     vault = provider.vault.this
